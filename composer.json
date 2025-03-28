@@ -1,0 +1,6 @@
+{
+    "require": {
+        "smarty/smarty": "^5.4",
+        "erusev/parsedown": "^1.7"
+    }
+}
