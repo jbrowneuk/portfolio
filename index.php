@@ -18,6 +18,10 @@ try {
     die($ex->getMessage());
 }
 
-var_dump($posts);
+$smarty = new \Smarty\Smarty();
+$smarty->setCompileDir('smarty/compile');
+$smarty->setCacheDir('smarty/cache');
 
-echo 'Done';
+$smarty->assign('posts', $posts);
+$smarty->display('post-list.tpl');
+
