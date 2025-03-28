@@ -31,6 +31,6 @@ $smarty->setCacheDir('smarty/cache');
 
 $smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\modifier_parsedown');
 
+$smarty->assign('pageId', 'journal');
 $smarty->assign('posts', $posts);
 $smarty->display('post-list.tpl');
-
