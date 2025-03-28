@@ -12,7 +12,7 @@
     {foreach $posts as $post}
         <section>
             <h1>{$post['title']}</h1>
-            <div>{$post['content']}</div>
+            <div>{$post['content']|parsedown}</div>
         </section>
     {/foreach}
 </body>
