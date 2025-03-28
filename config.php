@@ -1,0 +1,3 @@
+<?php
+
+$db = './production.sqlite';
