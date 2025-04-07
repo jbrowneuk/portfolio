@@ -4,6 +4,7 @@ namespace jbrowneuk;
 require_once './vendor/autoload.php';
 require_once './database/connect.php';
 require_once './database/posts.php';
+require_once './core/renderer.php';
 
 require_once './config.php';
 
@@ -12,18 +13,7 @@ if (!$pdo) {
     die('Could not connect to database.');
 }
 
-$Parsedown = new \Parsedown();
-
-function modifier_parsedown($input) {
-    global $Parsedown;
-    return $Parsedown->text($input);
-}
-
-$smarty = new \Smarty\Smarty();
-$smarty->setCompileDir('smarty/compile');
-$smarty->setCacheDir('smarty/cache');
-
-$smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\modifier_parsedown');
+$renderer = new PortfolioRenderer();
 
 // [TODO] get from URL not $_GET to preserve current site behaviour
 $requestedAction = isset($_GET['page']) ? $_GET['page'] : $defaultAction;
@@ -40,4 +30,4 @@ if (!file_exists($actionPath)) {
 }
 
 require_once($actionPath);
-renderAction($pdo, $smarty);
+renderAction($pdo, $renderer);
