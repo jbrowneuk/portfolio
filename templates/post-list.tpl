@@ -1,20 +1,11 @@
-{* Smarty template *}
-{* Post list page layout *}
+{* Smarty template: Post list page layout *}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Document</title>
-</head>
-<body>
+{extends file="./layout/wrapper.tpl"} 
+
+{block name="page-title"}Jason Browne: Journal{/block}
+
+{block name="page-content"}
     {foreach $posts as $post}
-        <section>
-            <h1>{$post['title']}</h1>
-            <div>{$post['content']|parsedown}</div>
-        </section>
+        {include file="./components/post.tpl"}
     {/foreach}
-</body>
-</html>
-
+{/block}
