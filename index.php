@@ -15,8 +15,21 @@ if (!$pdo) {
 
 $renderer = new PortfolioRenderer();
 
-// [TODO] get from URL not $_GET to preserve current site behaviour
-$requestedAction = isset($_GET['page']) ? $_GET['page'] : $defaultAction;
+// Calculate action if provided
+if (isset($_SERVER['REQUEST_URI'])) {
+    $requestUri = $_SERVER['REQUEST_URI'];
+
+    // Drop subdirectory if it is in the request URI
+    if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
+        $requestUri = substr($requestUri, strlen($scriptDirectory));
+    }
+
+    $pageParams = array_filter(explode('/', $requestUri));
+    $detectedAction = array_shift($pageParams);
+    $requestedAction = isset($detectedAction) ? $detectedAction : $defaultAction;
+} else {
+    $requestedAction = $defaultAction;
+}
 
 // Ensure action is alphanumeric
 if (preg_match('/[^a-z]/i', $requestedAction)) {
@@ -24,9 +37,10 @@ if (preg_match('/[^a-z]/i', $requestedAction)) {
 }
 
 // Check action exists
-$actionPath = './actions/' . $requestedAction . '.php';
+$rootDir = dirname(__FILE__);
+$actionPath = $rootDir . '/actions/' . $requestedAction . '.php';
 if (!file_exists($actionPath)) {
-    $actionPath = './actions/' . $defaultAction . '.php';
+    $actionPath = $rootDir . '/actions/' . $defaultAction . '.php';
 }
 
 require_once($actionPath);
