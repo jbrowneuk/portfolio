@@ -1,11 +1,11 @@
 {* Smarty template: Post list page layout *}
 
-{extends file="./layout/wrapper.tpl"} 
+{extends file="layout/wrapper.tpl"} 
 
 {block name="page-title"}Jason Browne: Journal{/block}
 
 {block name="page-content"}
     {foreach $posts as $post}
-        {include file="./components/post.tpl"}
+        {include file="components/post.tpl"}
     {/foreach}
 {/block}

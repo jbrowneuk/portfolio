@@ -4,6 +4,7 @@ namespace jbrowneuk;
 require_once './vendor/autoload.php';
 require_once './database/connect.php';
 require_once './database/posts.php';
+require_once './core/renderer.php';
 
 require_once './config.php';
 
@@ -12,25 +13,35 @@ if (!$pdo) {
     die('Could not connect to database.');
 }
 
-try {
-    $posts = \jbrowneuk\get_posts($pdo);
-} catch (\PDOException $ex) {
-    die($ex->getMessage());
+$renderer = new PortfolioRenderer();
+
+// Calculate action if provided
+if (isset($_SERVER['REQUEST_URI'])) {
+    $requestUri = $_SERVER['REQUEST_URI'];
+
+    // Drop subdirectory if it is in the request URI
+    if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
+        $requestUri = substr($requestUri, strlen($scriptDirectory));
+    }
+
+    $pageParams = array_filter(explode('/', $requestUri));
+    $detectedAction = array_shift($pageParams);
+    $requestedAction = isset($detectedAction) ? $detectedAction : $defaultAction;
+} else {
+    $requestedAction = $defaultAction;
 }
 
-$Parsedown = new \Parsedown();
-
-function modifier_parsedown($input) {
-    global $Parsedown;
-    return $Parsedown->text($input);
+// Ensure action is alphanumeric
+if (preg_match('/[^a-z]/i', $requestedAction)) {
+    $requestedAction = $defaultAction;
 }
 
-$smarty = new \Smarty\Smarty();
-$smarty->setCompileDir('smarty/compile');
-$smarty->setCacheDir('smarty/cache');
+// Check action exists
+$rootDir = dirname(__FILE__);
+$actionPath = $rootDir . '/actions/' . $requestedAction . '.php';
+if (!file_exists($actionPath)) {
+    $actionPath = $rootDir . '/actions/' . $defaultAction . '.php';
+}
 
-$smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\modifier_parsedown');
-
-$smarty->assign('pageId', 'journal');
-$smarty->assign('posts', $posts);
-$smarty->display('post-list.tpl');
+require_once($actionPath);
+renderAction($pdo, $renderer);

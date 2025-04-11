@@ -1,0 +1,24 @@
+.rating-bar-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+}
+
+.rating-bar {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--progress-bar_color_background-empty);
+}
+
+.dot.filled {
+    background-color: var(--progress-bar_color_background-full);
+}

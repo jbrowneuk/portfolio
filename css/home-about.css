@@ -1,0 +1,75 @@
+:root {
+    --avatar-dimension: 96px;
+    --avatar-border-width: 4px;
+}
+
+#skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+#skills-grid h2,
+.experience,
+.contacts-list {
+    margin-bottom: 15px;
+}
+
+.experience .role {
+    font-weight: bold;
+}
+
+.experience .timespan {
+    color: var(--page_color_foreground-secondary);
+}
+
+.experience-charts {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.circular {
+    width: 32px;
+    height: 32px;
+    margin: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    color: var(--page_color_background);
+    background: var(--page_color_foreground);
+}
+
+.mugshot-container {
+    position: relative;
+}
+
+.mugshot {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    box-sizing: content-box;
+    width: var(--avatar-dimension);
+    height: var(--avatar-dimension);
+    border: var(--avatar-border-width) solid var(--page_color_background);
+    border-radius: 50%;
+}
+
+@media screen and (max-width: 767px) {
+  #skills-grid {
+    grid-template-columns: 1fr;
+
+    #work-experience {
+      order: 2;
+    }
+
+    #skill-set {
+      order: 1;
+    }
+
+    #education {
+      order: 3;
+    }
+  }
+}
