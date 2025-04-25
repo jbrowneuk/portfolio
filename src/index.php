@@ -1,19 +1,26 @@
 <?php
 namespace jbrowneuk;
 
-require_once './vendor/autoload.php';
+// Vendor
+require_once '../vendor/autoload.php';
+
+require_once './core/page.php';
+require_once './core/renderer.php';
+
 require_once './database/connect.php';
 require_once './database/posts.php';
-require_once './core/renderer.php';
+
+require_once './actions/art.php';
+require_once './actions/journal.php';
+require_once './actions/portfolio.php';
+require_once './actions/projects.php';
 
 require_once './config.php';
 
-$pdo = \jbrowneuk\connect($db);
+$pdo = connect($db);
 if (!$pdo) {
     die('Could not connect to database.');
 }
-
-$renderer = new PortfolioRenderer();
 
 // Calculate action if provided
 if (isset($_SERVER['REQUEST_URI'])) {
@@ -31,17 +38,18 @@ if (isset($_SERVER['REQUEST_URI'])) {
     $requestedAction = $defaultAction;
 }
 
-// Ensure action is alphanumeric
-if (preg_match('/[^a-z]/i', $requestedAction)) {
-    $requestedAction = $defaultAction;
+$routes = [
+    'portfolio' => Portfolio::class,
+    'art' => Art::class,
+    'journal' => Journal::class,
+    'projects' => Projects::class
+];
+
+if (array_key_exists($requestedAction, $routes)) {
+    $actionClass = $routes[$requestedAction];
+} else {
+    $actionClass = $routes[$defaultAction];
 }
 
-// Check action exists
-$rootDir = dirname(__FILE__);
-$actionPath = $rootDir . '/actions/' . $requestedAction . '.php';
-if (!file_exists($actionPath)) {
-    $actionPath = $rootDir . '/actions/' . $defaultAction . '.php';
-}
-
-require_once($actionPath);
-renderAction($pdo, $renderer);
+$action = new $actionClass();
+$action->render($pdo, new PortfolioRenderer());

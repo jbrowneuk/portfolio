@@ -1,6 +1,9 @@
 <?php
+namespace jbrowneuk;
 
-function renderAction($pdo, $renderer) {
-    $renderer->setPageId('projects');
-    $renderer->displayPage('projects');
+class Projects implements Page {
+    public function render($pdo, $renderer) {
+        $renderer->setPageId('projects');
+        $renderer->displayPage('projects');
+    }
 }
