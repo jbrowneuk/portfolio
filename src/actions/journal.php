@@ -2,7 +2,7 @@
 namespace jbrowneuk;
 
 class Journal implements Page {
-    public function render($pdo, $renderer) {
+    public function render($pdo, $renderer, $pageParams) {
         try {
             $posts = get_posts($pdo);
         } catch (\PDOException $ex) {

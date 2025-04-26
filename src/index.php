@@ -35,6 +35,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
     $detectedAction = array_shift($pageParams);
     $requestedAction = isset($detectedAction) ? $detectedAction : $defaultAction;
 } else {
+    $pageParams = [];
     $requestedAction = $defaultAction;
 }
 
@@ -52,4 +53,4 @@ if (array_key_exists($requestedAction, $routes)) {
 }
 
 $action = new $actionClass();
-$action->render($pdo, new PortfolioRenderer());
+$action->render($pdo, new PortfolioRenderer(), $pageParams);

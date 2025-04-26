@@ -22,12 +22,12 @@ beforeEach(function () {
 
 it('should set page id', function () {
     $this->mockRenderer->expects($this->once())->method('setPageId')->with('art');
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });
 
 function runAssignTest($context, $expectedKey)
 {
-    $context->action->render($context->mockPdo, $context->mockRenderer);
+    $context->action->render($context->mockPdo, $context->mockRenderer, []);
     return array_find($context->assignCalls, function ($value) use ($expectedKey) { return $value[0] === $expectedKey; });
 }
 
@@ -56,5 +56,5 @@ it('should display page on template', function () {
         ->method('displayPage')
         ->with('album');
 
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });

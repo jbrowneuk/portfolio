@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('should set page id', function () {
     $this->mockRenderer->expects($this->once())->method('setPageId')->with('projects');
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });
 
 it('should display page on template', function () {
@@ -25,5 +25,5 @@ it('should display page on template', function () {
         ->method('displayPage')
         ->with('projects');
 
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });

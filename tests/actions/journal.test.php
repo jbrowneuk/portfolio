@@ -27,12 +27,12 @@ beforeEach(function () {
 
 it('should set page id', function () {
     $this->mockRenderer->expects($this->once())->method('setPageId')->with('journal');
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });
 
 it('should assign post data from database', function () {
     $expectedKey = 'posts';
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
     $result = array_find($this->assignCalls, function ($value) use ($expectedKey) { return $value[0] === $expectedKey; });
     expect([$expectedKey, []])->toBe($result);
@@ -45,5 +45,5 @@ it('should display page on template', function () {
         ->method('displayPage')
         ->with('post-list');
 
-    $this->action->render($this->mockPdo, $this->mockRenderer);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
 });
