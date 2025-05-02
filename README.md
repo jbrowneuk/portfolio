@@ -18,6 +18,9 @@ intentionally keeping the dependencies minimal.
 ## Get up and running
 Composer is used to set up dependencies. Use `composer install`.
 
+A database setup SQL file is provided in `setup/database.sql`. This will create
+the required tables to get going.
+
 ## Run unit tests
 `./vendor/bin/pest`
 
