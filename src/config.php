@@ -3,5 +3,6 @@
 $db = './site.db';
 $defaultAction = 'portfolio';
 
-// Uncomment this and update the path if running in a subdirectory
+// Uncomment these and update the paths if running in a subdirectory
 // $scriptDirectory = '/subdirectory';
+// $styleRoot = '../..';

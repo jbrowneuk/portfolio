@@ -1,10 +1,13 @@
 <?php
+
 namespace jbrowneuk;
 
-class PortfolioRenderer extends \Smarty\Smarty {
+class PortfolioRenderer extends \Smarty\Smarty
+{
     private static $parsedown = null;
 
-    public static function modifier_parsedown($input) {
+    public static function modifier_parsedown(string $input)
+    {
         if (self::$parsedown === null) {
             self::$parsedown = new \Parsedown();
         }
@@ -12,7 +15,8 @@ class PortfolioRenderer extends \Smarty\Smarty {
         return self::$parsedown->text($input);
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
         $this->setCompileDir('smarty/compile');
@@ -21,11 +25,17 @@ class PortfolioRenderer extends \Smarty\Smarty {
         $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\PortfolioRenderer::modifier_parsedown');
     }
 
-    public function setPageId($id) {
+    public function setStyleRoot(string $directory) {
+        $this->assign('styleDirectory', $directory);
+    }
+
+    public function setPageId(string $id)
+    {
         $this->assign('pageId', $id);
     }
 
-    public function displayPage($template) {
+    public function displayPage(string $template)
+    {
         $this->display('pages/' . $template . '.tpl');
     }
 }
