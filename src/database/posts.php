@@ -1,13 +1,16 @@
 <?php
+
 namespace jbrowneuk;
 
-function get_posts($pdo) {
-    $statement = $pdo->query('SELECT * FROM posts ORDER BY post_date DESC LIMIT 5'); // [todo] make configurable
+function get_posts($pdo)
+{
+    $itemsPerPage = 5;
+    $statement = $pdo->query('SELECT * FROM posts ORDER BY timestamp DESC LIMIT ' . $itemsPerPage);
 
     $posts = [];
     while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
         $post = [];
-        $cols = ['slug', 'title', 'content', 'tag', 'post_date', 'modification_date'];
+        $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags'];
         foreach ($cols as $column) {
             $post[$column] = $row[$column];
         }
