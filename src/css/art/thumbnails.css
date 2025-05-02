@@ -1,0 +1,69 @@
+:root {
+  --gallery-thumbnail-overlay_backdrop-filter: blur(10px) saturate(50%);
+}
+
+.thumbnail {
+  display: block;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--generic-subtle_border_radius);
+}
+
+.thumbnail.large.horizontal {
+  grid-column: 1 / span 2;
+  grid-row: span 1 / -1;
+}
+
+.thumbnail.large.vertical {
+  grid-column: span 1;
+  grid-row: span 2 / -1;
+}
+
+.thumbnail img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Title overlay */
+.thumbnail .title-area {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: var(--gallery-thumbnail-overlay_padding);
+  line-height: 1.5;
+  opacity: 0;
+  background-color: var(--gallery-thumbnail-overlay_color_background);
+  color: var(--gallery-thumbnail-overlay_color_foreground);
+  backdrop-filter: var(--gallery-thumbnail-overlay_backdrop-filter);
+  transition: opacity 200ms;
+}
+
+.thumbnail:hover .title-area {
+  opacity: 1;
+}
+
+.thumbnail .title-area .title-text,
+.thumbnail .title-area .subtitle-text,
+.thumbnail .featured-area {
+  display: block;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.thumbnail .title-area .title-text {
+  font-size: 20px;
+}
+
+/* Disable the multi-row or -column images on mobile */
+@media screen and (max-width: 576px) {
+  :host-context(.large.horizontal),
+  :host-context(.large.vertical) {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}

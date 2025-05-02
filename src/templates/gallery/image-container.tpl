@@ -1,3 +1,4 @@
+{* Smarty template: Gallery image grid container *}
 <section class="page-section">
     <div class="container">
         {if count($images) === 0}
@@ -14,7 +15,7 @@
         <!-- Images -->
         <div id="gallery-container" class="grid-list">
             {foreach $images as $idx=>$image}
-                {include file="gallery/thumbnail.tpl" isPromoted="$promotedImageIndex === $idx"}
+                {include file="gallery/thumbnail.tpl" isPromoted="{$promotedImageIndex === $idx}"}
             {/foreach}
         </div>
         {/if}
