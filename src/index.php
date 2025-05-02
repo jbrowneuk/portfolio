@@ -1,4 +1,5 @@
 <?php
+
 namespace jbrowneuk;
 
 // Vendor
@@ -22,6 +23,14 @@ if (!$pdo) {
     die('Could not connect to database.');
 }
 
+// Page routes
+$routes = [
+    'portfolio' => Portfolio::class,
+    'art' => Art::class,
+    'journal' => Journal::class,
+    'projects' => Projects::class
+];
+
 // Calculate action if provided
 if (isset($_SERVER['REQUEST_URI'])) {
     $requestUri = $_SERVER['REQUEST_URI'];
@@ -35,15 +44,9 @@ if (isset($_SERVER['REQUEST_URI'])) {
     $detectedAction = array_shift($pageParams);
     $requestedAction = isset($detectedAction) ? $detectedAction : $defaultAction;
 } else {
+    $pageParams = [];
     $requestedAction = $defaultAction;
 }
-
-$routes = [
-    'portfolio' => Portfolio::class,
-    'art' => Art::class,
-    'journal' => Journal::class,
-    'projects' => Projects::class
-];
 
 if (array_key_exists($requestedAction, $routes)) {
     $actionClass = $routes[$requestedAction];
@@ -51,5 +54,10 @@ if (array_key_exists($requestedAction, $routes)) {
     $actionClass = $routes[$defaultAction];
 }
 
+// Initialise page renderer
+$renderer = new PortfolioRenderer();
+$renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
+
+// Render the page
 $action = new $actionClass();
-$action->render($pdo, new PortfolioRenderer());
+$action->render($pdo, $renderer, $pageParams);
