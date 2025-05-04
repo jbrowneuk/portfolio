@@ -16,11 +16,11 @@ function modifier_album_names($input)
 
 class Art implements Page
 {
-    public function render($pdo, $renderer, $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
-            $subAction = $pageParams[0];
+            $subAction = array_shift($pageParams);
         }
 
         // [TODO] use subdirectory from config file
@@ -33,13 +33,17 @@ class Art implements Page
         $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
 
         switch ($subAction) {
+            case 'view':
+                $this->renderImageView($pdo, $renderer, $pageParams);
+                break;
+
             default:
                 $this->renderAlbumPage($pdo, $renderer);
                 break;
         }
     }
 
-    private function renderAlbumPage($pdo, $renderer)
+    private function renderAlbumPage(\PDO $pdo, PortfolioRenderer $renderer)
     {
         $page = 1;
         $albumId = 'featured';
@@ -58,5 +62,16 @@ class Art implements Page
         $renderer->assign('images', $images);
         $renderer->assign('totalImageCount', $imageCount);
         $renderer->displayPage('album');
+    }
+
+    private function renderImageView(\PDO $pdo, PortfolioRenderer $renderer, array $params)
+    {
+        if (isset($params[0]) && is_numeric($params[0])) {
+            $imageId = (int)$params[0];
+            $image = get_image($pdo, $imageId);
+            $renderer->assign('image', $image);
+        }
+
+        $renderer->displayPage('image');
     }
 }

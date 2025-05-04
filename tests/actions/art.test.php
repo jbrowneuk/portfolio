@@ -7,13 +7,18 @@ $mockAlbumImageCount = null;
 $mockAlbum = null;
 $mockImageHorizontal = null;
 $mockImageVertical = null;
+$mockImage = null;
 
 // Mocks
 function get_album($pdo, $albumId)
 {
     global $mockAlbum;
     if (!isset($mockAlbum)) {
-        $mockAlbum = ['album_id' => 'album_id', 'name' => 'album', 'description' => 'album desc'];
+        $mockAlbum = [
+            'album_id' => 'album_id',
+            'name' => 'album',
+            'description' => 'album desc'
+        ];
     }
 
     return $mockAlbum;
@@ -59,6 +64,25 @@ function get_images_for_album($pdo, $albumId, $page)
     return [$mockImageHorizontal, $mockImageVertical];
 }
 
+function get_image($pdo, $imageId)
+{
+    global $mockImage;
+
+    if (!isset($mockImage)) {
+        $mockImage = [
+            'image_id' => 1,
+            'title' => 'image',
+            'filename' => 'image.jpg',
+            'description' => 'mock',
+            'timestamp' => 0,
+            'width' => 1,
+            'height' => 1
+        ];
+    }
+
+    return $mockImage;
+}
+
 require_once 'src/core/page.php';
 require_once 'src/core/renderer.php';
 
@@ -97,9 +121,13 @@ describe('modifier_album_names', function () {
     });
 });
 
-function runAssignTest($context, $action, $expectedKey)
+function runAssignTest(object $context, array|string $params, string $expectedKey)
 {
-    $context->action->render($context->mockPdo, $context->mockRenderer, [$action]);
+    if (!is_array($params)) {
+        $params = [$params];
+    }
+
+    $context->action->render($context->mockPdo, $context->mockRenderer, $params);
     return array_find($context->assignCalls, function ($value) use ($expectedKey) {
         return $value[0] === $expectedKey;
     });
@@ -172,5 +200,22 @@ describe('Album page behaviour', function () {
             ->with('album');
 
         $this->action->render($this->mockPdo, $this->mockRenderer, [$subAction]);
+    });
+});
+
+describe('Image page behaviour', function () {
+    $subAction = 'view';
+
+    it('should display page without assigning image data if image id not provided', function () use ($subAction) {
+        $expectedKey = 'image';
+        $result = runAssignTest($this, $subAction, $expectedKey);
+        expect($result)->toBe(null);
+    });
+
+    it('should assign image data if image id provided', function () use ($subAction) {
+        global $mockImage;
+        $expectedKey = 'image';
+        $result = runAssignTest($this, [$subAction, 569], $expectedKey);
+        expect([$expectedKey, $mockImage])->toBe($result);
     });
 });
