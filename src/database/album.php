@@ -34,6 +34,8 @@ function get_albums(\PDO $pdo)
             $album[$column] = $row[$column];
         }
 
+        $album['image_count'] = get_image_count_for_album($pdo, $album['album_id']);
+
         $albums[] = $album;
     }
 

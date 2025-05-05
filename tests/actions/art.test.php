@@ -2,9 +2,12 @@
 
 namespace jbrowneuk;
 
-// Values set in mocks
+// Values set in mocks. [TODO] figure out how to make these work here instead of
+// having to define them in this way. Placing them here makes null get returned
+// from the mock functions below.
 $mockAlbumImageCount = null;
 $mockAlbum = null;
+$mockAlbum2 = null;
 $mockImageHorizontal = null;
 $mockImageVertical = null;
 $mockImage = null;
@@ -22,6 +25,26 @@ function get_album($pdo, $albumId)
     }
 
     return $mockAlbum;
+}
+
+function get_albums($pdo)
+{
+    global $mockAlbum, $mockAlbum2;
+    if (!isset($mockAlbum) || !isset($mockAlbum2)) {
+        $mockAlbum = [
+            'album_id' => 'album_id_1',
+            'name' => 'album',
+            'description' => 'album desc'
+        ];
+
+        $mockAlbum2 = [
+            'album_id' => 'album_id_2',
+            'name' => 'album',
+            'description' => 'album desc'
+        ];
+    }
+
+    return [$mockAlbum, $mockAlbum2];
 }
 
 function get_image_count_for_album($pdo, $albumId)
@@ -217,5 +240,36 @@ describe('Image page behaviour', function () {
         $expectedKey = 'image';
         $result = runAssignTest($this, [$subAction, 569], $expectedKey);
         expect([$expectedKey, $mockImage])->toBe($result);
+    });
+
+    it('should display page on template', function () use ($subAction) {
+        $this
+            ->mockRenderer
+            ->expects($this->once())
+            ->method('displayPage')
+            ->with('image');
+
+        $this->action->render($this->mockPdo, $this->mockRenderer, [$subAction]);
+    });
+});
+
+describe('Album list behaviour', function () {
+    $subAction = 'albums';
+
+    it('should assign album data', function () use ($subAction) {
+        global $mockAlbum, $mockAlbum2;
+        $expectedKey = 'albums';
+        $result = runAssignTest($this, [$subAction], $expectedKey);
+        expect([$expectedKey, [$mockAlbum, $mockAlbum2]])->toBe($result);
+    });
+
+    it('should display page on template', function () use ($subAction) {
+        $this
+            ->mockRenderer
+            ->expects($this->once())
+            ->method('displayPage')
+            ->with('album-list');
+
+        $this->action->render($this->mockPdo, $this->mockRenderer, [$subAction]);
     });
 });

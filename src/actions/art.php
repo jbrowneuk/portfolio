@@ -27,12 +27,17 @@ class Art implements Page
         $renderer->assign('imageRoot', '/media/art/');
         $renderer->assign('thumbDir', 'thumbnails/');
         $renderer->assign('imageDir', 'images/');
+        $renderer->assign('iconDir', 'icons/');
         $renderer->setPageId('art');
 
         // Album name formatter
         $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
 
         switch ($subAction) {
+            case 'albums':
+                $this->renderAlbumList($pdo, $renderer);
+                break;
+
             case 'view':
                 $this->renderImageView($pdo, $renderer, $pageParams);
                 break;
@@ -73,5 +78,12 @@ class Art implements Page
         }
 
         $renderer->displayPage('image');
+    }
+
+    private function renderAlbumList(\PDO $pdo, PortfolioRenderer $renderer)
+    {
+        $albums = get_albums($pdo);
+        $renderer->assign('albums', $albums);
+        $renderer->displayPage('album-list');
     }
 }
