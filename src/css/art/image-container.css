@@ -1,0 +1,19 @@
+:root {
+  --gallery-grid_dimension_gap: 15px;
+  --gallery-grid_width_column-minimum: 320px;
+  --gallery-grid_height_row: 320px;
+}
+
+.grid-list {
+  display: grid;
+  gap: var(--gallery-grid_dimension_gap);
+  grid-template-columns: repeat(auto-fill,
+          minmax(var(--gallery-grid_width_column-minimum), 1fr));
+  grid-auto-rows: var(--gallery-grid_height_row);
+}
+
+@media screen and (max-width: 576px) {
+  .grid-list {
+      grid-template-columns: 1fr;
+  }
+}

@@ -1,12 +1,89 @@
 <?php
+
 namespace jbrowneuk;
 
-class Art implements Page {
-    public function render($pdo, $renderer, $pageParams) {
+function modifier_album_names($input)
+{
+    if (!is_array($input)) {
+        return $input;
+    }
+
+    $titles = array_map(function ($album) {
+        return $album['name'];
+    }, $input);
+    return implode(', ', $titles);
+}
+
+class Art implements Page
+{
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    {
+        $subAction = '_default';
+        if (isset($pageParams[0])) {
+            $subAction = array_shift($pageParams);
+        }
+
+        // [TODO] use subdirectory from config file
+        $renderer->assign('imageRoot', '/media/art/');
+        $renderer->assign('thumbDir', 'thumbnails/');
+        $renderer->assign('imageDir', 'images/');
+        $renderer->assign('iconDir', 'icons/');
         $renderer->setPageId('art');
-        $renderer->assign('albumName', 'Featured');
-        $renderer->assign('promotedImageIndex', -1);
-        $renderer->assign('images', []);
+
+        // Album name formatter
+        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
+
+        switch ($subAction) {
+            case 'albums':
+                $this->renderAlbumList($pdo, $renderer);
+                break;
+
+            case 'view':
+                $this->renderImageView($pdo, $renderer, $pageParams);
+                break;
+
+            default:
+                $this->renderAlbumPage($pdo, $renderer);
+                break;
+        }
+    }
+
+    private function renderAlbumPage(\PDO $pdo, PortfolioRenderer $renderer)
+    {
+        $page = 1;
+        $albumId = 'featured';
+        $album = get_album($pdo, $albumId);
+        $imageCount = get_image_count_for_album($pdo, $albumId);
+        $images = get_images_for_album($pdo, $albumId, $page);
+
+        // Seed random number generator to get same promoted image per album page
+        $pageImageCount = count($images); // If there's less than NUM_IMAGES on a page
+        $seed = intval($album['album_id'] . $pageImageCount . $page, 36);
+        mt_srand($seed);
+        $promotedIndex = mt_rand(0, $pageImageCount);
+
+        $renderer->assign('album', $album);
+        $renderer->assign('promotedImageIndex', $promotedIndex);
+        $renderer->assign('images', $images);
+        $renderer->assign('totalImageCount', $imageCount);
         $renderer->displayPage('album');
+    }
+
+    private function renderImageView(\PDO $pdo, PortfolioRenderer $renderer, array $params)
+    {
+        if (isset($params[0]) && is_numeric($params[0])) {
+            $imageId = (int)$params[0];
+            $image = get_image($pdo, $imageId);
+            $renderer->assign('image', $image);
+        }
+
+        $renderer->displayPage('image');
+    }
+
+    private function renderAlbumList(\PDO $pdo, PortfolioRenderer $renderer)
+    {
+        $albums = get_albums($pdo);
+        $renderer->assign('albums', $albums);
+        $renderer->displayPage('album-list');
     }
 }

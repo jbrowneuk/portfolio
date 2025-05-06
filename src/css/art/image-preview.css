@@ -1,0 +1,18 @@
+.presenter {
+    margin-top: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.image-area {
+    position: relative;
+    display: inline-block;
+}
+
+.image-area img {
+    border-radius: var(--generic_border_radius);
+}
+
+.image-area img.responsive {
+    max-width: 100%;
+}
