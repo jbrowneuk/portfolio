@@ -2,7 +2,6 @@
 
 namespace jbrowneuk;
 
-// Vendor
 require_once '../vendor/autoload.php';
 
 require_once './core/page.php';
@@ -11,6 +10,8 @@ require_once './core/renderer.php';
 require_once './database/album.php';
 require_once './database/connect.php';
 require_once './database/posts.php';
+
+require_once './services/github-projects.php';
 
 require_once './actions/art.php';
 require_once './actions/journal.php';
