@@ -1,0 +1,23 @@
+.error-image {
+    padding-top: 30px;
+}
+
+.error-image img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+#site-map {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+}
+
+#site-map li {
+    width: 20%;
+}

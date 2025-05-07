@@ -14,6 +14,7 @@ require_once './database/posts.php';
 require_once './services/github-projects.php';
 
 require_once './actions/art.php';
+require_once './actions/error.php';
 require_once './actions/journal.php';
 require_once './actions/portfolio.php';
 require_once './actions/projects.php';
@@ -26,16 +27,18 @@ if (!$pdo) {
 }
 
 // Page routes
+$errorAction = 'error';
 $routes = [
     'portfolio' => Portfolio::class,
     'art' => Art::class,
     'journal' => Journal::class,
-    'projects' => Projects::class
+    'projects' => Projects::class,
+    $errorAction => Error::class
 ];
 
 // Calculate action if provided
 if (isset($_SERVER['REQUEST_URI'])) {
-    $requestUri = $_SERVER['REQUEST_URI'];
+    $requestUri = mb_strtolower($_SERVER['REQUEST_URI']);
 
     // Drop subdirectory if it is in the request URI
     if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
@@ -53,7 +56,7 @@ if (isset($_SERVER['REQUEST_URI'])) {
 if (array_key_exists($requestedAction, $routes)) {
     $actionClass = $routes[$requestedAction];
 } else {
-    $actionClass = $routes[$defaultAction];
+    $actionClass = $routes[$errorAction];
 }
 
 // Initialise page renderer
