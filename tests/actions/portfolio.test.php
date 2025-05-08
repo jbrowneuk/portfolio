@@ -1,4 +1,5 @@
 <?php
+
 namespace jbrowneuk;
 
 require_once 'src/core/page.php';

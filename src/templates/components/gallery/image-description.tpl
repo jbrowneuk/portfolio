@@ -14,10 +14,9 @@
             <ul data-post-tags class="tags-area">
                 <li><i aria-hidden="true" class="las la-tags"></i></li>
                 {foreach $image['albums'] as $album}
-                <li class="tag-container" data-post-tag="{$album['album_id']}">
-                    <a class="tag"
-                       href="/art/album/{$album['album_id']}">#{$album['name']}</a>
-                </li>
+                    <li class="tag-container" data-post-tag="{$album['album_id']}">
+                        <a class="tag" href="/art/album/{$album['album_id']}">#{$album['name']}</a>
+                    </li>
                 {/foreach}
             </ul>
         </footer>
