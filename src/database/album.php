@@ -75,7 +75,7 @@ function get_album(\PDO $pdo, string $albumId)
  */
 function get_image_count_for_album(\PDO $pdo, string $albumId)
 {
-    $statement = $pdo->prepare('SELECT count(image_id) as total FROM image_albums WHERE album_id = :albumid');
+    $statement = $pdo->prepare('SELECT count(image_id) AS total FROM image_albums WHERE album_id = :albumid');
     $statement->execute(['albumid' => $albumId]);
     $row = $statement->fetch(\PDO::FETCH_ASSOC);
     return $row['total'];
