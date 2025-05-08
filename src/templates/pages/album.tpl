@@ -11,6 +11,6 @@
 {/block}
 
 {block name="page-content"}
-    {include file="gallery/album-hero.tpl"}
-    {include file="gallery/image-container.tpl"}
+    {include file="components/gallery/album-hero.tpl"}
+    {include file="components/gallery/image-container.tpl"}
 {/block}

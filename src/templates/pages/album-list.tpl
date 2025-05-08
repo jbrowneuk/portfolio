@@ -22,7 +22,7 @@
         <div class="container">
             <div id="albums-container" class="grid">
                 {foreach $albums as $idx=>$album}
-                    {include file="gallery/album-card.tpl"}
+                    {include file="components/gallery/album-card.tpl"}
                 {/foreach}
             </div>
         </div>

@@ -10,8 +10,8 @@
 {/block}
 
 {block name="page-content"}
-    {include file="home/super-hero.tpl"}
-    {include file="home/software.tpl"}
-    {include file="home/artworks.tpl"}
-    {include file="home/about.tpl"}
+    {include file="components/home/super-hero.tpl"}
+    {include file="components/home/software.tpl"}
+    {include file="components/home/artworks.tpl"}
+    {include file="components/home/about.tpl"}
 {/block}
