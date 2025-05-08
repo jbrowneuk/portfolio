@@ -14,7 +14,7 @@
             <!-- Images -->
             <div id="gallery-container" class="grid-list">
                 {foreach $images as $idx=>$image}
-                    {include file="gallery/thumbnail.tpl" isPromoted="{$promotedImageIndex === $idx}"}
+                    {include file="components/gallery/thumbnail.tpl" isPromoted="{$promotedImageIndex === $idx}"}
                 {/foreach}
             </div>
         {/if}
