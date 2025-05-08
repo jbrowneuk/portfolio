@@ -63,6 +63,14 @@ if (array_key_exists($requestedAction, $routes)) {
 $renderer = new PortfolioRenderer();
 $renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
 
+// Calculate pageUrl for pagination
+$pageUrl = "/$requestedAction";
+if (isset($scriptDirectory)) {
+    $pageUrl = $scriptDirectory . $pageUrl;
+}
+
+$renderer->assign('pageUrl', $pageUrl);
+
 // Render the page
 $action = new $actionClass();
 $action->render($pdo, $renderer, $pageParams);

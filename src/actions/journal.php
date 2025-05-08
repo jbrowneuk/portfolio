@@ -4,18 +4,24 @@ namespace jbrowneuk;
 
 class Journal implements Page
 {
+    public static function modifier_pagination(array $pagination)
+    {
+        $totalPages = ceil($pagination['total_items'] / $pagination['items_per_page']);
+        $pages = range(1, $totalPages);
+        return $pages;
+    }
+
     public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
     {
         $page = $this->calculatePage($pageParams);
+        $posts = get_posts($pdo, $page);
+        $pagination = get_post_pagination_data($pdo);
 
-        try {
-            $posts = get_posts($pdo, $page);
-        } catch (\PDOException $ex) {
-            die($ex->getMessage());
-        }
+        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\Journal::modifier_pagination');
 
         $renderer->setPageId('journal');
         $renderer->assign('posts', $posts);
+        $renderer->assign('pagination', ['page' => $page, ...$pagination]);
         $renderer->displayPage('post-list');
     }
 

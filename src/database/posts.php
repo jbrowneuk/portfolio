@@ -25,6 +25,14 @@ function get_post_count(\PDO $pdo, ?string $tag = null)
     return $row['total'];
 }
 
+function get_post_pagination_data(\PDO $pdo, ?string $tag = null)
+{
+    return array(
+        'items_per_page' => POSTS_PER_PAGE,
+        'total_items' => get_post_count($pdo, $tag)
+    );
+}
+
 /**
  * Gets a page of post data, optionally scoped to a specific tag
  *
