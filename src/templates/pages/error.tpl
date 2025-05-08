@@ -26,10 +26,10 @@
                 locations, like you'd find on street signs in the real world.
             </p>
             <ul id="site-map" class="button-container" data-navigation>
-                {include file="error/link-button.tpl" title="Home" image="about" link="/"}
-                {include file="error/link-button.tpl" title="Art" image="art" link="/art"}
-                {include file="error/link-button.tpl" title="Software" image="software" link="/projects/code"}
-                {include file="error/link-button.tpl" title="Journal" image="about" link="/journal"}
+                {include file="components/error/link-button.tpl" title="Home" image="about" link="/"}
+                {include file="components/error/link-button.tpl" title="Art" image="art" link="/art"}
+                {include file="components/error/link-button.tpl" title="Software" image="software" link="/projects/code"}
+                {include file="components/error/link-button.tpl" title="Journal" image="about" link="/journal"}
             </ul>
         </article>
     </section>

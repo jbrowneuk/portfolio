@@ -1,8 +1,10 @@
 <?php
+
 namespace jbrowneuk;
 
 // Mocks
-function get_posts($pdo) {
+function get_posts($pdo)
+{
     return [];
 }
 
@@ -20,7 +22,9 @@ beforeEach(function () {
         ->expects($this->atLeastOnce())
         ->method('assign')
         ->with()
-        ->willReturnCallback(function ($key, $val) { $this->assignCalls[] = [$key, $val]; });
+        ->willReturnCallback(function ($key, $val) {
+            $this->assignCalls[] = [$key, $val];
+        });
 
     $this->action = new Journal();
 });
@@ -34,7 +38,9 @@ it('should assign post data from database', function () {
     $expectedKey = 'posts';
     $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
-    $result = array_find($this->assignCalls, function ($value) use ($expectedKey) { return $value[0] === $expectedKey; });
+    $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
+        return $value[0] === $expectedKey;
+    });
     expect([$expectedKey, []])->toBe($result);
 });
 

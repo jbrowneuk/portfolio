@@ -1,3 +1,5 @@
+{* Smarty template: project list GitHub section *}
+
 <section class="page-section post" data-github-blurb>
     <article class="container">
         <header>

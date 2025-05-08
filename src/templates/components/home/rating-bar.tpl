@@ -10,5 +10,5 @@
                 <span class="dot" role="presentation" data-dot></span>
             {/if}
         {/for}
-    </div>
-</span>
+    </span>
+</div>

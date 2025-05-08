@@ -5,7 +5,7 @@
 {block name="page-title"}Jason Browne: Code{/block}
 
 {block name="page-content"}
-    {include file="projects/hero.tpl"}
-    {include file="projects/github.tpl"}
-    {include file="projects/list.tpl"}
+    {include file="components/projects/hero.tpl"}
+    {include file="components/projects/github.tpl"}
+    {include file="components/projects/list.tpl"}
 {/block}

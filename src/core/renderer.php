@@ -25,7 +25,8 @@ class PortfolioRenderer extends \Smarty\Smarty
         $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\PortfolioRenderer::modifier_parsedown');
     }
 
-    public function setStyleRoot(string $directory) {
+    public function setStyleRoot(string $directory)
+    {
         $this->assign('styleDirectory', $directory);
     }
 

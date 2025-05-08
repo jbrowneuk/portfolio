@@ -11,8 +11,8 @@
 
 {block name="page-content"}
     {if isset($image)}
-        {include file="gallery/image-preview.tpl"}
-        {include file="gallery/image-description.tpl"}
+        {include file="components/gallery/image-preview.tpl"}
+        {include file="components/gallery/image-description.tpl"}
     {else}
 
 <section class="page-section text-center">

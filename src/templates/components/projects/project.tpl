@@ -1,4 +1,4 @@
-{* Smarty template: Project container *}
+{* Smarty template: Project item *}
 
 <section class="page-section post project-list-section" data-project-name="{$project['name']}">
     <article class="container">

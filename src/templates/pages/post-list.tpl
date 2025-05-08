@@ -6,6 +6,6 @@
 
 {block name="page-content"}
     {foreach $posts as $post}
-        {include file="components/post.tpl"}
+        {include file="components/journal/post.tpl"}
     {/foreach}
 {/block}

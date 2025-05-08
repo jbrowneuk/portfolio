@@ -1,3 +1,5 @@
+{* Smarty template: Portfolio top/home page: about section *}
+
 <section class="page-section background-alternate about-block">
     <header>
         <div class="container mugshot-container">
