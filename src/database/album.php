@@ -117,19 +117,21 @@ function generate_image_data(\PDO $pdo, array $row)
  *
  * @return array a page of image data for the specified album
  */
-function get_images_for_album(\PDO $pdo, string $albumId, int $page)
+function get_images_for_album(\PDO $pdo, string $albumId, int $page = 1)
 {
     if ($albumId === null) {
         return [];
     }
+
+    $offset = ($page > 0 ? $page - 1 : 1) * POSTS_PER_PAGE;
 
     $statement = $pdo->prepare('SELECT *
         FROM image_albums
         JOIN images ON image_albums.image_id = images.image_id
         WHERE image_albums.album_id = :albumname
         ORDER BY images.timestamp DESC
-        LIMIT :limit');
-    $statement->execute(['albumname' => $albumId, 'limit' => IMAGES_PER_PAGE]);
+        LIMIT :offset, :limit');
+    $statement->execute(['albumname' => $albumId, 'offset' => $offset, 'limit' => IMAGES_PER_PAGE]);
 
     $images = [];
     while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
