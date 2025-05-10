@@ -20,7 +20,10 @@
     <link href="{$styleDirectory}/style-bundle/palette.css?v3.1.1" rel="stylesheet">
 
     <!-- Component library -->
-    <link href="{$styleDirectory}/style-bundle/styles.css?v3.1.1" rel="stylesheet" />
+    <link href="{$styleDirectory}/style-bundle/styles.css?v3.1.1" rel="stylesheet">
+
+    <!-- Pagination components -->
+    <link href="./css/pagination.css?v202505" rel="stylesheet">
 
     {block name="extra-stylesheets"}{/block}
 </head>

@@ -8,4 +8,6 @@
     {foreach $posts as $post}
         {include file="components/journal/post.tpl"}
     {/foreach}
+
+    {include file="components/pagination.tpl"}
 {/block}

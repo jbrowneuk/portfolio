@@ -8,6 +8,14 @@ function get_posts($pdo)
     return [];
 }
 
+function get_post_pagination_data($pdo, $tag = null)
+{
+    return array(
+        'items_per_page' => 5,
+        'total_items' => 50
+    );
+}
+
 require_once 'src/core/page.php';
 require_once 'src/core/renderer.php';
 
@@ -52,4 +60,31 @@ it('should display page on template', function () {
         ->with('post-list');
 
     $this->action->render($this->mockPdo, $this->mockRenderer, []);
+});
+
+it('should have pagination data', function () {
+    $expectedKey = 'pagination';
+    $expectedPaginationData = array(
+        'page' => 1,
+        'items_per_page' => 5,
+        'total_items' => 50
+    );
+
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
+
+    $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
+        return $value[0] === $expectedKey;
+    });
+    expect([$expectedKey, $expectedPaginationData])->toBe($result);
+});
+
+it('should assign stale timestamp', function () {
+    $expectedKey = 'staleTimestamp';
+    $expectedTimestamp = time() - (60 * 60 * 24 * 365 * 2);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
+
+    $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
+        return $value[0] === $expectedKey;
+    });
+    expect([$expectedKey, $expectedTimestamp])->toBe($result);
 });
