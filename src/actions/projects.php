@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class Projects implements Page
+class Projects implements Action
 {
     public function render($pdo, $renderer, $pageParams)
     {

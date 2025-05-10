@@ -4,7 +4,7 @@ namespace jbrowneuk;
 
 require_once '../vendor/autoload.php';
 
-require_once './core/page.php';
+require_once './core/action.php';
 require_once './core/renderer.php';
 
 require_once './database/album.php';

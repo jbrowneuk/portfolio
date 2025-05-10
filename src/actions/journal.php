@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class Journal implements Page
+class Journal implements Action
 {
     public static function modifier_pagination(array $pagination)
     {

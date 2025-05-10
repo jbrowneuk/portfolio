@@ -14,7 +14,7 @@ function modifier_album_names($input)
     return implode(', ', $titles);
 }
 
-class Art implements Page
+class Art implements Action
 {
     public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
     {

@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class Error implements Page
+class Error implements Action
 {
   public function render($pdo, $renderer, $pageParams)
   {

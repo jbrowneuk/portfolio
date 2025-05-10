@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-require_once 'src/core/page.php';
+require_once 'src/core/action.php';
 require_once 'src/core/renderer.php';
 
 require_once 'src/actions/portfolio.php';
