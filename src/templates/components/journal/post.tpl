@@ -9,6 +9,15 @@
                 <span data-month-year class="month">{$post['timestamp']|date_format:"M Y"}</span>
             </time>
         </header>
+        {if $post['timestamp'] < $staleTimestamp}
+            <div class="outdated-content" data-outdated-content>
+                <i class="las la-exclamation-triangle icon"></i>
+                <span class="text">
+                    This content was posted over 2 years ago and is most likely no longer
+                    relevant.
+                </span>
+            </div>
+        {/if}
         {$post['content']|parsedown}
         <footer>
             <ul data-post-tags class="tags-area">

@@ -77,3 +77,14 @@ it('should have pagination data', function () {
     });
     expect([$expectedKey, $expectedPaginationData])->toBe($result);
 });
+
+it('should assign stale timestamp', function () {
+    $expectedKey = 'staleTimestamp';
+    $expectedTimestamp = time() - (60 * 60 * 24 * 365 * 2);
+    $this->action->render($this->mockPdo, $this->mockRenderer, []);
+
+    $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
+        return $value[0] === $expectedKey;
+    });
+    expect([$expectedKey, $expectedTimestamp])->toBe($result);
+});

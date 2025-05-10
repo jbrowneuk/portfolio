@@ -19,9 +19,13 @@ class Journal implements Page
 
         $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\Journal::modifier_pagination');
 
+        $years = 2;
+        $staleTimestamp = time() - (60 * 60 * 24 * 365 * $years);
+
         $renderer->setPageId('journal');
         $renderer->assign('posts', $posts);
         $renderer->assign('pagination', ['page' => $page, ...$pagination]);
+        $renderer->assign('staleTimestamp', $staleTimestamp);
         $renderer->displayPage('post-list');
     }
 
