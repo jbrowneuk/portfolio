@@ -57,6 +57,14 @@ function get_image_count_for_album($pdo, $albumId)
     return $mockAlbumImageCount;
 }
 
+function get_album_pagination_data($pdo, $albumId)
+{
+    return array(
+        'items_per_page' => 5,
+        'total_items' => get_image_count_for_album($pdo, $albumId)
+    );
+}
+
 function get_images_for_album($pdo, $albumId, $page)
 {
     global $mockImageHorizontal, $mockImageVertical;

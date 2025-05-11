@@ -11,12 +11,16 @@
                 </h1>
             </div>
         {else}
+            {include file="components/pagination.tpl"}
+
             <!-- Images -->
             <div id="gallery-container" class="grid-list">
                 {foreach $images as $idx=>$image}
                     {include file="components/gallery/thumbnail.tpl" isPromoted="{$promotedImageIndex === $idx}"}
                 {/foreach}
             </div>
+
+            {include file="components/pagination.tpl"}
         {/if}
     </div>
 </section>
