@@ -55,6 +55,7 @@ class Art implements Action
         $album = get_album($pdo, $albumId);
         $pagination = get_album_pagination_data($pdo, $albumId);
         $images = get_images_for_album($pdo, $albumId, $page);
+        $urlPrefix = "/album/{$album['album_id']}";
 
         // Seed random number generator to get same promoted image per album page
         $pageImageCount = count($images); // If there's less than NUM_IMAGES on a page
@@ -65,8 +66,7 @@ class Art implements Action
         $renderer->assign('album', $album);
         $renderer->assign('promotedImageIndex', $promotedIndex);
         $renderer->assign('images', $images);
-        $renderer->assign('pagination', ['page' => $page, ...$pagination]);
-        $renderer->assign('urlExtra', "/album/{$album['album_id']}");
+        $renderer->assign('pagination', ['page' => $page, 'prefix' => $urlPrefix, ...$pagination]);
         $renderer->assign('totalImageCount', $pagination['total_items']);
         $renderer->displayPage('album');
     }

@@ -223,6 +223,20 @@ describe('Album page behaviour', function () {
         expect([$expectedKey, $mockAlbumImageCount])->toBe($result);
     });
 
+    it('should assign pagination data', function () use ($subAction) {
+        global $mockAlbum;
+        $expectedKey = 'pagination';
+        $result = runAssignTest($this, $subAction, $expectedKey)[1];
+
+        // Expectation: this calls the mock
+        $mockPaginationData = get_album_pagination_data(null, null);
+
+        expect($result['page'])->toBe(1); // Expected default page
+        expect($result['prefix'])->toBe("/album/{$mockAlbum['album_id']}");
+        expect($result['items_per_page'])->toBe($mockPaginationData['items_per_page']);
+        expect($result['total_items'])->toBe($mockPaginationData['total_items']);
+    });
+
     it('should display page on template', function () use ($subAction) {
         $this
             ->mockRenderer
