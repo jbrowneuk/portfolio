@@ -16,7 +16,7 @@ function get_post_pagination_data($pdo, $tag = null)
     );
 }
 
-require_once 'src/core/page.php';
+require_once 'src/core/action.php';
 require_once 'src/core/renderer.php';
 
 require_once 'src/actions/journal.php';

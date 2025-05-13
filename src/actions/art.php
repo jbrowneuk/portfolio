@@ -14,7 +14,7 @@ function modifier_album_names($input)
     return implode(', ', $titles);
 }
 
-class Art implements Page
+class Art implements Action
 {
     public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
     {
@@ -43,18 +43,19 @@ class Art implements Page
                 break;
 
             default:
-                $this->renderAlbumPage($pdo, $renderer);
+                $this->renderAlbumPage($pdo, $renderer, $pageParams);
                 break;
         }
     }
 
-    private function renderAlbumPage(\PDO $pdo, PortfolioRenderer $renderer)
+    private function renderAlbumPage(\PDO $pdo, PortfolioRenderer $renderer, array $params)
     {
-        $page = 1;
+        $page = parsePageNumber($params);
         $albumId = 'featured';
         $album = get_album($pdo, $albumId);
-        $imageCount = get_image_count_for_album($pdo, $albumId);
+        $pagination = get_album_pagination_data($pdo, $albumId);
         $images = get_images_for_album($pdo, $albumId, $page);
+        $urlPrefix = "/album/{$album['album_id']}";
 
         // Seed random number generator to get same promoted image per album page
         $pageImageCount = count($images); // If there's less than NUM_IMAGES on a page
@@ -65,7 +66,8 @@ class Art implements Page
         $renderer->assign('album', $album);
         $renderer->assign('promotedImageIndex', $promotedIndex);
         $renderer->assign('images', $images);
-        $renderer->assign('totalImageCount', $imageCount);
+        $renderer->assign('pagination', ['page' => $page, 'prefix' => $urlPrefix, ...$pagination]);
+        $renderer->assign('totalImageCount', $pagination['total_items']);
         $renderer->displayPage('album');
     }
 

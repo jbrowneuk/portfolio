@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-interface Page
+interface Action
 {
     public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams);
 }

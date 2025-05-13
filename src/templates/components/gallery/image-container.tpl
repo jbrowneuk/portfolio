@@ -1,5 +1,7 @@
 {* Smarty template: Gallery image grid container *}
 
+{include file="components/pagination.tpl"}
+
 <section class="page-section">
     <div class="container">
         {if count($images) === 0}
@@ -20,3 +22,5 @@
         {/if}
     </div>
 </section>
+
+{include file="components/pagination.tpl"}

@@ -4,7 +4,7 @@
     <ul role="navigation">
         {foreach $pagination|pagination as $segment}
             {assign var=activeClass value=($segment == $pagination['page']) ? 'active' : 'normal'}
-            <li class="{$activeClass}"><a href="{$pageUrl}/page/{$segment}">{$segment}</a></li>
+            <li class="{$activeClass}"><a href="{$pageUrl}{$pagination['prefix']|default:''}/page/{$segment}">{$segment}</a></li>
         {/foreach}
     </ul>
 </nav>

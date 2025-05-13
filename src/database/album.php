@@ -82,6 +82,23 @@ function get_image_count_for_album(\PDO $pdo, string $albumId)
 }
 
 /**
+ * Gets the data required for pagination. Returns the expected number of items
+ * for a page and the total number of items for an album.
+ *
+ * @param \PDO $pdo a connected PDO object
+ * @param string $albumId the ID of the album to get the data from
+ *
+ * @return array pagination data for the specified album
+ */
+function get_album_pagination_data(\PDO $pdo, string $albumId)
+{
+    return array(
+        'items_per_page' => IMAGES_PER_PAGE,
+        'total_items' => get_image_count_for_album($pdo, $albumId)
+    );
+}
+
+/**
  * Constructs image data from a database row
  *
  * @param \PDO $pdo a connected PDO object
@@ -117,19 +134,21 @@ function generate_image_data(\PDO $pdo, array $row)
  *
  * @return array a page of image data for the specified album
  */
-function get_images_for_album(\PDO $pdo, string $albumId, int $page)
+function get_images_for_album(\PDO $pdo, string $albumId, int $page = 1)
 {
     if ($albumId === null) {
         return [];
     }
+
+    $offset = ($page > 0 ? $page - 1 : 1) * POSTS_PER_PAGE;
 
     $statement = $pdo->prepare('SELECT *
         FROM image_albums
         JOIN images ON image_albums.image_id = images.image_id
         WHERE image_albums.album_id = :albumname
         ORDER BY images.timestamp DESC
-        LIMIT :limit');
-    $statement->execute(['albumname' => $albumId, 'limit' => IMAGES_PER_PAGE]);
+        LIMIT :offset, :limit');
+    $statement->execute(['albumname' => $albumId, 'offset' => $offset, 'limit' => IMAGES_PER_PAGE]);
 
     $images = [];
     while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {

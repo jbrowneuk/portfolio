@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class Portfolio implements Page
+class Portfolio implements Action
 {
     public function render($pdo, $renderer, $pageParams)
     {

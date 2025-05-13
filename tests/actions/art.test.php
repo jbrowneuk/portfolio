@@ -57,6 +57,14 @@ function get_image_count_for_album($pdo, $albumId)
     return $mockAlbumImageCount;
 }
 
+function get_album_pagination_data($pdo, $albumId)
+{
+    return array(
+        'items_per_page' => 5,
+        'total_items' => get_image_count_for_album($pdo, $albumId)
+    );
+}
+
 function get_images_for_album($pdo, $albumId, $page)
 {
     global $mockImageHorizontal, $mockImageVertical;
@@ -106,7 +114,7 @@ function get_image($pdo, $imageId)
     return $mockImage;
 }
 
-require_once 'src/core/page.php';
+require_once 'src/core/action.php';
 require_once 'src/core/renderer.php';
 
 require_once 'src/actions/art.php';
@@ -213,6 +221,20 @@ describe('Album page behaviour', function () {
         $expectedKey = 'totalImageCount';
         $result = runAssignTest($this, $subAction, $expectedKey);
         expect([$expectedKey, $mockAlbumImageCount])->toBe($result);
+    });
+
+    it('should assign pagination data', function () use ($subAction) {
+        global $mockAlbum;
+        $expectedKey = 'pagination';
+        $result = runAssignTest($this, $subAction, $expectedKey)[1];
+
+        // Expectation: this calls the mock
+        $mockPaginationData = get_album_pagination_data(null, null);
+
+        expect($result['page'])->toBe(1); // Expected default page
+        expect($result['prefix'])->toBe("/album/{$mockAlbum['album_id']}");
+        expect($result['items_per_page'])->toBe($mockPaginationData['items_per_page']);
+        expect($result['total_items'])->toBe($mockPaginationData['total_items']);
     });
 
     it('should display page on template', function () use ($subAction) {
