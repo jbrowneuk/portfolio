@@ -14,3 +14,13 @@ function posts_dbo_factory(\PDO $pdo)
 {
     return new PostsDBO($pdo);
 }
+
+/**
+ * Creates an instance of the AlbumDBO object
+ *
+ * @return IAlbumDBO an album database object
+ */
+function album_dbo_factory(\PDO $pdo): IAlbumDBO
+{
+    return new AlbumDBO($pdo);
+}
