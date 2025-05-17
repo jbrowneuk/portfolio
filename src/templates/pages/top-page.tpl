@@ -3,10 +3,9 @@
 {extends file="layout/wrapper.tpl"} 
 
 {block name="extra-stylesheets"}
-    <!-- [TODO] fix urls -->
-    <link href="./css/super-hero.css" rel="stylesheet">
-    <link href="./css/home-about.css" rel="stylesheet">
-    <link href="./css/home-rating-bar.css" rel="stylesheet">
+    <link href="{$styleRoot}/css/super-hero.css" rel="stylesheet">
+    <link href="{$styleRoot}/css/home-about.css" rel="stylesheet">
+    <link href="{$styleRoot}/css/home-rating-bar.css" rel="stylesheet">
 {/block}
 
 {block name="page-content"}
