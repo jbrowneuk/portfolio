@@ -16,6 +16,8 @@ templating and [Pest](https://pestphp.com/) for the unit tests. I'm
 intentionally keeping the dependencies minimal.
 
 ## Get up and running
+The code is written for an environment using PHP 8.4, and it needs support for the SQLite PDO.
+
 Composer is used to set up dependencies. Use `composer install`.
 
 A database setup SQL file is provided in `setup/database.sql`. This will create

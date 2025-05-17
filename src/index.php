@@ -4,12 +4,15 @@ namespace jbrowneuk;
 
 require_once '../vendor/autoload.php';
 
+require_once './interfaces/ialbumdbo.php';
+
 require_once './core/action.php';
 require_once './core/pagination.php';
 require_once './core/renderer.php';
 
 require_once './database/album.php';
 require_once './database/connect.php';
+require_once './database/factories.php';
 require_once './database/posts.php';
 
 require_once './services/github-projects.php';

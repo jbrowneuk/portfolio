@@ -33,28 +33,31 @@ class Art implements Action
         // Album name formatter
         $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
 
+        $albumDBO = album_dbo_factory($pdo);
+
         switch ($subAction) {
             case 'albums':
-                $this->renderAlbumList($pdo, $renderer);
+                $this->renderAlbumList($albumDBO, $renderer);
                 break;
 
             case 'view':
-                $this->renderImageView($pdo, $renderer, $pageParams);
+                $this->renderImageView($albumDBO, $renderer, $pageParams);
                 break;
 
             default:
-                $this->renderAlbumPage($pdo, $renderer, $pageParams);
+                $this->renderAlbumPage($albumDBO, $renderer, $pageParams);
                 break;
         }
     }
 
-    private function renderAlbumPage(\PDO $pdo, PortfolioRenderer $renderer, array $params)
+    private function renderAlbumPage(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params)
     {
         $page = parsePageNumber($params);
+
         $albumId = 'featured';
-        $album = get_album($pdo, $albumId);
-        $pagination = get_album_pagination_data($pdo, $albumId);
-        $images = get_images_for_album($pdo, $albumId, $page);
+        $album = $dbo->getAlbum($albumId);
+        $pagination = $dbo->getAlbumPaginationData($albumId);
+        $images = $dbo->getImagesForAlbum($albumId, $page);
         $urlPrefix = "/album/{$album['album_id']}";
 
         // Seed random number generator to get same promoted image per album page
@@ -71,20 +74,20 @@ class Art implements Action
         $renderer->displayPage('album');
     }
 
-    private function renderImageView(\PDO $pdo, PortfolioRenderer $renderer, array $params)
+    private function renderImageView(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params)
     {
         if (isset($params[0]) && is_numeric($params[0])) {
             $imageId = (int)$params[0];
-            $image = get_image($pdo, $imageId);
+            $image = $dbo->getImage($imageId);
             $renderer->assign('image', $image);
         }
 
         $renderer->displayPage('image');
     }
 
-    private function renderAlbumList(\PDO $pdo, PortfolioRenderer $renderer)
+    private function renderAlbumList(IAlbumDBO $dbo, PortfolioRenderer $renderer)
     {
-        $albums = get_albums($pdo);
+        $albums = $dbo->getAlbums();
         $renderer->assign('albums', $albums);
         $renderer->displayPage('album-list');
     }
