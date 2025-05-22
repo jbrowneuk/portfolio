@@ -4,16 +4,25 @@ namespace jbrowneuk;
 
 const EXPECTED_POST_COUNT = 5;
 
+const MOCK_POST = [
+    'post_id' => 'post-id',
+    'title' => 'title',
+    'content' => 'content',
+    'timestamp' => 1234567890,
+    'modified_timestamp' => null,
+    'tags' => 'abc'
+];
+
 describe('Posts Database Object', function () {
     require_once 'src/database/posts.php';
 
     beforeEach(function () {
+        $this->mockStatement = \Mockery::mock(\PDOStatement::class);
         $this->mockPdo = \Mockery::mock(\PDO::class);
     });
 
     describe('getPostCount', function () {
         beforeEach(function () {
-            $this->mockStatement = \Mockery::mock(\PDOStatement::class);
             $this->mockStatement
                 ->shouldReceive('fetch')
                 ->andReturn(['total' => EXPECTED_POST_COUNT]);
@@ -85,7 +94,6 @@ describe('Posts Database Object', function () {
 
     describe('getPosts', function () {
         beforeEach(function () {
-            $this->mockStatement = \Mockery::mock(\PDOStatement::class);
             $this->mockStatement
                 ->shouldReceive('fetch')
                 ->andReturn([]);
@@ -141,6 +149,46 @@ describe('Posts Database Object', function () {
                 ->once();
 
             expect($this->postsDbo->getPosts($page))->toBe([]);
+        });
+    });
+
+    describe('getPost', function () {
+        beforeEach(function () {
+            $this->postsDbo = new PostsDBO($this->mockPdo);
+
+            $this->mockStatement
+                ->shouldReceive('fetch')
+                ->andReturn(MOCK_POST);
+        });
+
+        it('should prepare using correct SQL', function () {
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->with('SELECT * FROM posts where post_id = :postId')
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPost('anything'))->toBe(MOCK_POST);
+        });
+
+        it('should fetch correct post using ID', function () {
+            $expectedId = 'hello-world';
+
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->with(['postId' => $expectedId])
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPost($expectedId))->toBe(MOCK_POST);
         });
     });
 });
