@@ -57,6 +57,16 @@ class PostsDBO implements IPostsDBO
         return $posts;
     }
 
+    public function getPost(string $postId)
+    {
+        $sql = 'SELECT * FROM posts where post_id = :postId';
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['postId' => $postId]);
+
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        return $this->generatePostData($row);
+    }
+
     /**
      * Constructs post data from a database row
      *

@@ -36,4 +36,13 @@ interface IPostsDBO
      * @return array array of post data
      */
     public function getPosts(int $page = 1, ?string $tag = null);
+
+    /**
+     * Gets a specific post's data
+     *
+     * @param string $postId the ID of the post to fetch
+     *
+     * @return array post data
+     */
+    public function getPost(string $postId);
 }
