@@ -64,6 +64,10 @@ class PostsDBO implements IPostsDBO
         $statement->execute(['postId' => $postId]);
 
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if ($row === false) {
+            return null;
+        }
+
         return $this->generatePostData($row);
     }
 

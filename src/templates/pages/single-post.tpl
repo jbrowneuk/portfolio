@@ -2,8 +2,18 @@
 
 {extends file="layout/wrapper.tpl"} 
 
-{block name="page-title"}Jason Browne: {$post['title']}{/block}
+{block name="page-title"}Jason Browne: {if isset($post)}{$post['title']}{else}Not found{/if}{/block}
 
 {block name="page-content"}
-    {include file="components/journal/post.tpl"}
+    {if isset($post)}
+        {include file="components/journal/post.tpl"}
+    {else}
+<section class="page-section text-center">
+    <h1>
+        <i class="las la-frown" aria-hidden="true"></i>
+        This post does not exist
+    </h1>
+    <p>Try going <a href="/journal">back to the journal</a>.</p>
+</section>
+    {/if}
 {/block}
