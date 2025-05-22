@@ -5,6 +5,7 @@ namespace jbrowneuk;
 require_once '../vendor/autoload.php';
 
 require_once './interfaces/ialbumdbo.php';
+require_once './interfaces/ipostsdbo.php';
 
 require_once './core/action.php';
 require_once './core/pagination.php';
