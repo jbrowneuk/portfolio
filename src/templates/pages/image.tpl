@@ -5,8 +5,7 @@
 {block name="page-title"}Jason Browne: Gallery{if isset($image)} - {$image['title']}{/if}{/block}
 
 {block name="extra-stylesheets"}
-    <!-- [TODO] fix urls -->
-    <link href="./css/art/image-preview.css" rel="stylesheet">
+    <link href="{$styleRoot}/css/art/image-preview.css" rel="stylesheet">
 {/block}
 
 {block name="page-content"}

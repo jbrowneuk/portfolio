@@ -5,8 +5,7 @@
 {block name="page-title"}Jason Browne{/block}
 
 {block name="extra-stylesheets"}
-    <!-- [TODO] fix urls -->
-    <link href="./css/error.css" rel="stylesheet">
+    <link href="{$styleRoot}/css/error.css" rel="stylesheet">
 {/block}
 
 {block name="page-content"}

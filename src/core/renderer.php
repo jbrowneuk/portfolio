@@ -6,6 +6,13 @@ class PortfolioRenderer extends \Smarty\Smarty
 {
     private static $parsedown = null;
 
+    /**
+     * Parses markdown to HTML text
+     *
+     * @param string $input markdown text content
+     * 
+     * @return string HTML representation of the markdown input
+     */
     public static function modifier_parsedown(string $input)
     {
         if (self::$parsedown === null) {
@@ -15,6 +22,13 @@ class PortfolioRenderer extends \Smarty\Smarty
         return self::$parsedown->text($input);
     }
 
+    /**
+     * Parses pagination data for rendering
+     *
+     * @param array $pagination paginatino data
+     *
+     * @return array pagination data
+     */
     public static function modifier_pagination(array $pagination)
     {
         $totalPages = ceil($pagination['total_items'] / $pagination['items_per_page']);
@@ -22,6 +36,9 @@ class PortfolioRenderer extends \Smarty\Smarty
         return $pages;
     }
 
+    /**
+     * Constructs an instance of the PortfolioRenderer
+     */
     public function __construct()
     {
         parent::__construct();
@@ -33,16 +50,31 @@ class PortfolioRenderer extends \Smarty\Smarty
         $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\PortfolioRenderer::modifier_pagination');
     }
 
+    /**
+     * Sets the style root directory
+     *
+     * @param string $directory root directory for all CSS URLs
+     */
     public function setStyleRoot(string $directory)
     {
-        $this->assign('styleDirectory', $directory);
+        $this->assign('styleRoot', $directory);
     }
 
+    /**
+     * Sets the page ID, used for pagination and navigation
+     *
+     * @param $stringid the page ID
+     */
     public function setPageId(string $id)
     {
         $this->assign('pageId', $id);
     }
 
+    /**
+     * Renders the page to a specified template
+     *
+     * @param string $template template name
+     */
     public function displayPage(string $template)
     {
         $this->display('pages/' . $template . '.tpl');
