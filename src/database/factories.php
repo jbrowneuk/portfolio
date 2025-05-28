@@ -10,7 +10,7 @@ namespace jbrowneuk;
 /**
  * Creates an instance of the PostsDBO object
  */
-function posts_dbo_factory(\PDO $pdo)
+function posts_dbo_factory(\PDO $pdo): IPostsDBO
 {
     return new PostsDBO($pdo);
 }

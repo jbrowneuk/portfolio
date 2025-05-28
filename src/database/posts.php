@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class PostsDBO
+class PostsDBO implements IPostsDBO
 {
     const POSTS_PER_PAGE = 5;
 
@@ -13,13 +13,6 @@ class PostsDBO
      */
     public function __construct(private readonly \PDO $pdo) {}
 
-    /**
-     * Gets the total post count, optionally scoped to a specific tag
-     *
-     * @param ?string $tag (optional) tag to scope the count to
-     *
-     * @return int total count of posts in the search scope
-     */
     public function getPostCount(?string $tag = null)
     {
         if ($tag != null && strlen($tag) > 0) {
@@ -33,15 +26,6 @@ class PostsDBO
         return $row['total'];
     }
 
-    /**
-     * Gets the data required for pagination, optionally scoped to a specific
-     * tag. Returns the expected number of posts for a page and the total
-     * number of posts.
-     *
-     * @param ?string $tag (optional) tag to scope the count to
-     *
-     * @return array pagination data (for the specified tag if provided)
-     */
     public function getPostPaginationData(?string $tag = null)
     {
         return array(
@@ -50,14 +34,6 @@ class PostsDBO
         );
     }
 
-    /**
-     * Gets a page of post data, optionally scoped to a specific tag
-     *
-     * @param int $page the page to get data from, defaults to 1
-     * @param ?string $tag (optional) tag to scope the count to
-     *
-     * @return array array of post data
-     */
     public function getPosts(int $page = 1, ?string $tag = null)
     {
         $offset = ($page > 0 ? $page - 1 : 1) * self::POSTS_PER_PAGE;
@@ -75,15 +51,41 @@ class PostsDBO
 
         $posts = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $post = [];
-            $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags'];
-            foreach ($cols as $column) {
-                $post[$column] = $row[$column];
-            }
-
-            $posts[] = $post;
+            $posts[] = $this->generatePostData($row);
         }
 
         return $posts;
+    }
+
+    public function getPost(string $postId)
+    {
+        $sql = 'SELECT * FROM posts where post_id = :postId';
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['postId' => $postId]);
+
+        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if ($row === false) {
+            return null;
+        }
+
+        return $this->generatePostData($row);
+    }
+
+    /**
+     * Constructs post data from a database row
+     *
+     * @param array $row the database row
+     *
+     * @return array post data array
+     */
+    private function generatePostData(array $row)
+    {
+        $post = [];
+        $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags'];
+        foreach ($cols as $column) {
+            $post[$column] = $row[$column];
+        }
+
+        return $post;
     }
 }
