@@ -8,7 +8,7 @@ class Journal implements Action
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
-            $subAction = array_shift($pageParams);
+            $subAction = $pageParams[0];
         }
 
         $postsDBO = posts_dbo_factory($pdo);
@@ -33,12 +33,19 @@ class Journal implements Action
     private function renderPostList(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams)
     {
         $page = parsePageNumber($pageParams);
+        $tag = getValueFromPageParams($pageParams, 'tag');
 
-        $posts = $postsDBO->getPosts($page);
-        $basePagination = $postsDBO->getPostPaginationData();
+        $posts = $postsDBO->getPosts($page, $tag);
+        $basePagination = $postsDBO->getPostPaginationData($tag);
 
         // Fill out pagination data
         $pagination = ['page' => $page, ...$basePagination];
+
+        // Add tag data to template, if set
+        if ($tag !== null) {
+            $renderer->assign('tag', $tag);
+            $pagination['prefix'] = "/tag/$tag";
+        }
 
         // Render page
         $renderer->assign('posts', $posts);
@@ -48,9 +55,9 @@ class Journal implements Action
 
     private function renderSinglePost(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams)
     {
-        // Since the first page parameter is 'post' and that's removed with array_shift, next element should be ID
-        if (isset($pageParams[0])) {
-            $post = $postsDBO->getPost($pageParams[0]);
+        // Since the first page parameter is 'post', next element should be ID
+        if (isset($pageParams[1])) {
+            $post = $postsDBO->getPost($pageParams[1]);
             $renderer->assign('post', $post);
         }
 

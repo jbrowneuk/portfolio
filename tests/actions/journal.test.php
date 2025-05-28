@@ -19,41 +19,20 @@ const MOCK_POST = [
 
 describe('Journal Action', function () {
     // Mocks 
-    class MockPostsDBO implements IPostsDBO
+    function posts_dbo_factory()
     {
-        public function __construct(public readonly \PDO $pdo) {}
+        $mock = \Mockery::mock(IPostsDBO::class);
+        $mock->shouldReceive('getPostCount')->andReturn(1);
+        $mock->shouldReceive('getPostPaginationData')->andReturn([
+            'items_per_page' => 5,
+            'total_items' => 50
+        ]);
+        $mock->shouldReceive('getPosts')->andReturn([]);
 
-        public function getPostCount($tag = null)
-        {
-            return 1;
-        }
+        $mock->shouldReceive('getPost')->with(MOCK_POST['post_id'])->andReturn(MOCK_POST);
+        $mock->shouldReceive('getPost')->andReturn(false);
 
-        public function getPostPaginationData(?string $tag = null)
-        {
-            return array(
-                'items_per_page' => 5,
-                'total_items' => 50
-            );
-        }
-
-        public function getPosts($page = 1, $tag = null)
-        {
-            return [];
-        }
-
-        public function getPost($id)
-        {
-            if ($id === MOCK_POST['post_id']) {
-                return MOCK_POST;
-            }
-
-            return false;
-        }
-    }
-
-    function posts_dbo_factory(\PDO $pdo)
-    {
-        return new MockPostsDBO($pdo);
+        return $mock;
     }
 
     beforeEach(function () {
@@ -85,9 +64,7 @@ describe('Journal Action', function () {
             $expectedTimestamp = time() - (60 * 60 * 24 * 365 * 2);
             $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
-            $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
-                return $value[0] === $expectedKey;
-            });
+            $result = array_find($this->assignCalls, fn($value) => $value[0] === $expectedKey);
             expect([$expectedKey, $expectedTimestamp])->toBe($result);
         });
     });
@@ -97,9 +74,7 @@ describe('Journal Action', function () {
             $expectedKey = 'posts';
             $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
-            $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
-                return $value[0] === $expectedKey;
-            });
+            $result = array_find($this->assignCalls, fn($value) => $value[0] === $expectedKey);
             expect([$expectedKey, []])->toBe($result);
         });
 
@@ -113,10 +88,25 @@ describe('Journal Action', function () {
 
             $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
-            $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
-                return $value[0] === $expectedKey;
-            });
+            $result = array_find($this->assignCalls, fn($value) => $value[0] === $expectedKey);
             expect([$expectedKey, $expectedPaginationData])->toBe($result);
+        });
+
+        // Tag is not stored in the class anywhere, but is assigned to the template
+        it('should assign tag if one exists in the page params', function () {
+            $expectedTag = 'potato';
+            $tagKey = 'tag';
+            $paginationKey = 'pagination';
+
+            $this->action->render($this->mockPdo, $this->mockRenderer, ['journal', 'tag', $expectedTag]);
+
+            // Check tag assigned to template
+            $tagResult = array_find($this->assignCalls, fn($value) => $value[0] === $tagKey);
+            expect($tagResult)->toBe([$tagKey, $expectedTag]);
+
+            // Check pagination has the tag prefix
+            $paginationResult = array_find($this->assignCalls, fn($value) => $value[0] === $paginationKey);
+            expect($paginationResult[1]['prefix'])->toBe("/tag/$expectedTag");
         });
 
         it('should display page on template', function () {
@@ -136,7 +126,7 @@ describe('Journal Action', function () {
 
             $this->action->render($this->mockPdo, $this->mockRenderer, $params);
 
-            $result = array_find($this->assignCalls, fn ($val) => $val[0] === 'post');
+            $result = array_find($this->assignCalls, fn($val) => $val[0] === 'post');
             expect($result)->toBe(['post', MOCK_POST]);
         });
 
@@ -145,7 +135,7 @@ describe('Journal Action', function () {
 
             $this->action->render($this->mockPdo, $this->mockRenderer, $params);
 
-            $result = array_find($this->assignCalls, fn ($val) => $val[0] === 'post');
+            $result = array_find($this->assignCalls, fn($val) => $val[0] === 'post');
             expect($result)->toBeNull();
         });
 
