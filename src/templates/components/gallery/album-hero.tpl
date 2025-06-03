@@ -1,6 +1,6 @@
 {* Smarty template: Gallery album page hero *}
 
-<section *ngIf="data" id="page-hero" class="page-section small-hero">
+<section id="page-hero" class="page-section small-hero">
     <div class="container">
         <div class="toolbar">
             <h1>{$album['name']}</h1>

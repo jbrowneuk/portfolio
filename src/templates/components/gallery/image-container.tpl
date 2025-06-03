@@ -5,7 +5,7 @@
 <section class="page-section">
     <div class="container">
         {if count($images) === 0}
-            <!-- Loading failed -->
+            {* Loading failed *}
             <div>
                 <h1>
                     <i class="las la-frown" aria-hidden="true"></i>
@@ -13,7 +13,7 @@
                 </h1>
             </div>
         {else}
-            <!-- Images -->
+            {* Images *}
             <div id="gallery-container" class="grid-list">
                 {foreach $images as $idx=>$image}
                     {include file="components/gallery/thumbnail.tpl" isPromoted="{$promotedImageIndex === $idx}"}

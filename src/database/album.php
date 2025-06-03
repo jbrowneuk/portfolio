@@ -41,6 +41,10 @@ class AlbumDBO implements IAlbumDBO
         $statement = $this->pdo->prepare('SELECT * FROM albums WHERE album_id = :albumId LIMIT 1');
         $statement->execute(['albumId' => $albumId]);
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        if ($row === false) {
+            return null;
+        }
+
         return $this->generateAlbumData($row);
     }
 

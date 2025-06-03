@@ -20,7 +20,7 @@ class Art implements Action
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
-            $subAction = array_shift($pageParams);
+            $subAction = $pageParams[0];
         }
 
         // [TODO] use subdirectory from config file
@@ -55,13 +55,23 @@ class Art implements Action
         $page = parsePageNumber($params);
 
         $albumId = 'featured';
+        $requestedAlbum = getValueFromPageParams($params, 'album');
+        if ($requestedAlbum !== null) {
+            $albumId = $requestedAlbum;
+        }
+
         $album = $dbo->getAlbum($albumId);
+        if ($album === null) {
+            $renderer->displayPage('album');
+            return;
+        }
+
         $pagination = $dbo->getAlbumPaginationData($albumId);
         $images = $dbo->getImagesForAlbum($albumId, $page);
         $urlPrefix = "/album/{$album['album_id']}";
 
         // Seed random number generator to get same promoted image per album page
-        $pageImageCount = count($images); // If there's less than NUM_IMAGES on a page
+        $pageImageCount = count($images) - 1; // If there's less than NUM_IMAGES on a page
         $seed = intval($album['album_id'] . $pageImageCount . $page, 36);
         mt_srand($seed);
         $promotedIndex = mt_rand(0, $pageImageCount);
@@ -76,8 +86,10 @@ class Art implements Action
 
     private function renderImageView(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params)
     {
-        if (isset($params[0]) && is_numeric($params[0])) {
-            $imageId = (int)$params[0];
+        // Since the first page parameter is 'view', next element should be ID
+        $idx = 1;
+        if (isset($params[$idx]) && is_numeric($params[$idx])) {
+            $imageId = (int)$params[$idx];
             $image = $dbo->getImage($imageId);
             $renderer->assign('image', $image);
         }
