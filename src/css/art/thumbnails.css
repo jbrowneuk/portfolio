@@ -61,8 +61,8 @@
 
 /* Disable the multi-row or -column images on mobile */
 @media screen and (max-width: 576px) {
-  :host-context(.large.horizontal),
-  :host-context(.large.vertical) {
+  .thumbnail.large.horizontal,
+  .thumbnail.large.vertical {
     grid-column: span 1;
     grid-row: span 1;
   }
