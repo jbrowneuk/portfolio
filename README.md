@@ -16,12 +16,22 @@ templating and [Pest](https://pestphp.com/) for the unit tests. I'm
 intentionally keeping the dependencies minimal.
 
 ## Get up and running
-The code is written for an environment using PHP 8.4, and it needs support for the SQLite PDO.
+The code is written for an environment using PHP 8.4, and it needs support for
+the SQLite PDO.
 
 Composer is used to set up dependencies. Use `composer install`.
 
 A database setup SQL file is provided in `setup/database.sql`. This will create
 the required tables to get going.
+
+### Style bundle as a submodule
+The [style bundle](https://github.com/jbrowneuk/style-bundle.git) is added as a
+submodule in `src/theme`. If you're cloning this repo for the first time, be
+sure to read the git documentation on how to use submodules.
+
+TL;DR:
+- `git submodule init` on initial clone to get git to fetch the submodules.
+- `git submodule update` to fetch latest commits from the submodule repo.
 
 ## Run unit tests
 `./vendor/bin/pest`
