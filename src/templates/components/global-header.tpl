@@ -10,7 +10,7 @@
                 <span class="link-text hide-sm">Jason Browne</span>
             </a>
             <ul id="nav-links">
-                {include file="./nav-link.tpl" url="/" title="portfolio" isActive="{(isset($pageId) && $pageId == 'portfolio')}"}
+                {include file="./nav-link.tpl" url="/" title="portfolio" isActive="{(isset($pageId) && $pageId == 'portfolio')}" extraClasses="hide-md hide-sm"}
                 {include file="./nav-link.tpl" url="/projects/code/" title="projects" isActive="{(isset($pageId) && $pageId == 'projects')}"}
                 {include file="./nav-link.tpl" url="/art/" title="art" isActive="{(isset($pageId) && $pageId == 'art')}"}
                 {include file="./nav-link.tpl" url="/journal/" title="posts" isActive="{(isset($pageId) && $pageId == 'journal')}"}
