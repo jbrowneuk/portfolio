@@ -1,7 +1,4 @@
 {* Smarty template: page header nav links *}
+{assign var=activeClass value=$isActive == 1 ? 'active' : ''}
 
-{if $isActive == 1}
-    <li><a href="{$url}" class="active">{$title}</a></li>
-{else}
-    <li><a href="{$url}">{$title}</a></li>
-{/if}
+<li><a href="{$url}" class="{$activeClass} {$extraClasses|default}">{$title}</a></li>
