@@ -6,12 +6,14 @@
 
 {block name="page-content"}
     {if isset($post)}
-        <nav class="breadcrumbs page-section">
-            <a href="/journal" data-back-button>All posts</a>
-            <span class="spacer">
-                <i class="las la-angle-double-right" aria-hidden="true"></i>
-            </span>
-            <span data-title>{$post['title']}</span>
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol role="navigation">
+                    <li><a href="/"><i class="las la-home"></i></a></li>
+                    <li><a href="/journal" data-back-button>Journal</a></li>
+                    <li data-title>{$post['title']}</li>
+                </ol>
+            </div>
         </nav>
 
         {include file="components/journal/post.tpl"}
