@@ -4,6 +4,10 @@
 
 {block name="page-title"}Jason Browne: Journal{/block}
 
+{block name="extra-stylesheets"}
+    <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
+{/block}
+
 {block name="page-content"}
     {include file="components/journal/tag-header.tpl"}
 

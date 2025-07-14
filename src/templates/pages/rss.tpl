@@ -5,7 +5,7 @@
         <title>Jason Browne’s Journal</title>
         <link>https://jbrowne.io</link>
         <description>Journal feed for Jason Browne’s Personal Journal</description>
-        <atom:link href="http://jbrowne.io/rss" rel="self" type="application/rss+xml" />
+        <atom:link href="http://jbrowne.io/rss/journal" rel="self" type="application/rss+xml" />
 
 {foreach $posts as $post}
         <item>
