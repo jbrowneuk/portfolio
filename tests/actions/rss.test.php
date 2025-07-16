@@ -54,3 +54,34 @@ describe('Journal RSS feed action', function () {
         $this->action->render($this->mockPdo, $this->mockRenderer, []);
     });
 });
+
+describe('Estimated read time calculation', function () {
+    $wordPerMinuteCount = 200;
+
+    it('should return [less than a minute read] for a zero-length text', function () {
+        $result = calc_read_time('');
+        expect($result)->toBe('less than a minute read');
+    });
+
+    it('should return [less than a minute read] for texts containing fewer than half words per minute count', function () use ($wordPerMinuteCount) {
+        $words = array_fill(0, ($wordPerMinuteCount / 2) - 1, 'A');
+        $content = join(' ', $words);
+        $result = calc_read_time($content);
+        expect($result)->toBe('less than a minute read');
+    });
+
+    it('should return [1 minute read] for texts containing words per minute count', function () use ($wordPerMinuteCount) {
+        $words = array_fill(0, $wordPerMinuteCount, 'A');
+        $content = join(' ', $words);
+        $result = calc_read_time($content);
+        expect($result)->toBe('1 minute read');
+    });
+
+    it('should calculate correct minute length for texts', function () use ($wordPerMinuteCount) {
+        $multiplier = 4;
+        $words = array_fill(0, $wordPerMinuteCount * $multiplier, 'A');
+        $content = join(' ', $words);
+        $result = calc_read_time($content);
+        expect($result)->toBe("$multiplier minute read");
+    });
+});
