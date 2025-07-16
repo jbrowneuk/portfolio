@@ -2,20 +2,11 @@
 
 namespace jbrowneuk;
 
+require_once 'src/database/posts.php';
+
 const EXPECTED_POST_COUNT = 5;
 
-const MOCK_POST = [
-    'post_id' => 'post-id',
-    'title' => 'title',
-    'content' => 'content',
-    'timestamp' => 1234567890,
-    'modified_timestamp' => null,
-    'tags' => 'abc'
-];
-
 describe('Posts Database Object', function () {
-    require_once 'src/database/posts.php';
-
     beforeEach(function () {
         $this->mockStatement = \Mockery::mock(\PDOStatement::class);
         $this->mockPdo = \Mockery::mock(\PDO::class);

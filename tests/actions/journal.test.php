@@ -6,35 +6,11 @@ require_once 'src/interfaces/ipostsdbo.php';
 require_once 'src/core/action.php';
 require_once 'src/core/renderer.php';
 
+require_once 'tests/mocks/post-dbo-factory.mock.php';
+
 require_once 'src/actions/journal.php';
 
-const MOCK_POST = [
-    'post_id' => 'post-id',
-    'title' => 'title',
-    'content' => 'content',
-    'timestamp' => 1234567890,
-    'modified_timestamp' => null,
-    'tags' => 'abc'
-];
-
 describe('Journal Action', function () {
-    // Mocks 
-    function posts_dbo_factory()
-    {
-        $mock = \Mockery::mock(IPostsDBO::class);
-        $mock->shouldReceive('getPostCount')->andReturn(1);
-        $mock->shouldReceive('getPostPaginationData')->andReturn([
-            'items_per_page' => 5,
-            'total_items' => 50
-        ]);
-        $mock->shouldReceive('getPosts')->andReturn([]);
-
-        $mock->shouldReceive('getPost')->with(MOCK_POST['post_id'])->andReturn(MOCK_POST);
-        $mock->shouldReceive('getPost')->andReturn(false);
-
-        return $mock;
-    }
-
     beforeEach(function () {
         $this->assignCalls = array();
 
@@ -75,7 +51,7 @@ describe('Journal Action', function () {
             $this->action->render($this->mockPdo, $this->mockRenderer, []);
 
             $result = array_find($this->assignCalls, fn($value) => $value[0] === $expectedKey);
-            expect([$expectedKey, []])->toBe($result);
+            expect([$expectedKey, [MOCK_POST]])->toBe($result);
         });
 
         it('should have pagination data', function () {

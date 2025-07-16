@@ -4,6 +4,10 @@
 
 {block name="page-title"}Jason Browne: {if isset($post)}{$post['title']}{else}Not found{/if}{/block}
 
+{block name="extra-stylesheets"}
+    <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
+{/block}
+
 {block name="page-content"}
     {if isset($post)}
         <nav class="breadcrumbs">

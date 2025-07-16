@@ -23,6 +23,7 @@ require_once './actions/error.php';
 require_once './actions/journal.php';
 require_once './actions/portfolio.php';
 require_once './actions/projects.php';
+require_once './actions/rss.php';
 
 require_once './config.php';
 
@@ -38,6 +39,7 @@ $routes = [
     'art' => Art::class,
     'journal' => Journal::class,
     'projects' => Projects::class,
+    'rss' => RSS::class,
     $errorAction => Error::class
 ];
 
