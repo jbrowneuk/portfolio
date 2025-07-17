@@ -21,6 +21,7 @@ require_once './database/posts.php';
 require_once './services/github-projects.php';
 
 require_once './actions/art.php';
+require_once './actions/auth.php';
 require_once './actions/editor.php';
 require_once './actions/error.php';
 require_once './actions/journal.php';
@@ -38,10 +39,11 @@ if (!$pdo) {
 // Page routes
 $errorAction = 'error';
 $routes = [
-    'portfolio' => Portfolio::class,
     'art' => Art::class,
+    'auth' => Auth::class,
     'editor' => Editor::class,
     'journal' => Journal::class,
+    'portfolio' => Portfolio::class,
     'projects' => Projects::class,
     'rss' => RSS::class,
     $errorAction => Error::class
