@@ -5,9 +5,9 @@ namespace jbrowneuk;
 /**
  * An action that controls logging in and out of the site's admin functionality
  */
-class Auth implements Action
+class Auth implements IAction
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
     {
         $renderer->setPageId('auth');
 

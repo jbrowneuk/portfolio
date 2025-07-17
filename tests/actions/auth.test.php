@@ -2,7 +2,8 @@
 
 namespace jbrowneuk;
 
-require_once 'src/core/action.php';
+require_once 'src/interfaces/iaction.php';
+
 require_once 'src/core/authentication.php';
 require_once 'src/core/renderer.php';
 

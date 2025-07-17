@@ -25,8 +25,9 @@ const MOCK_IMAGE_VERT = [
     'height' => 100
 ];
 
+require_once 'src/interfaces/iaction.php';
 require_once 'src/interfaces/ialbumdbo.php';
-require_once 'src/core/action.php';
+
 require_once 'src/core/renderer.php';
 
 require_once 'src/actions/art.php';

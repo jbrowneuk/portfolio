@@ -2,8 +2,9 @@
 
 namespace jbrowneuk;
 
+require_once 'src/interfaces/iaction.php';
 require_once 'src/interfaces/ipostsdbo.php';
-require_once 'src/core/action.php';
+
 require_once 'src/core/renderer.php';
 
 require_once 'tests/mocks/post-dbo-factory.mock.php';

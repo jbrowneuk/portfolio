@@ -14,9 +14,9 @@ function modifier_album_names($input)
     return implode(', ', $titles);
 }
 
-class Art implements Action
+class Art implements IAction
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
@@ -31,7 +31,7 @@ class Art implements Action
         $renderer->setPageId('art');
 
         // Album name formatter
-        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
+        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\Art::albumNameConcatenation');
 
         $albumDBO = album_dbo_factory($pdo);
 

@@ -2,9 +2,12 @@
 
 namespace jbrowneuk;
 
-class Error implements Action
+/**
+ * An action that shows a generic error page
+ */
+class Error implements IAction
 {
-  public function render($pdo, $renderer, $pageParams)
+  public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
   {
     $renderer->setPageId('error');
     $renderer->displayPage('error');
