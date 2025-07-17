@@ -66,19 +66,13 @@ describe('Art Action', function () {
         $this->action = new Art();
     });
 
-    describe('modifier_album_names', function () {
-        it('should return input if not an array', function () {
-            $input = 1024;
-            $result = modifier_album_names($input);
-            expect($result)->toBe($input);
-        });
-
+    describe('albumNameFormatter', function () {
         it('should return concatenated album names separated by comma from input data', function () {
             $input = [
                 ['name' => 'one'],
                 ['name' => 'two']
             ];
-            $result = modifier_album_names($input);
+            $result = Art::albumNameFormatter($input);
             expect($result)->toBe('one, two');
         });
     });
