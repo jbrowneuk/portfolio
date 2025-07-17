@@ -8,6 +8,7 @@ require_once './interfaces/ialbumdbo.php';
 require_once './interfaces/ipostsdbo.php';
 
 require_once './core/action.php';
+require_once './core/authentication.php';
 require_once './core/renderer.php';
 require_once './core/url-helpers.php';
 
