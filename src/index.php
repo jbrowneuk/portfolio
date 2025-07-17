@@ -6,17 +6,18 @@ require_once '../vendor/autoload.php';
 
 require_once './interfaces/iaction.php';
 require_once './interfaces/ialbumdbo.php';
+require_once './interfaces/iauthenticationdbo.php';
 require_once './interfaces/ipostsdbo.php';
 
 require_once './core/authentication.php';
 require_once './core/renderer.php';
 require_once './core/url-helpers.php';
 
-require_once './database/album.php';
+require_once './database/album.dbo.php';
 require_once './database/authentication.dbo.php';
 require_once './database/connect.php';
 require_once './database/factories.php';
-require_once './database/posts.php';
+require_once './database/posts.dbo.php';
 
 require_once './services/github-projects.php';
 

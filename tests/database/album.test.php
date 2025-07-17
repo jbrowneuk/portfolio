@@ -18,9 +18,9 @@ const MOCK_IMAGE = [
     'height' => 768
 ];
 
-describe('Album Database Object', function () {
-    require_once 'src/database/album.php';
+require_once 'src/database/album.dbo.php';
 
+describe('Album Database Object', function () {
     beforeEach(function () {
         $this->mockPdo = \Mockery::mock(\PDO::class);
         $this->albumDbo = new AlbumDBO($this->mockPdo);
