@@ -8,10 +8,12 @@ require_once './interfaces/ialbumdbo.php';
 require_once './interfaces/ipostsdbo.php';
 
 require_once './core/action.php';
+require_once './core/authentication.php';
 require_once './core/renderer.php';
 require_once './core/url-helpers.php';
 
 require_once './database/album.php';
+require_once './database/authentication.dbo.php';
 require_once './database/connect.php';
 require_once './database/factories.php';
 require_once './database/posts.php';
@@ -19,6 +21,8 @@ require_once './database/posts.php';
 require_once './services/github-projects.php';
 
 require_once './actions/art.php';
+require_once './actions/auth.php';
+require_once './actions/editor.php';
 require_once './actions/error.php';
 require_once './actions/journal.php';
 require_once './actions/portfolio.php';
@@ -35,9 +39,11 @@ if (!$pdo) {
 // Page routes
 $errorAction = 'error';
 $routes = [
-    'portfolio' => Portfolio::class,
     'art' => Art::class,
+    'auth' => Auth::class,
+    'editor' => Editor::class,
     'journal' => Journal::class,
+    'portfolio' => Portfolio::class,
     'projects' => Projects::class,
     'rss' => RSS::class,
     $errorAction => Error::class
@@ -69,6 +75,7 @@ if (array_key_exists($requestedAction, $routes)) {
 // Initialise page renderer
 $renderer = new PortfolioRenderer();
 $renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
+$renderer->setScriptDirectory(isset($scriptDirectory) ? $scriptDirectory : '');
 
 // Calculate pageUrl for pagination
 $pageUrl = "/$requestedAction";
