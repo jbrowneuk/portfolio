@@ -11,6 +11,7 @@ require_once './interfaces/ipostsdbo.php';
 
 require_once './core/authentication.php';
 require_once './core/renderer.php';
+require_once './core/routes.php';
 require_once './core/url-helpers.php';
 
 require_once './database/album.dbo.php';
@@ -36,19 +37,6 @@ $pdo = connect($db);
 if (!$pdo) {
     die('Could not connect to database.');
 }
-
-// Page routes
-$errorAction = 'error';
-$routes = [
-    'art' => Art::class,
-    'auth' => Auth::class,
-    'editor' => Editor::class,
-    'journal' => Journal::class,
-    'portfolio' => Portfolio::class,
-    'projects' => Projects::class,
-    'rss' => RSS::class,
-    $errorAction => Error::class
-];
 
 // Calculate action if provided
 if (isset($_SERVER['REQUEST_URI'])) {
