@@ -38,25 +38,16 @@ if (!$pdo) {
     die('Could not connect to database.');
 }
 
-// Calculate action if provided
-if (isset($_SERVER['REQUEST_URI'])) {
-    $requestUri = mb_strtolower($_SERVER['REQUEST_URI']);
-
-    // Drop subdirectory if it is in the request URI
-    if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
-        $requestUri = substr($requestUri, strlen($scriptDirectory));
-    }
-
-    $pageParams = array_filter(explode('/', $requestUri));
-    $detectedAction = array_shift($pageParams);
-    $requestedAction = isset($detectedAction) ? $detectedAction : $defaultAction;
-} else {
-    $pageParams = [];
-    $requestedAction = $defaultAction;
+// Clean request URI if script directory is defined
+$requestUri = mb_strtolower($_SERVER['REQUEST_URI'] | '');
+if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
+    $requestUri = substr($requestUri, strlen($scriptDirectory));
 }
 
-if (array_key_exists($requestedAction, $routes)) {
-    $actionClass = $routes[$requestedAction];
+// Calculate route
+$request = getRequestedPage($requestUri, $scriptDirectory, $defaultAction);
+if (array_key_exists($request['action'], $routes)) {
+    $actionClass = $routes[$request['action']];
 } else {
     $actionClass = $routes[$errorAction];
 }
@@ -67,7 +58,7 @@ $renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
 $renderer->setScriptDirectory(isset($scriptDirectory) ? $scriptDirectory : '');
 
 // Calculate pageUrl for pagination
-$pageUrl = "/$requestedAction";
+$pageUrl = "/{$request['action']}";
 if (isset($scriptDirectory)) {
     $pageUrl = $scriptDirectory . $pageUrl;
 }
@@ -76,4 +67,4 @@ $renderer->assign('pageUrl', $pageUrl);
 
 // Render the page
 $action = new $actionClass();
-$action->render($pdo, $renderer, $pageParams);
+$action->render($pdo, $renderer, $request['params']);

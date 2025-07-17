@@ -3,6 +3,39 @@
 namespace jbrowneuk;
 
 /**
+ * Attempts to parse the requested page and parameters from a path-like URI.
+ * Returns the parsed information as an associative array. If the path cannot be
+ * parsed, the provided default action will be returned with an empty parameter
+ * array.
+ * 
+ * - `action`: the action is the first segment of the path.
+ * - `params`: the params are generated from the remainder of the path, split on
+ *             the slash character.
+ * 
+ * Considering the following path, `/my-action/param/goes/here`, this function
+ * will return the following:
+ * - the action value will be `my-action`
+ * - the params value will be ['param', 'goes', 'here']
+ *
+ * @param string $path a path-like string
+ * @param string $defaultAction the default action to return
+ *
+ * @return array an array containing two keys, `action` and `params` which
+ *               represents the input path
+ */
+function getRequestedPage(string $path, string $defaultAction): array
+{
+    $page = ['action' => $defaultAction, 'params' => []];
+
+    $pageParams = array_filter(explode('/', $path));
+    $detectedAction = array_shift($pageParams);
+    $page['action'] = isset($detectedAction) ? $detectedAction : $defaultAction;
+    $page['params'] = $pageParams;
+
+    return $page;
+}
+
+/**
  * Attempts to parse a value from a key/value pair provided as a set of parameters.
  *
  * Considering a URL string split on slash, this function will try to find a
