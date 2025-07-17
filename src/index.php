@@ -12,6 +12,7 @@ require_once './core/renderer.php';
 require_once './core/url-helpers.php';
 
 require_once './database/album.php';
+require_once './database/authentication.dbo.php';
 require_once './database/connect.php';
 require_once './database/factories.php';
 require_once './database/posts.php';
