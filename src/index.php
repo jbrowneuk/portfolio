@@ -21,6 +21,7 @@ require_once './database/posts.php';
 require_once './services/github-projects.php';
 
 require_once './actions/art.php';
+require_once './actions/editor.php';
 require_once './actions/error.php';
 require_once './actions/journal.php';
 require_once './actions/portfolio.php';
@@ -39,6 +40,7 @@ $errorAction = 'error';
 $routes = [
     'portfolio' => Portfolio::class,
     'art' => Art::class,
+    'editor' => Editor::class,
     'journal' => Journal::class,
     'projects' => Projects::class,
     'rss' => RSS::class,
@@ -71,6 +73,7 @@ if (array_key_exists($requestedAction, $routes)) {
 // Initialise page renderer
 $renderer = new PortfolioRenderer();
 $renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
+$renderer->setScriptDirectory(isset($scriptDirectory) ? $scriptDirectory : '');
 
 // Calculate pageUrl for pagination
 $pageUrl = "/$requestedAction";
