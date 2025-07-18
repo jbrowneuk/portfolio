@@ -45,7 +45,7 @@ if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
 }
 
 // Calculate route
-$request = getRequestedPage($requestUri, $scriptDirectory, $defaultAction);
+$request = getRequestedPage($requestUri, $defaultAction);
 if (array_key_exists($request['action'], $routes)) {
     $actionClass = $routes[$request['action']];
 } else {
