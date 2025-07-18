@@ -2,9 +2,9 @@
 
 namespace jbrowneuk;
 
-require_once 'src/database/posts.php';
-
 const EXPECTED_POST_COUNT = 5;
+
+require_once 'src/database/posts.dbo.php';
 
 describe('Posts Database Object', function () {
     beforeEach(function () {

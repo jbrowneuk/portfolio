@@ -4,6 +4,39 @@ namespace jbrowneuk;
 
 require_once 'src/core/url-helpers.php';
 
+describe('getRequestedPage', function () {
+    it('should return default action and empty params if path is empty', function () {
+        $path = '';
+        $defaultAction = 'potato';
+
+        $result = getRequestedPage($path, $defaultAction);
+
+        expect($result['action'])->toBe($defaultAction);
+        expect($result['params'])->toBe([]);
+    });
+
+    it('should return action and empty params if path contains single element', function () {
+        $path = 'roast';
+        $defaultAction = 'potato';
+
+        $result = getRequestedPage($path, $defaultAction);
+
+        expect($result['action'])->toBe($path);
+        expect($result['params'])->toBe([]);
+    });
+
+    it('should return action and parsed params if path contains multiple elements', function () {
+        $path = 'roast/fried/boiled/baked';
+        $defaultAction = 'potato';
+        $pathBits = explode('/', $path);
+
+        $result = getRequestedPage($path, $defaultAction);
+
+        expect($result['action'])->toBe(array_shift($pathBits));
+        expect($result['params'])->toBe($pathBits);
+    });
+});
+
 describe('getValueFromPageParams', function () {
     it('should return value if array contains \'key\' as element n and a value as n+1', function () {
         $expectedKey = 'food';

@@ -10,7 +10,7 @@ class Authentication
     // Public to allow testing
     public const string LOGGED_IN_KEY = 'logged-in';
 
-    private AuthenticationDBO $dbo;
+    private IAuthenticationDBO $dbo;
 
     /**
      * Constructs a new instance of the authentication controller
@@ -19,7 +19,7 @@ class Authentication
      */
     public function __construct(private \PDO $pdo)
     {
-        $this->dbo = new AuthenticationDBO($pdo);
+        $this->dbo = authentication_dbo_factory($pdo);
     }
 
     /**

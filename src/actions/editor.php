@@ -2,9 +2,9 @@
 
 namespace jbrowneuk;
 
-class Editor implements Action
+class Editor implements IAction
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
     {
         $auth = new Authentication($pdo);
 

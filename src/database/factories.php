@@ -24,3 +24,13 @@ function album_dbo_factory(\PDO $pdo): IAlbumDBO
 {
     return new AlbumDBO($pdo);
 }
+
+/**
+ * Creates an instance of the AuthenticationDBO object
+ *
+ * @return IAuthenticationDBO an album database object
+ */
+function authentication_dbo_factory(\PDO $pdo): IAuthenticationDBO
+{
+    return new AuthenticationDBO($pdo);
+}

@@ -1,5 +1,7 @@
 vendor/
 smarty/
 
+src/.htaccess
+
 *.db
 *.sqlite

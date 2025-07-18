@@ -2,9 +2,12 @@
 
 namespace jbrowneuk;
 
-class Journal implements Action
+/**
+ * An action that renders the journal and individual posts
+ */
+class Journal implements IAction
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
@@ -30,7 +33,10 @@ class Journal implements Action
         }
     }
 
-    private function renderPostList(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams)
+    /**
+     * Renders the post list page
+     */
+    private function renderPostList(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams): void
     {
         $page = parsePageNumber($pageParams);
         $tag = getValueFromPageParams($pageParams, 'tag');
@@ -53,7 +59,10 @@ class Journal implements Action
         $renderer->displayPage('post-list');
     }
 
-    private function renderSinglePost(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams)
+    /**
+     * Renders a single post page
+     */
+    private function renderSinglePost(IPostsDBO $postsDBO, PortfolioRenderer $renderer, array $pageParams): void
     {
         // Since the first page parameter is 'post', next element should be ID
         if (isset($pageParams[1])) {

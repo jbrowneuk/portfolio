@@ -2,21 +2,25 @@
 
 namespace jbrowneuk;
 
-function modifier_album_names($input)
+/**
+ * An action that is used to render the art gallery and its individual images
+ */
+class Art implements IAction
 {
-    if (!is_array($input)) {
-        return $input;
+    /**
+     * Smarty modifier to concatenate the list of albums into a comma-separated string
+     *
+     * @param array $input array of albums
+     *
+     * @return string the names concatenated with commas
+     */
+    public static function albumNameFormatter(array $input): string
+    {
+        $titles = array_map(fn ($album) => $album['name'], $input);
+        return implode(', ', $titles);
     }
 
-    $titles = array_map(function ($album) {
-        return $album['name'];
-    }, $input);
-    return implode(', ', $titles);
-}
-
-class Art implements Action
-{
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams)
+    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
@@ -31,7 +35,7 @@ class Art implements Action
         $renderer->setPageId('art');
 
         // Album name formatter
-        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\modifier_album_names');
+        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\Art::albumNameFormatter');
 
         $albumDBO = album_dbo_factory($pdo);
 
@@ -45,12 +49,15 @@ class Art implements Action
                 break;
 
             default:
-                $this->renderAlbumPage($albumDBO, $renderer, $pageParams);
+                $this->renderAlbumImagePage($albumDBO, $renderer, $pageParams);
                 break;
         }
     }
 
-    private function renderAlbumPage(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params)
+    /**
+     * Renders the image thumbnail grid for an album
+     */
+    private function renderAlbumImagePage(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params): void
     {
         $page = parsePageNumber($params);
 
@@ -84,7 +91,10 @@ class Art implements Action
         $renderer->displayPage('album');
     }
 
-    private function renderImageView(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params)
+    /**
+     * Renders the single image view
+     */
+    private function renderImageView(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params): void
     {
         // Since the first page parameter is 'view', next element should be ID
         $idx = 1;
@@ -97,7 +107,10 @@ class Art implements Action
         $renderer->displayPage('image');
     }
 
-    private function renderAlbumList(IAlbumDBO $dbo, PortfolioRenderer $renderer)
+    /**
+     * Renders the list of albums
+     */
+    private function renderAlbumList(IAlbumDBO $dbo, PortfolioRenderer $renderer): void
     {
         $albums = $dbo->getAlbums();
         $renderer->assign('albums', $albums);
