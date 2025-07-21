@@ -21,7 +21,7 @@ class RSS implements IAction
     {
         $renderer->setPageId('rss');
 
-        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\calculateReadTime');
+        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\RSS::calculateReadTime');
 
         $postsDBO = posts_dbo_factory($pdo);
         $posts = $postsDBO->getPosts();
