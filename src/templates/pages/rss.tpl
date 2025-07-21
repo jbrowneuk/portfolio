@@ -11,8 +11,8 @@
         <item>
             <title>{$post['title']}</title>
             <pubDate>{$post['timestamp']|date_format:DateTime::RSS}</pubDate>
-            <link>https://jbrowne.io/journal/{$post['post_id']}</link>
-            <guid>https://jbrowne.io/journal/{$post['post_id']}</guid>
+            <link>https://jbrowne.io/journal/post/{$post['post_id']}</link>
+            <guid>https://jbrowne.io/journal/post/{$post['post_id']}</guid>
             <description>{$post['content']|readTime}. Tagged {$post['tags']|split:' '|join:', '}</description>
         </item>
 {/foreach}
