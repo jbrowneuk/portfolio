@@ -19,7 +19,7 @@
         <i class="las la-frown" aria-hidden="true"></i>
         This image does not exist
     </h1>
-    <p>Try going <a href="/art">back to the gallery</a>.</p>
+    <p>Try going <a href="{$scriptDirectory}/art">back to the gallery</a>.</p>
 </section>
 
     {/if}

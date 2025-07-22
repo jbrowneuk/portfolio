@@ -10,7 +10,7 @@
                 I spend a lot of my life being visually creative, and strive to bring
                 those skills into my daily work.
             </p>
-            <a role="button" class="button primary" routerLink="/art">
+            <a role="button" class="button primary" href="{$scriptDirectory}/art">
                 <i class="las la-rocket"></i> View the gallery
             </a>
         </div>
