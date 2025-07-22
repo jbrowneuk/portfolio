@@ -8,13 +8,27 @@ namespace jbrowneuk;
 interface IPostsDBO
 {
     /**
+     * Updates the number of posts loaded per page
+     *
+     * @param int $posts number of posts to load per page
+     */
+    public function setPostsPerPage(int $posts): void;
+
+    /**
+     * Controls whether the returned posts list contains drafts
+     *
+     * @param bool $shown whether drafts are shown
+     */
+    public function showDrafts(bool $shown): void;
+
+    /**
      * Gets the total post count, optionally scoped to a specific tag
      *
      * @param ?string $tag (optional) tag to scope the count to
      *
      * @return int total count of posts in the search scope
      */
-    public function getPostCount(?string $tag = null);
+    public function getPostCount(?string $tag = null): int;
 
     /**
      * Gets the data required for pagination, optionally scoped to a specific
@@ -25,7 +39,7 @@ interface IPostsDBO
      *
      * @return array pagination data (for the specified tag if provided)
      */
-    public function getPostPaginationData(?string $tag = null);
+    public function getPostPaginationData(?string $tag = null): array;
 
     /**
      * Gets a page of post data, optionally scoped to a specific tag
@@ -35,7 +49,7 @@ interface IPostsDBO
      *
      * @return array array of post data
      */
-    public function getPosts(int $page = 1, ?string $tag = null);
+    public function getPosts(int $page = 1, ?string $tag = null): array;
 
     /**
      * Gets a specific post's data
@@ -44,5 +58,5 @@ interface IPostsDBO
      *
      * @return array post data
      */
-    public function getPost(string $postId);
+    public function getPost(string $postId): ?array;
 }

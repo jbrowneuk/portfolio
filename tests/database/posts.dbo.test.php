@@ -12,7 +12,7 @@ describe('Posts Database Object', function () {
         $this->mockPdo = \Mockery::mock(\PDO::class);
     });
 
-    describe('getPostCount', function () {
+    describe('getPostCount - published only', function () {
         beforeEach(function () {
             $this->mockStatement
                 ->shouldReceive('fetch')
@@ -21,17 +21,17 @@ describe('Posts Database Object', function () {
             $this->postsDbo = new PostsDBO($this->mockPdo);
         });
 
-        it('should fetch post count of all posts if tag not provided', function () {
+        it('should fetch post count of all posts if tag not provided, with only published posts', function () {
             $this->mockPdo
                 ->shouldReceive('query')
-                ->with('SELECT count(post_id) AS total FROM posts')
+                ->with(PostsSQL::SELECT_POST_COUNT_PUBLISHED)
                 ->andReturn($this->mockStatement)
                 ->once();
 
             expect($this->postsDbo->getPostCount())->toBe(EXPECTED_POST_COUNT);
         });
 
-        it('should fetch post count of tagged posts if tag is provided', function () {
+        it('should fetch post count of tagged posts if tag is provided, with only published posts', function () {
             $tag = 'anything';
 
             $this->mockStatement
@@ -41,7 +41,45 @@ describe('Posts Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT count(post_id) AS total FROM posts WHERE tags LIKE :tag')
+                ->with(PostsSQL::SELECT_POST_COUNT_TAG_PUBLISHED)
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPostCount($tag))->toBe(EXPECTED_POST_COUNT);
+        });
+    });
+
+    describe('getPostCount - all posts', function () {
+        beforeEach(function () {
+            $this->mockStatement
+                ->shouldReceive('fetch')
+                ->andReturn(['total' => EXPECTED_POST_COUNT]);
+
+            $this->postsDbo = new PostsDBO($this->mockPdo);
+            $this->postsDbo->showDrafts(true);
+        });
+
+        it('should fetch post count of all posts if tag not provided, with only published posts', function () {
+            $this->mockPdo
+                ->shouldReceive('query')
+                ->with(PostsSQL::SELECT_POST_COUNT)
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPostCount())->toBe(EXPECTED_POST_COUNT);
+        });
+
+        it('should fetch post count of tagged posts if tag is provided, with only published posts', function () {
+            $tag = 'anything';
+
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->with(['tag' => "%$tag%"])
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->with(PostsSQL::SELECT_POST_COUNT_TAG)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -59,7 +97,7 @@ describe('Posts Database Object', function () {
 
             $pagination = $this->postsDbo->getPostPaginationData();
 
-            expect($pagination['items_per_page'])->toBe(PostsDBO::POSTS_PER_PAGE);
+            expect($pagination['items_per_page'])->toBe(PostsDBO::DEFAULT_POSTS_PER_PAGE);
         });
 
         it('should return total items if tag not specified', function () {
@@ -83,7 +121,7 @@ describe('Posts Database Object', function () {
         });
     });
 
-    describe('getPosts', function () {
+    describe('getPosts - published only', function () {
         beforeEach(function () {
             $this->mockStatement
                 ->shouldReceive('fetch')
@@ -95,12 +133,12 @@ describe('Posts Database Object', function () {
         it('should fetch a page of posts if tag not provided', function () {
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::POSTS_PER_PAGE])
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -112,12 +150,12 @@ describe('Posts Database Object', function () {
 
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts WHERE tags LIKE :tag ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS_TAGGED_PUBLISHED)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -126,16 +164,77 @@ describe('Posts Database Object', function () {
 
         it('should calculate correct page offset', function () {
             $page = 5;
-            $expectedOffset = ($page - 1) * PostsDBO::POSTS_PER_PAGE; // Zero-based pagination
+            $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
 
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::POSTS_PER_PAGE])
+                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPosts($page))->toBe([]);
+        });
+    });
+
+    describe('getPosts - all posts', function () {
+        beforeEach(function () {
+            $this->mockStatement
+                ->shouldReceive('fetch')
+                ->andReturn([]);
+
+            $this->postsDbo = new PostsDBO($this->mockPdo);
+            $this->postsDbo->showDrafts(true);
+        });
+
+        it('should fetch a page of posts if tag not provided', function () {
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->with(PostsSQL::SELECT_POSTS)
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPosts(1))->toBe([]);
+        });
+
+        it('should fetch a page of posts filtered to tag if tag provided', function () {
+            $tag = 'blog-post';
+
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->with(PostsSQL::SELECT_POSTS_TAGGED)
+                ->andReturn($this->mockStatement)
+                ->once();
+
+            expect($this->postsDbo->getPosts(1, $tag))->toBe([]);
+        });
+
+        it('should calculate correct page offset', function () {
+            $page = 5;
+            $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+
+            $this->mockStatement
+                ->shouldReceive('execute')
+                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                ->once();
+
+            $this->mockPdo
+                ->shouldReceive('prepare')
+                ->with(PostsSQL::SELECT_POSTS)
                 ->andReturn($this->mockStatement)
                 ->once();
 

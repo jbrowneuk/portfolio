@@ -14,6 +14,7 @@ const MOCK_POST = [
 function posts_dbo_factory()
 {
     $mock = \Mockery::mock(IPostsDBO::class);
+    $mock->shouldReceive('setPostsPerPage')->zeroOrMoreTimes(); // stub for now
     $mock->shouldReceive('getPostCount')->andReturn(1);
     $mock->shouldReceive('getPostPaginationData')->andReturn([
         'items_per_page' => 5,
