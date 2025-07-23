@@ -24,7 +24,7 @@
                 </p>
                 <p>
                     I also spend some of my spare time
-                    <a href="/code/lab">experimenting</a> with exciting new
+                    <a href="{$scriptDirectory}/code/lab">experimenting</a> with exciting new
                     technologies and processes in order to bridge the gap
                     between humans and the machines we use.
                 </p>

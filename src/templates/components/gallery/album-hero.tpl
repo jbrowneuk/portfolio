@@ -8,7 +8,8 @@
             <div class="secondary-text right-side" data-image-count>
                 {$totalImageCount} {$totalImageCount === 1 ? 'image' : 'images'}
             </div>
-            <a href="/art/albums" class="button primary right-side" data-album-selector>Pick another album</a>
+            <a href="{$scriptDirectory}/art/albums" class="button primary right-side" data-album-selector>Pick another
+                album</a>
         </div>
     </div>
 </section>

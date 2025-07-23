@@ -13,8 +13,8 @@
         <nav class="breadcrumbs">
             <div class="container">
                 <ol role="navigation">
-                    <li><a href="/"><i class="las la-home"></i></a></li>
-                    <li><a href="/journal" data-back-button>Journal</a></li>
+                    <li><a href="{$scriptDirectory}/"><i class="las la-home"></i></a></li>
+                    <li><a href="{$scriptDirectory}/journal" data-back-button>Journal</a></li>
                     <li data-title>{$post['title']}</li>
                 </ol>
             </div>
@@ -27,7 +27,7 @@
         <i class="las la-frown" aria-hidden="true"></i>
         This post does not exist
     </h1>
-    <p>Try going <a href="/journal">back to the journal</a>.</p>
+    <p>Try going <a href="{$scriptDirectory}/journal">back to the journal</a>.</p>
 </section>
     {/if}
 {/block}

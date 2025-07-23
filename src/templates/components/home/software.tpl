@@ -14,7 +14,7 @@
                 I also have a very basic User Experience skill set which I am actively
                 building upon.
             </p>
-            <a role="button" class="button primary" routerLink="/projects/code">
+            <a role="button" class="button primary" href="{$scriptDirectory}/projects/code">
                 <i class="las la-code"></i> View the source
             </a>
             <a role="button" class="button neutral" href="//github.com/jbrowneuk">

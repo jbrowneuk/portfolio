@@ -12,10 +12,10 @@
             <div class="map-list">
                 <header>Portfolio</header>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/art">Art</a></li>
-                    <li><a href="/projects/code">Projects</a></li>
-                    <li><a href="/journal">Posts</a></li>
+                    <li><a href="{$scriptDirectory}/">Home</a></li>
+                    <li><a href="{$scriptDirectory}/art">Art</a></li>
+                    <li><a href="{$scriptDirectory}/projects/code">Projects</a></li>
+                    <li><a href="{$scriptDirectory}/journal">Posts</a></li>
                 </ul>
             </div>
             <div class="map-list">
