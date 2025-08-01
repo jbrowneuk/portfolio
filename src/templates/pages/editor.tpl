@@ -5,9 +5,16 @@
 {block name="page-title"}Jason Browne: Post Editor{/block}
 
 {block name="page-content"}
-    <section class="page-section post">
-        <article class="container">
-            <h1>Editor works</h1>
-        </article>
-    </section>
+    <nav class="breadcrumbs">
+        <div class="container">
+            <ol role="navigation">
+                <li><a href="{$scriptDirectory}/"><i class="las la-home"></i></a></li>
+                <li><a href="{$scriptDirectory}/editor">Editor</a></li>
+            </ol>
+        </div>
+    </nav>
+
+    {include file="components/editor/post-list.tpl"}
+
+    {include file="components/pagination.tpl"}
 {/block}

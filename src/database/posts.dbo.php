@@ -124,7 +124,7 @@ class PostsDBO implements IPostsDBO
     private function generatePostData(array $row): array
     {
         $post = [];
-        $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags'];
+        $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags', 'published'];
         foreach ($cols as $column) {
             $post[$column] = $row[$column];
         }
