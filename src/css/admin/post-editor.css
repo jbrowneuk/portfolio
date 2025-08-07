@@ -1,0 +1,20 @@
+#post-editor input,
+#post-editor textarea {
+  width: 100%;
+  padding: 4px 8px;
+}
+
+.form-row {
+  margin: 0 0 16px;
+}
+
+.post-title {
+  font-size: var(--page-section_font-size_heading);
+}
+
+.post-content {
+  font-family: monospace;
+  resize: vertical;
+  height: 20vh;
+  min-height: 64px;
+}
