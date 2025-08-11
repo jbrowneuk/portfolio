@@ -5,48 +5,49 @@ namespace jbrowneuk;
 /**
  * An action that controls logging in and out of the site's admin functionality
  */
-class Auth implements IAction
+class Auth
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
-    {
-        $renderer->setPageId('auth');
+    public function __construct(private readonly IAuthentication $auth, private readonly IRenderer $renderer) {}
 
-        $auth = new Authentication($pdo);
+    public function __invoke(array $pageParams = [])
+    {
+        $this->renderer->setPageId('auth');
+
         $isLogout = array_search('logout', $pageParams, true) !== false;
 
         if ($isLogout) {
-            $this->handleLogout($auth, $renderer);
+            $this->handleLogout();
         } else {
-            $this->handleLogin($auth, $renderer);
+            $this->handleLogin();
         }
     }
 
     /**
      * Handles the login page request
      */
-    private function handleLogin(Authentication $auth, PortfolioRenderer $renderer): void
+    private function handleLogin(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = $auth->login($_POST['username'], $_POST['password']);
+            $result = $this->auth->login($_POST['username'], $_POST['password']);
             if (!$result) {
-                $renderer->assign('loginError', true);
+                $this->renderer->assign('loginError', true);
             }
         }
 
-        if ($auth->isAuthenticated()) {
-            $renderer->redirectTo('editor');
+        if ($this->auth->isAuthenticated()) {
+            $this->renderer->redirectTo('editor');
             return;
         }
 
-        $renderer->displayPage('login');
+        $this->renderer->displayPage('login');
     }
 
     /**
      * Handles the logout page request
      */
-    private function handleLogout(Authentication $auth, PortfolioRenderer $renderer): void
+    private function handleLogout(): void
     {
-        $auth->logout();
-        $renderer->redirectTo('');
+        $this->auth->logout();
+        $this->renderer->redirectTo('');
     }
 }

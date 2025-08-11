@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class RSS implements IAction
+class RSS
 {
     public static function calculateReadTime(string $content): string
     {
@@ -17,17 +17,17 @@ class RSS implements IAction
         return "$formattedTime minute read";
     }
 
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
+    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IRenderer $renderer) {}
+
+    public function __invoke()
     {
-        $renderer->setPageId('rss');
+        $this->renderer->setPageId('rss');
+        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\RSS::calculateReadTime');
 
-        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\RSS::calculateReadTime');
-
-        $postsDBO = posts_dbo_factory($pdo);
-        $posts = $postsDBO->getPosts();
-        $renderer->assign('posts', $posts);
+        $posts = $this->postsDBO->getPosts();
+        $this->renderer->assign('posts', $posts);
 
         header('Content-Type: application/rss+xml; charset=utf-8');
-        $renderer->displayPage('rss');
+        $this->renderer->displayPage('rss');
     }
 }

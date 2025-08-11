@@ -5,40 +5,24 @@ namespace jbrowneuk;
 /**
  * Controls user authentication on the site
  */
-class Authentication
+class Authentication implements IAuthentication
 {
     // Public to allow testing
     public const string LOGGED_IN_KEY = 'logged-in';
-
-    private IAuthenticationDBO $dbo;
 
     /**
      * Constructs a new instance of the authentication controller
      *
      * @param \PDO $pdo an active PDO object
      */
-    public function __construct(private \PDO $pdo)
-    {
-        $this->dbo = authentication_dbo_factory($pdo);
-    }
+    public function __construct(private readonly IAuthenticationDBO $dbo) {}
 
-    /**
-     * Gets whether a user is authenticated
-     */
     public function isAuthenticated(): bool
     {
         $this->initSession();
         return isset($_SESSION[self::LOGGED_IN_KEY]);
     }
 
-    /**
-     * Attempts to log in a user identified with the username and password. Returns success state.
-     *
-     * @param string $username the user's name
-     * @param string $password the user's password
-     *
-     * @return bool `true` if successful (i.e. the user exists), `false` if not
-     */
     public function login(string $username, #[\SensitiveParameter] string $password): bool
     {
         $this->initSession();

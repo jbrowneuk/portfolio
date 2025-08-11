@@ -5,11 +5,13 @@ namespace jbrowneuk;
 /**
  * An action that renders the top page of the portfolio
  */
-class Portfolio implements IAction
+class Portfolio
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
+    public function __construct(private readonly IRenderer $renderer) {}
+
+    public function __invoke()
     {
-        $renderer->setPageId('portfolio');
-        $renderer->displayPage('top-page');
+        $this->renderer->setPageId('portfolio');
+        $this->renderer->displayPage('top-page');
     }
 }

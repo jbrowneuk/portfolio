@@ -2,36 +2,31 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/iaction.php';
-
-require_once 'src/core/authentication.php';
-require_once 'src/core/renderer.php';
-
-require_once 'src/database/authentication.dbo.php';
+require_once 'src/interfaces/iauthentication.php';
+require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/editor.php';
 
 describe('Editor Action', function () {
     beforeEach(function () {
-        $this->mockPdo = $this->createMock(\PDO::class);
-        $this->mockRenderer = $this->createMock(PortfolioRenderer::class);
+        $this->mockAuth = \Mockery::mock(IAuthentication::class);
+        $this->mockRenderer = $this->createMock(IRenderer::class);
 
-        $this->action = new Editor();
+        $this->action = new Editor($this->mockAuth, $this->mockRenderer);
+    });
+
+    afterEach(function () {
+        \Mockery::close();
     });
 
     describe('When authenticated', function () {
         beforeEach(function () {
-            session_start();
-            $_SESSION[Authentication::LOGGED_IN_KEY] = true;
-        });
-
-        afterEach(function () {
-            session_destroy();
+            $this->mockAuth->shouldReceive('isAuthenticated')->andReturn(true);
         });
 
         it('should set page id', function () {
             $this->mockRenderer->expects($this->once())->method('setPageId')->with('admin');
-            $this->action->render($this->mockPdo, $this->mockRenderer, []);
+            ($this->action)([]);
         });
 
         it('should display page on template', function () {
@@ -41,14 +36,18 @@ describe('Editor Action', function () {
                 ->method('displayPage')
                 ->with('editor');
 
-            $this->action->render($this->mockPdo, $this->mockRenderer, []);
+            ($this->action)([]);
         });
     });
 
     describe('When not authenticated', function () {
+        beforeEach(function () {
+            $this->mockAuth->shouldReceive('isAuthenticated')->andReturn(false);
+        });
+
         it('should redirect to auth action', function () {
             $this->mockRenderer->expects($this->once())->method('redirectTo')->with('auth');
-            $this->action->render($this->mockPdo, $this->mockRenderer, []);
+            ($this->action)([]);
         });
     });
 });

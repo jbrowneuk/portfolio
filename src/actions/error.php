@@ -5,11 +5,13 @@ namespace jbrowneuk;
 /**
  * An action that shows a generic error page
  */
-class Error implements IAction
+class Error
 {
-  public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
-  {
-    $renderer->setPageId('error');
-    $renderer->displayPage('error');
-  }
+    public function __construct(private readonly IRenderer $renderer) {}
+
+    public function __invoke()
+    {
+        $this->renderer->setPageId('error');
+        $this->renderer->displayPage('error');
+    }
 }

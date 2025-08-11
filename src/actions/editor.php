@@ -2,18 +2,18 @@
 
 namespace jbrowneuk;
 
-class Editor implements IAction
+class Editor
 {
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
-    {
-        $auth = new Authentication($pdo);
+    public function __construct(private readonly IAuthentication $auth, private readonly IRenderer $renderer) {}
 
-        if (!$auth->isAuthenticated()) {
-            $renderer->redirectTo('auth');
+    public function __invoke()
+    {
+        if (!$this->auth->isAuthenticated()) {
+            $this->renderer->redirectTo('auth');
             return;
         }
 
-        $renderer->setPageId('admin');
-        $renderer->displayPage('editor');
+        $this->renderer->setPageId('admin');
+        $this->renderer->displayPage('editor');
     }
 }

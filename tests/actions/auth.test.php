@@ -2,44 +2,39 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/iaction.php';
-require_once 'src/interfaces/iauthenticationdbo.php';
-
-require_once 'src/core/authentication.php';
-require_once 'src/core/renderer.php';
-
-require_once 'src/database/authentication.dbo.php';
+require_once 'src/interfaces/iauthentication.php';
+require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/auth.php';
 
 describe('Authentication page', function () {
     beforeEach(function () {
-        session_start();
+        $this->authenticated = true;
 
-        $this->mockPdo = \Mockery::mock(\PDO::class);
-        $this->mockRenderer = \Mockery::mock(PortfolioRenderer::class);
-        $this->mockRenderer->shouldReceive('setPageId')->zeroOrMoreTimes();
-        $this->mockRenderer->shouldReceive('displayPage')->zeroOrMoreTimes();
+        $this->mockAuth = \Mockery::spy(IAuthentication::class);
+        $this->mockAuth->shouldReceive('isAuthenticated')->andReturnUsing(fn() => $this->authenticated);
 
-        $this->action = new Auth();
+        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+
+        $this->action = new Auth($this->mockAuth, $this->mockRenderer);
 
         // Mock server superglobal
         $_SERVER['REQUEST_METHOD'] = 'GET';
     });
 
     afterEach(function () {
-        if (session_id()) session_destroy();
+        \Mockery::close();
     });
 
     describe('When authenticated', function () {
         beforeEach(function () {
-            $_SESSION[Authentication::LOGGED_IN_KEY] = true;
+            $this->authenticated = true;
         });
 
         describe('Login page', function () {
             it('should redirect to editor page', function () {
-                $this->mockRenderer->shouldReceive('redirectTo')->with('editor');
-                $this->action->render($this->mockPdo, $this->mockRenderer, []);
+                ($this->action)([]);
+                $this->mockRenderer->shouldHaveReceived('redirectTo')->with('editor');
             });
         });
 
@@ -47,31 +42,31 @@ describe('Authentication page', function () {
             $params = ['logout'];
 
             it('should redirect to main page', function () use ($params) {
-                $this->mockRenderer->shouldReceive('redirectTo')->with('');
-                $this->action->render($this->mockPdo, $this->mockRenderer, $params);
+                ($this->action)($params);
+                $this->mockRenderer->shouldHaveReceived('redirectTo')->with('');
             });
 
-            it('should clear session', function () use ($params) {
-                $this->mockRenderer->shouldReceive('redirectTo')->once();
-                expect(isset($_SESSION[Authentication::LOGGED_IN_KEY]))->toBeTrue();
-
-                $this->action->render($this->mockPdo, $this->mockRenderer, $params);
-
-                expect(isset($_SESSION[Authentication::LOGGED_IN_KEY]))->toBeFalse();
+            it('should call logout on auth object', function () use ($params) {
+                ($this->action)($params);
+                $this->mockAuth->shouldHaveReceived('logout')->once();
             });
         });
     });
 
     describe('When not authenticated', function () {
+        beforeEach(function () {
+            $this->authenticated = false;
+        });
+
         describe('Login page', function () {
             it('should set page id', function () {
-                $this->mockRenderer->shouldReceive('setPageId')->with('auth');
-                $this->action->render($this->mockPdo, $this->mockRenderer, []);
+                ($this->action)([]);
+                $this->mockRenderer->shouldHaveReceived('setPageId')->with('auth');
             });
 
             it('should display login page template', function () {
-                $this->mockRenderer->shouldReceive('displayPage')->with('login');
-                $this->action->render($this->mockPdo, $this->mockRenderer, []);
+                ($this->action)([]);
+                $this->mockRenderer->shouldHaveReceived('displayPage')->with('login');
             });
 
             it('should attempt to login user and redirect on form submission with valid user', function () {
@@ -79,8 +74,14 @@ describe('Authentication page', function () {
                 $_POST['username'] = 'valid';
                 $_POST['password'] = 'valid';
 
-                $this->mockRenderer->shouldReceive('redirectTo')->with('editor');
-                $this->action->render($this->mockPdo, $this->mockRenderer, []);
+                $this->mockAuth->shouldReceive('login')->andReturnUsing(function () {
+                    $this->authenticated = true;
+                    return true;
+                });
+
+                ($this->action)([]);
+
+                $this->mockRenderer->shouldHaveReceived('redirectTo')->with('editor');
             });
 
             it('should show login error on form submission with invalid user', function () {
@@ -88,11 +89,13 @@ describe('Authentication page', function () {
                 $_POST['username'] = 'invalid';
                 $_POST['password'] = 'invalid';
 
-                $this->mockRenderer->shouldNotReceive('redirectTo');
-                $this->mockRenderer->shouldReceive('displayPage')->with('login');
-                $this->mockRenderer->shouldReceive('assign')->with('loginError', true);
+                $this->mockAuth->shouldReceive('login')->andReturn(false);
 
-                $this->action->render($this->mockPdo, $this->mockRenderer, []);
+                ($this->action)([]);
+
+                $this->mockRenderer->shouldNotHaveReceived('redirectTo');
+                $this->mockRenderer->shouldHaveReceived('displayPage')->with('login');
+                $this->mockRenderer->shouldHaveReceived('assign')->with('loginError', true);
             });
         });
 
@@ -100,8 +103,8 @@ describe('Authentication page', function () {
             $params = ['logout'];
 
             it('should redirect to main page', function () use ($params) {
-                $this->mockRenderer->shouldReceive('redirectTo')->with('');
-                $this->action->render($this->mockPdo, $this->mockRenderer, $params);
+                ($this->action)($params);
+                $this->mockRenderer->shouldHaveReceived('redirectTo')->with('');
             });
         });
     });
