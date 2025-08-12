@@ -2,21 +2,7 @@
 
 namespace jbrowneuk;
 
-const MOCK_ALBUM = [
-    'album_id' => 'id',
-    'name' => 'name',
-    'description' => 'description'
-];
-
-const MOCK_IMAGE = [
-    'image_id' => 569,
-    'title' => 'title',
-    'filename' => 'i.jpg',
-    'description' => 'desc',
-    'timestamp' => 123456789,
-    'width' => 1024,
-    'height' => 768
-];
+require_once 'tests/mocks/art.mock.php';
 
 require_once 'src/database/album.dbo.php';
 
@@ -52,17 +38,17 @@ describe('Album Database Object', function () {
             $albumStatement = \Mockery::mock(\PDOStatement::class);
             $albumStatement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
                 ->once();
             $albumStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM);
+                ->andReturn(MOCK_ALBUM_1);
 
             $countStatement = \Mockery::mock(\PDOStatement::class);
             $countStatement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
                 ->once();
             $countStatement
                 ->shouldReceive('fetch')
@@ -82,12 +68,12 @@ describe('Album Database Object', function () {
         });
 
         it('should fetch album by ID', function () {
-            $result = $this->albumDbo->getAlbum(MOCK_ALBUM['album_id']);
-            expect($result)->toContain(...MOCK_ALBUM);
+            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1['album_id']);
+            expect($result)->toContain(...MOCK_ALBUM_1);
         });
 
         it('should get image count for specified album', function () {
-            $result = $this->albumDbo->getAlbum(MOCK_ALBUM['album_id']);
+            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1['album_id']);
             expect($result['image_count'])->toBe($this->totalItemCount);
         });
     });
@@ -99,7 +85,7 @@ describe('Album Database Object', function () {
             $statement = \Mockery::mock(\PDOStatement::class);
             $statement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
                 ->once();
             $statement
                 ->shouldReceive('fetch')
@@ -111,7 +97,7 @@ describe('Album Database Object', function () {
                 ->once()
                 ->andReturn($statement);
 
-            $this->paginationData = $this->albumDbo->getAlbumPaginationData(MOCK_ALBUM['album_id']);
+            $this->paginationData = $this->albumDbo->getAlbumPaginationData(MOCK_ALBUM_1['album_id']);
         });
 
         it('should return max items per page', function () {
@@ -148,7 +134,7 @@ describe('Album Database Object', function () {
                 ->once()
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM['album_id']))->toBe([]);
+            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']))->toBe([]);
         });
 
         it('should fetch images for specified album ID', function () {
@@ -157,7 +143,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('execute')
                 ->once()
                 ->with([
-                    'albumName' => MOCK_ALBUM['album_id'],
+                    'albumName' => MOCK_ALBUM_1['album_id'],
                     'offset' => 0,
                     'limit' => AlbumDBO::IMAGES_PER_PAGE
                 ]);
@@ -175,7 +161,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('prepare')
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM['album_id']))->toBe([]);
+            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']))->toBe([]);
         });
 
         it('should fetch full image data for specified album ID', function () {
@@ -186,7 +172,7 @@ describe('Album Database Object', function () {
             $imagesInAlbumStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_IMAGE);
+                ->andReturn(MOCK_IMAGE_HORIZ);
             $imagesInAlbumStatement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
@@ -195,11 +181,11 @@ describe('Album Database Object', function () {
             $albumsForImageStatement
                 ->shouldReceive('execute')
                 ->once()
-                ->with(['imageId' => MOCK_IMAGE['image_id']]);
+                ->with(['imageId' => MOCK_IMAGE_HORIZ['image_id']]);
             $albumsForImageStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM);
+                ->andReturn(MOCK_ALBUM_1);
             $albumsForImageStatement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
@@ -223,8 +209,8 @@ describe('Album Database Object', function () {
             WHERE image_albums.image_id = :imageId')
                 ->andReturn($albumsForImageStatement);
 
-            $expected = [[...MOCK_IMAGE, 'albums' => [MOCK_ALBUM['album_id'] => MOCK_ALBUM]]];
-            $actual = $this->albumDbo->getImagesForAlbum(MOCK_ALBUM['album_id']);
+            $expected = [[...MOCK_IMAGE_HORIZ, 'albums' => [MOCK_ALBUM_1['album_id'] => MOCK_ALBUM_1]]];
+            $actual = $this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']);
 
             expect($actual)->toBe($expected);
         });
@@ -267,7 +253,7 @@ describe('Album Database Object', function () {
             $statement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM);
+                ->andReturn(MOCK_ALBUM_1);
             $statement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
@@ -278,7 +264,7 @@ describe('Album Database Object', function () {
                 ->once()
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getAlbumsForImage($expectedImageId))->toBe([MOCK_ALBUM['album_id'] => MOCK_ALBUM]);
+            expect($this->albumDbo->getAlbumsForImage($expectedImageId))->toBe([MOCK_ALBUM_1['album_id'] => MOCK_ALBUM_1]);
         });
     });
 
@@ -293,7 +279,7 @@ describe('Album Database Object', function () {
                 ->with(['imageId' => $expectedId]);
             $statement
                 ->shouldReceive('fetch')
-                ->andReturn(MOCK_IMAGE);
+                ->andReturn(MOCK_IMAGE_HORIZ);
 
             $albumsStatement = \Mockery::mock(\PDOStatement::class);
             $albumsStatement
@@ -313,7 +299,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('prepare')
                 ->andReturn($albumsStatement);
 
-            expect($this->albumDbo->getImage($expectedId))->toBe([...MOCK_IMAGE, 'albums' => []]);
+            expect($this->albumDbo->getImage($expectedId))->toBe([...MOCK_IMAGE_HORIZ, 'albums' => []]);
         });
     });
 });

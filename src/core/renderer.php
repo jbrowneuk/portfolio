@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-class PortfolioRenderer extends \Smarty\Smarty
+class PortfolioRenderer extends \Smarty\Smarty implements IRenderer
 {
     private static ?\Parsedown $parsedown = null;
     private string $scriptDirectory = '';
@@ -51,52 +51,27 @@ class PortfolioRenderer extends \Smarty\Smarty
         $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\PortfolioRenderer::modifier_pagination');
     }
 
-    /**
-     * Sets the style root directory
-     *
-     * @param string $directory root directory for all CSS URLs
-     */
     public function setStyleRoot(string $directory)
     {
         $this->assign('styleRoot', $directory);
     }
 
-    /**
-     * Sets the root directory for the index.php script to control redirects, etc
-     *
-     * @param string $directory root directory for the index.php script
-     */
     public function setScriptDirectory(string $directory)
     {
         $this->scriptDirectory = $directory;
         $this->assign('scriptDirectory', $directory);
     }
 
-    /**
-     * Sets the page ID, used for pagination and navigation
-     *
-     * @param $string id the page ID
-     */
     public function setPageId(string $id)
     {
         $this->assign('pageId', $id);
     }
 
-    /**
-     * Renders the page to a specified template
-     *
-     * @param string $template template name
-     */
     public function displayPage(string $template)
     {
         $this->display('pages/' . $template . '.tpl');
     }
 
-    /**
-     * Redirects to a location under the set scriptDirectory
-     *
-     * @param string $location location to redirect to
-     */
     public function redirectTo(string $location)
     {
         header("Location: {$this->scriptDirectory}/{$location}");

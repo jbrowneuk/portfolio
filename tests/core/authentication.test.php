@@ -6,13 +6,12 @@ require_once 'src/interfaces/iauthenticationdbo.php';
 
 require_once 'src/database/authentication.dbo.php';
 
-require_once 'tests/mocks/authentication-dbo-factory.mock.php';
-
 require_once 'src/core/authentication.php';
 
 describe('Authentication controller', function () {
     beforeEach(function () {
-        $this->authentication = new Authentication(\Mockery::mock(\PDO::class));
+        $this->authDBO = \Mockery::mock(IAuthenticationDBO::class);
+        $this->authentication = new Authentication($this->authDBO);
     });
 
     afterEach(function () {
@@ -21,10 +20,9 @@ describe('Authentication controller', function () {
 
     describe('Login', function() {
         it('should not allow login of invalid user', function () {
-            $username = 'invalid';
-            $password = 'invalid';
+            $this->authDBO->shouldReceive('verifyUser')->andReturn(false);
 
-            $result = $this->authentication->login($username, $password);
+            $result = $this->authentication->login('username', 'password');
 
             expect($result)->toBeFalse();
             expect(isset($_SESSION[Authentication::LOGGED_IN_KEY]))->toBeFalse();
@@ -34,10 +32,9 @@ describe('Authentication controller', function () {
             session_start();
             $originalId = session_id();
 
-            $username = 'valid';
-            $password = 'valid';
+            $this->authDBO->shouldReceive('verifyUser')->andReturn(true);
 
-            $result = $this->authentication->login($username, $password);
+            $result = $this->authentication->login('username', 'password');
 
             expect($result)->toBeTrue();
             expect(session_id())->not()->toBe($originalId);

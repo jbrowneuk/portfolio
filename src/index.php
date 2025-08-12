@@ -4,10 +4,11 @@ namespace jbrowneuk;
 
 require_once '../vendor/autoload.php';
 
-require_once './interfaces/iaction.php';
 require_once './interfaces/ialbumdbo.php';
+require_once './interfaces/iauthentication.php';
 require_once './interfaces/iauthenticationdbo.php';
 require_once './interfaces/ipostsdbo.php';
+require_once './interfaces/irenderer.php';
 
 require_once './core/authentication.php';
 require_once './core/renderer.php';
@@ -17,10 +18,11 @@ require_once './core/url-helpers.php';
 require_once './database/album.dbo.php';
 require_once './database/authentication.dbo.php';
 require_once './database/connect.php';
-require_once './database/factories.php';
 require_once './database/posts.dbo.php';
 
 require_once './services/github-projects.php';
+
+require_once './di/initialise.php';
 
 require_once './actions/art.php';
 require_once './actions/auth.php';
@@ -38,8 +40,11 @@ if (!$pdo) {
     die('Could not connect to database.');
 }
 
+$container = initialiseContainer($pdo);
+
 // Clean request URI if script directory is defined
-$requestUri = mb_strtolower($_SERVER['REQUEST_URI'] | '');
+$rawUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$requestUri = mb_strtolower($rawUri);
 if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
     $requestUri = substr($requestUri, strlen($scriptDirectory));
 }
@@ -65,6 +70,8 @@ if (isset($scriptDirectory)) {
 
 $renderer->assign('pageUrl', $pageUrl);
 
+$container->set(IRenderer::class, $renderer);
+
 // Render the page
-$action = new $actionClass();
-$action->render($pdo, $renderer, $request['params']);
+$container->call($actionClass, [$request['params']]);
+

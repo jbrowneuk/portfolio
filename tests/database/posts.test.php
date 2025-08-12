@@ -4,6 +4,8 @@ namespace jbrowneuk;
 
 const EXPECTED_POST_COUNT = 5;
 
+require_once 'tests/mocks/post.mock.php';
+
 require_once 'src/database/posts.dbo.php';
 
 describe('Posts Database Object', function () {

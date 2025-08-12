@@ -2,32 +2,28 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/iaction.php';
-
-require_once 'src/core/renderer.php';
+require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/portfolio.php';
 
 describe('Portfolio Top Page Action', function () {
     beforeEach(function () {
-        $this->mockPdo = $this->createMock(\PDO::class);
-        $this->mockRenderer = $this->createMock(PortfolioRenderer::class);
+        $this->mockRenderer = \Mockery::spy(IRenderer::class);
 
-        $this->action = new Portfolio();
+        $this->action = new Portfolio($this->mockRenderer);
+    });
+
+    afterEach(function () {
+        \Mockery::close();
     });
 
     it('should set page id', function () {
-        $this->mockRenderer->expects($this->once())->method('setPageId')->with('portfolio');
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        $this->mockRenderer->shouldReceive('setPageId')->once()->with('portfolio');
+        ($this->action)();
     });
 
     it('should display page on template', function () {
-        $this
-            ->mockRenderer
-            ->expects($this->atLeastOnce())
-            ->method('displayPage')
-            ->with('top-page');
-
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        $this->mockRenderer->shouldReceive('displayPage')->once()->with('top-page');
+        ($this->action)();
     });
 });

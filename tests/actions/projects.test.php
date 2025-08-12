@@ -13,51 +13,35 @@ function get_projects_from_github()
     return MOCK_PROJECTS;
 }
 
-require_once 'src/interfaces/iaction.php';
-
-require_once 'src/core/renderer.php';
+require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/projects.php';
 
 describe('Projects Action', function () {
     beforeEach(function () {
-        $this->mockPdo = $this->createMock(\PDO::class);
         $this->assignCalls = array();
-        $this->mockRenderer = $this->createMock(PortfolioRenderer::class);
-        $this
-            ->mockRenderer
-            ->expects($this->any())
-            ->method('assign')
-            ->with()
-            ->willReturnCallback(function ($key, $val) {
-                $this->assignCalls[] = [$key, $val];
-            });
+        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
+            $this->assignCalls[$key] = $val;
+        });
 
-        $this->action = new Projects();
+        $this->action = new Projects($this->mockRenderer);
+        ($this->action)();
+    });
+
+    afterEach(function () {
+        \Mockery::close();
     });
 
     it('should set page id', function () {
-        $this->mockRenderer->expects($this->once())->method('setPageId')->with('projects');
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        $this->mockRenderer->shouldHaveReceived('setPageId')->with('projects')->once();
     });
 
     it('should display page on template', function () {
-        $this
-            ->mockRenderer
-            ->expects($this->atLeastOnce())
-            ->method('displayPage')
-            ->with('projects');
-
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        $this->mockRenderer->shouldHaveReceived('displayPage')->with('projects')->once();
     });
 
     it('should assign project data', function () {
-        $expectedKey = 'projects';
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
-
-        $result = array_find($this->assignCalls, function ($value) use ($expectedKey) {
-            return $value[0] === $expectedKey;
-        });
-        expect([$expectedKey, MOCK_PROJECTS])->toBe($result);
+        expect($this->assignCalls['projects'])->toBe(MOCK_PROJECTS);
     });
 });

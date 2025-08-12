@@ -5,7 +5,7 @@ namespace jbrowneuk;
 /**
  * An action that is used to render the art gallery and its individual images
  */
-class Art implements IAction
+class Art
 {
     /**
      * Smarty modifier to concatenate the list of albums into a comma-separated string
@@ -20,7 +20,9 @@ class Art implements IAction
         return implode(', ', $titles);
     }
 
-    public function render(\PDO $pdo, PortfolioRenderer $renderer, array $pageParams): void
+    public function __construct(private readonly IAlbumDBO $albumsDBO, private readonly IRenderer $renderer) {}
+
+    public function __invoke(array $pageParams = [])
     {
         $subAction = '_default';
         if (isset($pageParams[0])) {
@@ -28,28 +30,26 @@ class Art implements IAction
         }
 
         // [TODO] use subdirectory from config file
-        $renderer->assign('imageRoot', '/media/art/');
-        $renderer->assign('thumbDir', 'thumbnails/');
-        $renderer->assign('imageDir', 'images/');
-        $renderer->assign('iconDir', 'icons/');
-        $renderer->setPageId('art');
+        $this->renderer->assign('imageRoot', '/media/art/');
+        $this->renderer->assign('thumbDir', 'thumbnails/');
+        $this->renderer->assign('imageDir', 'images/');
+        $this->renderer->assign('iconDir', 'icons/');
+        $this->renderer->setPageId('art');
 
         // Album name formatter
-        $renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\Art::albumNameFormatter');
-
-        $albumDBO = album_dbo_factory($pdo);
+        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\Art::albumNameFormatter');
 
         switch ($subAction) {
             case 'albums':
-                $this->renderAlbumList($albumDBO, $renderer);
+                $this->renderAlbumList();
                 break;
 
             case 'view':
-                $this->renderImageView($albumDBO, $renderer, $pageParams);
+                $this->renderImageView($pageParams);
                 break;
 
             default:
-                $this->renderAlbumImagePage($albumDBO, $renderer, $pageParams);
+                $this->renderAlbumImagePage($pageParams);
                 break;
         }
     }
@@ -57,7 +57,7 @@ class Art implements IAction
     /**
      * Renders the image thumbnail grid for an album
      */
-    private function renderAlbumImagePage(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params): void
+    private function renderAlbumImagePage(array $params): void
     {
         $page = parsePageNumber($params);
 
@@ -67,14 +67,14 @@ class Art implements IAction
             $albumId = $requestedAlbum;
         }
 
-        $album = $dbo->getAlbum($albumId);
+        $album = $this->albumsDBO->getAlbum($albumId);
         if ($album === null) {
-            $renderer->displayPage('album');
+            $this->renderer->displayPage('album');
             return;
         }
 
-        $pagination = $dbo->getAlbumPaginationData($albumId);
-        $images = $dbo->getImagesForAlbum($albumId, $page);
+        $pagination = $this->albumsDBO->getAlbumPaginationData($albumId);
+        $images = $this->albumsDBO->getImagesForAlbum($albumId, $page);
         $urlPrefix = "/album/{$album['album_id']}";
 
         // Seed random number generator to get same promoted image per album page
@@ -83,37 +83,37 @@ class Art implements IAction
         mt_srand($seed);
         $promotedIndex = mt_rand(0, $pageImageCount);
 
-        $renderer->assign('album', $album);
-        $renderer->assign('promotedImageIndex', $promotedIndex);
-        $renderer->assign('images', $images);
-        $renderer->assign('pagination', ['page' => $page, 'prefix' => $urlPrefix, ...$pagination]);
-        $renderer->assign('totalImageCount', $pagination['total_items']);
-        $renderer->displayPage('album');
+        $this->renderer->assign('album', $album);
+        $this->renderer->assign('promotedImageIndex', $promotedIndex);
+        $this->renderer->assign('images', $images);
+        $this->renderer->assign('pagination', ['page' => $page, 'prefix' => $urlPrefix, ...$pagination]);
+        $this->renderer->assign('totalImageCount', $pagination['total_items']);
+        $this->renderer->displayPage('album');
     }
 
     /**
      * Renders the single image view
      */
-    private function renderImageView(IAlbumDBO $dbo, PortfolioRenderer $renderer, array $params): void
+    private function renderImageView(array $params): void
     {
         // Since the first page parameter is 'view', next element should be ID
         $idx = 1;
         if (isset($params[$idx]) && is_numeric($params[$idx])) {
             $imageId = (int)$params[$idx];
-            $image = $dbo->getImage($imageId);
-            $renderer->assign('image', $image);
+            $image = $this->albumsDBO->getImage($imageId);
+            $this->renderer->assign('image', $image);
         }
 
-        $renderer->displayPage('image');
+        $this->renderer->displayPage('image');
     }
 
     /**
      * Renders the list of albums
      */
-    private function renderAlbumList(IAlbumDBO $dbo, PortfolioRenderer $renderer): void
+    private function renderAlbumList(): void
     {
-        $albums = $dbo->getAlbums();
-        $renderer->assign('albums', $albums);
-        $renderer->displayPage('album-list');
+        $albums = $this->albumsDBO->getAlbums();
+        $this->renderer->assign('albums', $albums);
+        $this->renderer->displayPage('album-list');
     }
 }

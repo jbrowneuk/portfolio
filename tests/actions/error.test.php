@@ -2,32 +2,28 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/iaction.php';
-
-require_once 'src/core/renderer.php';
+require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/error.php';
 
 describe('Error Action', function () {
     beforeEach(function () {
-        $this->mockPdo = $this->createMock(\PDO::class);
-        $this->mockRenderer = $this->createMock(PortfolioRenderer::class);
+        $this->mockRenderer = \Mockery::spy(IRenderer::class);
 
-        $this->action = new Error();
+        $this->action = new Error($this->mockRenderer);
+    });
+
+    afterEach(function () {
+        \Mockery::close();
     });
 
     it('should set page id', function () {
-        $this->mockRenderer->expects($this->once())->method('setPageId')->with('error');
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        ($this->action)();
+        $this->mockRenderer->shouldHaveReceived('setPageId')->once()->with('error');
     });
 
     it('should display page on template', function () {
-        $this
-            ->mockRenderer
-            ->expects($this->atLeastOnce())
-            ->method('displayPage')
-            ->with('error');
-
-        $this->action->render($this->mockPdo, $this->mockRenderer, []);
+        ($this->action)();
+        $this->mockRenderer->shouldHaveReceived('displayPage')->once()->with('error');
     });
 });
