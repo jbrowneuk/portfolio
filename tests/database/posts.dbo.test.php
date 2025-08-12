@@ -14,6 +14,35 @@ describe('Posts Database Object', function () {
         $this->mockPdo = \Mockery::mock(\PDO::class);
     });
 
+    describe('setPostsPerPage', function () {
+        beforeEach(function () {
+            $this->postsDbo = new PostsDBO($this->mockPdo);
+        });
+
+        it('should change posts per page for pagination', function () {
+            $newCount = 16;
+            $this->postsDbo->setPostsPerPage($newCount);
+
+            $this->mockPdo->shouldReceive('query')->andReturn($this->mockStatement);
+            $this->mockStatement->shouldReceive('fetch')->andReturn(['total' => 0]);
+
+            $result = $this->postsDbo->getPostPaginationData();
+            expect($result['items_per_page'])->toBe($newCount);
+        });
+
+        it('should change posts per page for getPosts query', function () {
+            $newCount = 16;
+            $this->postsDbo->setPostsPerPage($newCount);
+
+            $this->mockPdo->shouldReceive('prepare')->andReturn($this->mockStatement);
+            $this->mockStatement->shouldReceive('execute')->with(['offset' => 0, 'limit' => $newCount]);
+            $this->mockStatement->shouldReceive('fetch')->andReturn(false);
+
+            $result = $this->postsDbo->getPosts();
+            expect($result)->toBe([]); // Make sure the function has returned
+        });
+    });
+
     describe('getPostCount', function () {
         beforeEach(function () {
             $this->mockStatement
@@ -26,7 +55,7 @@ describe('Posts Database Object', function () {
         it('should fetch post count of all posts if tag not provided', function () {
             $this->mockPdo
                 ->shouldReceive('query')
-                ->with('SELECT count(post_id) AS total FROM posts')
+                ->with(PostsSQL::SELECT_POST_COUNT)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -43,7 +72,7 @@ describe('Posts Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT count(post_id) AS total FROM posts WHERE tags LIKE :tag')
+                ->with(PostsSQL::SELECT_POST_COUNT_TAGGED)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -61,7 +90,7 @@ describe('Posts Database Object', function () {
 
             $pagination = $this->postsDbo->getPostPaginationData();
 
-            expect($pagination['items_per_page'])->toBe(PostsDBO::POSTS_PER_PAGE);
+            expect($pagination['items_per_page'])->toBe(PostsDBO::DEFAULT_POSTS_PER_PAGE);
         });
 
         it('should return total items if tag not specified', function () {
@@ -97,12 +126,12 @@ describe('Posts Database Object', function () {
         it('should fetch a page of posts if tag not provided', function () {
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::POSTS_PER_PAGE])
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -114,12 +143,12 @@ describe('Posts Database Object', function () {
 
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts WHERE tags LIKE :tag ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS_TAGGED)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -128,16 +157,16 @@ describe('Posts Database Object', function () {
 
         it('should calculate correct page offset', function () {
             $page = 5;
-            $expectedOffset = ($page - 1) * PostsDBO::POSTS_PER_PAGE; // Zero-based pagination
+            $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
 
             $this->mockStatement
                 ->shouldReceive('execute')
-                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::POSTS_PER_PAGE])
+                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
                 ->once();
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts ORDER BY timestamp DESC LIMIT :offset, :limit')
+                ->with(PostsSQL::SELECT_POSTS)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -161,7 +190,7 @@ describe('Posts Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM posts where post_id = :postId')
+                ->with(PostsSQL::SELECT_SINGLE_POST)
                 ->andReturn($this->mockStatement)
                 ->once();
 
