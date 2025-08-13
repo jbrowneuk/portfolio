@@ -52,7 +52,7 @@ function getRequestedPage(string $path, string $defaultAction): array
 function getValueFromPageParams(array $pageParams, string $key): string | null
 {
     $index = array_find_key($pageParams, fn($item) => $item === $key);
-    if (!array_key_exists($index + 1, $pageParams)) {
+    if ($index === null || !array_key_exists($index + 1, $pageParams)) {
         return null;
     }
 

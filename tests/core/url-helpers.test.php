@@ -56,6 +56,15 @@ describe('getValueFromPageParams', function () {
 
         expect($actual)->toBeNull();
     });
+
+    it('should return null if item not found in array', function () {
+        $keyToFind = 'tag';
+        $params = ['page', '3'];
+
+        $actual = getValueFromPageParams($params, $keyToFind);
+
+        expect($actual)->toBeNull();
+    });
 });
 
 describe('parsePageNumber', function () {
