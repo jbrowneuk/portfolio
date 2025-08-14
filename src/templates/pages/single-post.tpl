@@ -2,7 +2,7 @@
 
 {extends file="layout/wrapper.tpl"} 
 
-{block name="page-title"}Jason Browne: {if isset($post)}{$post['title']}{else}Not found{/if}{/block}
+{block name="page-title"}Jason Browne: {if isset($post)}{$post->title}{else}Not found{/if}{/block}
 
 {block name="extra-stylesheets"}
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
@@ -15,7 +15,7 @@
                 <ol role="navigation">
                     <li><a href="{$scriptDirectory}/"><i class="las la-home"></i></a></li>
                     <li><a href="{$scriptDirectory}/journal" data-back-button>Journal</a></li>
-                    <li data-title>{$post['title']}</li>
+                    <li data-title>{$post->title}</li>
                 </ol>
             </div>
         </nav>

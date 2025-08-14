@@ -17,7 +17,7 @@ describe('Journal Action', function () {
         ]);
         $postsDBO->shouldReceive('getPosts')->andReturn([MOCK_POST]);
 
-        $postsDBO->shouldReceive('getPost')->with(MOCK_POST['post_id'])->andReturn(MOCK_POST);
+        $postsDBO->shouldReceive('getPost')->with(MOCK_POST_ROW['post_id'])->andReturn(MOCK_POST);
         $postsDBO->shouldReceive('getPost')->andReturn(false);
 
         return $postsDBO;
@@ -94,7 +94,7 @@ describe('Journal Action', function () {
 
     describe('renderSinglePost', function () {
         it('should fetch post data if post ID is provided after post in params', function () {
-            ($this->action)(['post', MOCK_POST['post_id']]);
+            ($this->action)(['post', MOCK_POST_ROW['post_id']]);
             expect($this->assignCalls['post'])->toBe(MOCK_POST);
         });
 
@@ -104,7 +104,7 @@ describe('Journal Action', function () {
         });
 
         it('should display page on template', function () {
-            ($this->action)(['post', MOCK_POST['post_id']]);
+            ($this->action)(['post', MOCK_POST_ROW['post_id']]);
             $this->mockRenderer->shouldHaveReceived('displayPage')->with('single-post')->once();
         });
     });
