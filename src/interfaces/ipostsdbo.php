@@ -8,6 +8,13 @@ namespace jbrowneuk;
 interface IPostsDBO
 {
     /**
+     * Updates the number of posts loaded per page
+     *
+     * @param int $posts number of posts to load per page
+     */
+    public function setPostsPerPage(int $posts): void;
+
+    /**
      * Gets the total post count, optionally scoped to a specific tag
      *
      * @param ?string $tag (optional) tag to scope the count to

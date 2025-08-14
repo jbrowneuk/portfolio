@@ -9,7 +9,7 @@ require_once 'src/actions/rss.php';
 
 describe('Journal RSS feed action', function () {
     beforeEach(function () {
-        $this->postsDBO = \Mockery::mock(IPostsDBO::class);
+        $this->postsDBO = \Mockery::spy(IPostsDBO::class);
         $this->postsDBO->shouldReceive('getPosts')->andReturn([MOCK_POST]);
 
         $this->assignCalls = array();
@@ -28,6 +28,10 @@ describe('Journal RSS feed action', function () {
 
     it('should set page id', function () {
         $this->mockRenderer->shouldHaveReceived('setPageId')->with('rss')->once();
+    });
+
+    it('should set posts count', function () {
+        $this->postsDBO->shouldHaveReceived('setPostsPerPage')->once();
     });
 
     it('should assign posts', function () {

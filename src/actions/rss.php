@@ -17,7 +17,9 @@ class RSS
         return "$formattedTime minute read";
     }
 
-    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IRenderer $renderer) {}
+    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IRenderer $renderer) {
+        $this->postsDBO->setPostsPerPage(16);
+    }
 
     public function __invoke()
     {
