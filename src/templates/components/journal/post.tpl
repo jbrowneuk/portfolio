@@ -22,7 +22,7 @@
         <footer>
             <ul data-post-tags class="tags-area">
                 <li><i aria-hidden="true" class="las la-tags"></i></li>
-                {foreach $post->tags|split:' ' as $tag}
+                {foreach $post->tags as $tag}
                     <li class="tag-container" data-post-tag="{$tag}"><a class="tag"
                             href="{$scriptDirectory}/journal/tag/{$tag}">#{$tag}</a></li>
                 {/foreach}

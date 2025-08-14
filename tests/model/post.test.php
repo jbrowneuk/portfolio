@@ -10,6 +10,6 @@ describe('Post object', function () {
         expect($post->content)->toBe(MOCK_POST_ROW['content']);
         expect($post->timestamp)->toBe(MOCK_POST_ROW['timestamp']);
         expect($post->modified)->toBe(MOCK_POST_ROW['modified_timestamp']);
-        expect($post->tags)->toBe(MOCK_POST_ROW['tags']);
+        expect($post->tags)->toBe(explode(' ', MOCK_POST_ROW['tags']));
     });
 });

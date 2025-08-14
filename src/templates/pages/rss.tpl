@@ -13,7 +13,7 @@
             <pubDate>{$post->timestamp|date_format:DateTime::RSS}</pubDate>
             <link>https://jbrowne.io/journal/post/{$post->id}</link>
             <guid>https://jbrowne.io/journal/post/{$post->id}</guid>
-            <description>{$post->content|readTime}. Tagged {$post->tags|split:' '|join:', '}</description>
+            <description>{$post->content|readTime}. Tagged {$post->tags|join:', '}</description>
         </item>
 {/foreach}
 
