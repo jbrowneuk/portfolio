@@ -2,10 +2,12 @@
 
 namespace jbrowneuk;
 
+require_once 'src/model/album.php';
+
 const MOCK_PER_PAGE = 5;
 const MOCK_IMAGE_COUNT = 1024;
-const MOCK_ALBUM_1 = ['album_id' => 'id1', 'name' => 'a1', 'description' => 'desc1'];
-const MOCK_ALBUM_2 = ['album_id' => 'id2', 'name' => 'a2', 'description' => 'desc2'];
+const MOCK_ALBUM_1_ROW = ['album_id' => 'id1', 'name' => 'a1', 'description' => 'desc1'];
+const MOCK_ALBUM_2_ROW = ['album_id' => 'id2', 'name' => 'a2', 'description' => 'desc2'];
 const MOCK_IMAGE_HORIZ = [
     'image_id' => 1,
     'title' => 'i',
@@ -24,3 +26,6 @@ const MOCK_IMAGE_VERT = [
     'width' => 50,
     'height' => 100
 ];
+
+const MOCK_ALBUM_1 = new Album(MOCK_ALBUM_1_ROW);
+const MOCK_ALBUM_2 = new Album(MOCK_ALBUM_2_ROW);

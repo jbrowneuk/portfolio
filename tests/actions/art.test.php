@@ -112,7 +112,7 @@ describe('Art Action', function () {
             $result = $this->assignCalls['pagination'];
 
             expect($result['page'])->toBe(1); // Expected default page
-            expect($result['prefix'])->toBe("/album/" . MOCK_ALBUM_1['album_id']);
+            expect($result['prefix'])->toBe("/album/" . MOCK_ALBUM_1_ROW['album_id']);
             expect($result['items_per_page'])->toBe(MOCK_PER_PAGE);
             expect($result['total_items'])->toBe(MOCK_IMAGE_COUNT);
         });

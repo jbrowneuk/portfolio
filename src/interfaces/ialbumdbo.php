@@ -19,9 +19,9 @@ interface IAlbumDBO
      *
      * @param string $albumId the ID of the album to fetch
      *
-     * @return array album data for the specified album
+     * @return Album album data for the specified album
      */
-    public function getAlbum(string $albumId);
+    public function getAlbum(string $albumId): ?Album;
 
     /**
      * Gets the data required for pagination. Returns the expected number of items
