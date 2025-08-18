@@ -2,9 +2,9 @@
 
 <div class="presenter container zoomed-out">
     <div class="image-area">
-        <img src="{$imageRoot}{$imageDir}{$image['filename']}" alt="{$image['title']}" class="responsive" />
-        {if isset($image['featured'])}
-            <span data-ngIf="data.featured" class="featured-badge" title="Featured">
+        <img src="{$imageRoot}{$imageDir}{$image->filename}" alt="{$image->title}" class="responsive" />
+        {if $image->featured}
+            <span class="featured-badge" title="Featured">
                 <svg>
                     <use xlink:href="#sitesheet-logo"></use>
                 </svg>

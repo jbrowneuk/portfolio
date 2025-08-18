@@ -10,6 +10,8 @@ require_once './interfaces/iauthenticationdbo.php';
 require_once './interfaces/ipostsdbo.php';
 require_once './interfaces/irenderer.php';
 
+require_once './model/album.php';
+require_once './model/image.php';
 require_once './model/post.php';
 
 require_once './core/authentication.php';

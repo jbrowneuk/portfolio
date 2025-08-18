@@ -3,11 +3,15 @@
     grid-column: span 3;
     overflow: hidden;
     line-height: 1;
+    min-height: 80px;
+    border-radius: var(--generic-subtle_border_radius);
+    background-color: var(--page-section_color_background-dark);
 }
 
 .album-card .image-area img {
     width: 100%;
     height: auto;
+    display: block;
 }
 
 .album-card .text-area {
