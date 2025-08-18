@@ -180,7 +180,7 @@ describe('Posts Database Object', function () {
 
             $this->mockStatement
                 ->shouldReceive('fetch')
-                ->andReturn(MOCK_POST);
+                ->andReturn(MOCK_POST_ROW);
         });
 
         it('should prepare using correct SQL', function () {
@@ -194,7 +194,7 @@ describe('Posts Database Object', function () {
                 ->andReturn($this->mockStatement)
                 ->once();
 
-            expect($this->postsDbo->getPost('anything'))->toBe(MOCK_POST);
+            expect($this->postsDbo->getPost('anything'))->toEqual(MOCK_POST);
         });
 
         it('should fetch correct post using ID', function () {
@@ -210,7 +210,7 @@ describe('Posts Database Object', function () {
                 ->andReturn($this->mockStatement)
                 ->once();
 
-            expect($this->postsDbo->getPost($expectedId))->toBe(MOCK_POST);
+            expect($this->postsDbo->getPost($expectedId))->toEqual(MOCK_POST);
         });
     });
 });

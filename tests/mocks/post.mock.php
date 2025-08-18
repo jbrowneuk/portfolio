@@ -2,7 +2,9 @@
 
 namespace jbrowneuk;
 
-const MOCK_POST = [
+require_once 'src/model/post.php';
+
+const MOCK_POST_ROW = [
     'post_id' => 'post-id',
     'title' => 'title',
     'content' => 'content',
@@ -11,3 +13,4 @@ const MOCK_POST = [
     'tags' => 'abc'
 ];
 
+const MOCK_POST = new Post(MOCK_POST_ROW);

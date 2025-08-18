@@ -9,11 +9,11 @@
 
 {foreach $posts as $post}
         <item>
-            <title>{$post['title']}</title>
-            <pubDate>{$post['timestamp']|date_format:DateTime::RSS}</pubDate>
-            <link>https://jbrowne.io/journal/post/{$post['post_id']}</link>
-            <guid>https://jbrowne.io/journal/post/{$post['post_id']}</guid>
-            <description>{$post['content']|readTime}. Tagged {$post['tags']|split:' '|join:', '}</description>
+            <title>{$post->title}</title>
+            <pubDate>{$post->timestamp|date_format:DateTime::RSS}</pubDate>
+            <link>https://jbrowne.io/journal/post/{$post->id}</link>
+            <guid>https://jbrowne.io/journal/post/{$post->id}</guid>
+            <description>{$post->content|readTime}. Tagged {$post->tags|join:', '}</description>
         </item>
 {/foreach}
 

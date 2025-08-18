@@ -79,7 +79,7 @@ class PostsDBO implements IPostsDBO
 
         $posts = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $posts[] = $this->generatePostData($row);
+            $posts[] = new Post($row);
         }
 
         return $posts;
@@ -96,24 +96,6 @@ class PostsDBO implements IPostsDBO
             return null;
         }
 
-        return $this->generatePostData($row);
-    }
-
-    /**
-     * Constructs post data from a database row
-     *
-     * @param array $row the database row
-     *
-     * @return array post data array
-     */
-    private function generatePostData(array $row)
-    {
-        $post = [];
-        $cols = ['post_id', 'title', 'content', 'timestamp', 'modified_timestamp', 'tags'];
-        foreach ($cols as $column) {
-            $post[$column] = $row[$column];
-        }
-
-        return $post;
+        return new Post($row);
     }
 }
