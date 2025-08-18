@@ -23,7 +23,7 @@ describe('Album Database Object', function () {
         it('should fetch all albums', function () {
             $this->mockPdo
                 ->shouldReceive('query')
-                ->with('SELECT * FROM albums')
+                ->with(AlbumSQL::SELECT_ALBUMS)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -38,17 +38,17 @@ describe('Album Database Object', function () {
             $albumStatement = \Mockery::mock(\PDOStatement::class);
             $albumStatement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1_ROW['album_id']])
                 ->once();
             $albumStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM_1);
+                ->andReturn(MOCK_ALBUM_1_ROW);
 
             $countStatement = \Mockery::mock(\PDOStatement::class);
             $countStatement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1_ROW['album_id']])
                 ->once();
             $countStatement
                 ->shouldReceive('fetch')
@@ -57,24 +57,28 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT * FROM albums WHERE album_id = :albumId LIMIT 1')
+                ->with(AlbumSQL::SELECT_SINGLE_ALBUM)
                 ->andReturn($albumStatement)
                 ->once();
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT count(image_id) AS total FROM image_albums WHERE album_id = :albumId')
+                ->with(AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
                 ->andReturn($countStatement)
                 ->once();
         });
 
         it('should fetch album by ID', function () {
-            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1['album_id']);
-            expect($result)->toContain(...MOCK_ALBUM_1);
+            $expected = clone(MOCK_ALBUM_1);
+            $expected->imageCount = $this->totalItemCount;
+
+            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1_ROW['album_id']);
+
+            expect($result)->toEqual($expected);
         });
 
         it('should get image count for specified album', function () {
-            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1['album_id']);
-            expect($result['image_count'])->toBe($this->totalItemCount);
+            $result = $this->albumDbo->getAlbum(MOCK_ALBUM_1_ROW['album_id']);
+            expect($result->imageCount)->toBe($this->totalItemCount);
         });
     });
 
@@ -85,7 +89,7 @@ describe('Album Database Object', function () {
             $statement = \Mockery::mock(\PDOStatement::class);
             $statement
                 ->shouldReceive('execute')
-                ->with(['albumId' => MOCK_ALBUM_1['album_id']])
+                ->with(['albumId' => MOCK_ALBUM_1_ROW['album_id']])
                 ->once();
             $statement
                 ->shouldReceive('fetch')
@@ -93,11 +97,11 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT count(image_id) AS total FROM image_albums WHERE album_id = :albumId')
+                ->with(AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
                 ->once()
                 ->andReturn($statement);
 
-            $this->paginationData = $this->albumDbo->getAlbumPaginationData(MOCK_ALBUM_1['album_id']);
+            $this->paginationData = $this->albumDbo->getAlbumPaginationData(MOCK_ALBUM_1_ROW['album_id']);
         });
 
         it('should return max items per page', function () {
@@ -122,19 +126,13 @@ describe('Album Database Object', function () {
                 ->once()
                 ->andReturn([]);
 
-            // [TODO] extract SQL statements to constants file or similar so whitespace isn't the reason a test fails
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT *
-            FROM image_albums
-            JOIN images ON image_albums.image_id = images.image_id
-            WHERE image_albums.album_id = :albumName
-            ORDER BY images.timestamp DESC
-            LIMIT :offset, :limit')
+                ->with(AlbumSQL::SELECT_IMAGES_IN_ALBUM)
                 ->once()
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']))->toBe([]);
+            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1_ROW['album_id']))->toBe([]);
         });
 
         it('should fetch images for specified album ID', function () {
@@ -143,7 +141,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('execute')
                 ->once()
                 ->with([
-                    'albumName' => MOCK_ALBUM_1['album_id'],
+                    'albumName' => MOCK_ALBUM_1_ROW['album_id'],
                     'offset' => 0,
                     'limit' => AlbumDBO::IMAGES_PER_PAGE
                 ]);
@@ -161,7 +159,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('prepare')
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']))->toBe([]);
+            expect($this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1_ROW['album_id']))->toBe([]);
         });
 
         it('should fetch full image data for specified album ID', function () {
@@ -172,7 +170,7 @@ describe('Album Database Object', function () {
             $imagesInAlbumStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_IMAGE_HORIZ);
+                ->andReturn(MOCK_IMAGE_HORIZ_ROW);
             $imagesInAlbumStatement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
@@ -181,38 +179,32 @@ describe('Album Database Object', function () {
             $albumsForImageStatement
                 ->shouldReceive('execute')
                 ->once()
-                ->with(['imageId' => MOCK_IMAGE_HORIZ['image_id']]);
+                ->with(['imageId' => MOCK_IMAGE_HORIZ_ROW['image_id']]);
             $albumsForImageStatement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM_1);
+                ->andReturn(MOCK_ALBUM_1_ROW);
             $albumsForImageStatement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
 
-            // [TODO] extract SQL statements to constants file or similar so whitespace isn't the reason a test fails
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT *
-            FROM image_albums
-            JOIN images ON image_albums.image_id = images.image_id
-            WHERE image_albums.album_id = :albumName
-            ORDER BY images.timestamp DESC
-            LIMIT :offset, :limit')
+                ->with(AlbumSQL::SELECT_IMAGES_IN_ALBUM)
                 ->andReturn($imagesInAlbumStatement);
             
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT *
-            FROM image_albums
-            JOIN albums ON image_albums.album_id = albums.album_id
-            WHERE image_albums.image_id = :imageId')
+                ->with(AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
                 ->andReturn($albumsForImageStatement);
 
-            $expected = [[...MOCK_IMAGE_HORIZ, 'albums' => [MOCK_ALBUM_1['album_id'] => MOCK_ALBUM_1]]];
-            $actual = $this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1['album_id']);
+            $expectedImage = new Image(MOCK_IMAGE_HORIZ_ROW);
+            $expectedImage->setAlbums([MOCK_ALBUM_1_ROW['album_id'] => MOCK_ALBUM_1]);
+            $expected = [$expectedImage];
 
-            expect($actual)->toBe($expected);
+            $actual = $this->albumDbo->getImagesForAlbum(MOCK_ALBUM_1_ROW['album_id']);
+
+            expect($actual)->toEqual($expected);
         });
     });
 
@@ -232,10 +224,7 @@ describe('Album Database Object', function () {
             // [TODO] extract SQL statements to constants file or similar so whitespace isn't the reason a test fails
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with('SELECT *
-            FROM image_albums
-            JOIN albums ON image_albums.album_id = albums.album_id
-            WHERE image_albums.image_id = :imageId')
+                ->with(AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
                 ->once()
                 ->andReturn($statement);
 
@@ -253,7 +242,7 @@ describe('Album Database Object', function () {
             $statement
                 ->shouldReceive('fetch')
                 ->once()
-                ->andReturn(MOCK_ALBUM_1);
+                ->andReturn(MOCK_ALBUM_1_ROW);
             $statement
                 ->shouldReceive('fetch')
                 ->andReturn(FALSE);
@@ -264,7 +253,8 @@ describe('Album Database Object', function () {
                 ->once()
                 ->andReturn($statement);
 
-            expect($this->albumDbo->getAlbumsForImage($expectedImageId))->toBe([MOCK_ALBUM_1['album_id'] => MOCK_ALBUM_1]);
+            $expected = [MOCK_ALBUM_1_ROW['album_id'] => MOCK_ALBUM_1];
+            expect($this->albumDbo->getAlbumsForImage($expectedImageId))->toEqual($expected);
         });
     });
 
@@ -279,7 +269,7 @@ describe('Album Database Object', function () {
                 ->with(['imageId' => $expectedId]);
             $statement
                 ->shouldReceive('fetch')
-                ->andReturn(MOCK_IMAGE_HORIZ);
+                ->andReturn(MOCK_IMAGE_HORIZ_ROW);
 
             $albumsStatement = \Mockery::mock(\PDOStatement::class);
             $albumsStatement
@@ -291,7 +281,7 @@ describe('Album Database Object', function () {
             $this->mockPdo
                 ->shouldReceive('prepare')
                 ->once()
-                ->with('SELECT * FROM images WHERE image_id = :imageId')
+                ->with(AlbumSQL::SELECT_SINGLE_IMAGE)
                 ->andReturn($statement);
 
             // Album data query, don't care about this so return empty for anything else
@@ -299,7 +289,10 @@ describe('Album Database Object', function () {
                 ->shouldReceive('prepare')
                 ->andReturn($albumsStatement);
 
-            expect($this->albumDbo->getImage($expectedId))->toBe([...MOCK_IMAGE_HORIZ, 'albums' => []]);
+            $expected = new Image(MOCK_IMAGE_HORIZ_ROW);
+            $expected->albums = [];
+
+            expect($this->albumDbo->getImage($expectedId))->toEqual($expected);
         });
     });
 });

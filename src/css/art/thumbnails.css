@@ -9,6 +9,7 @@
   overflow: hidden;
   position: relative;
   border-radius: var(--generic-subtle_border_radius);
+  background-color: var(--page-section_color_background-dark);
 }
 
 .thumbnail.large.horizontal {

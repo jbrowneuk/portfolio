@@ -16,7 +16,7 @@ class Art
      */
     public static function albumNameFormatter(array $input): string
     {
-        $titles = array_map(fn ($album) => $album['name'], $input);
+        $titles = array_map(fn ($album) => $album->name, $input);
         return implode(', ', $titles);
     }
 
@@ -75,11 +75,11 @@ class Art
 
         $pagination = $this->albumsDBO->getAlbumPaginationData($albumId);
         $images = $this->albumsDBO->getImagesForAlbum($albumId, $page);
-        $urlPrefix = "/album/{$album['album_id']}";
+        $urlPrefix = "/album/{$album->id}";
 
         // Seed random number generator to get same promoted image per album page
         $pageImageCount = count($images) - 1; // If there's less than NUM_IMAGES on a page
-        $seed = intval($album['album_id'] . $pageImageCount . $page, 36);
+        $seed = intval($album->id . $pageImageCount . $page, 36);
         mt_srand($seed);
         $promotedIndex = mt_rand(0, $pageImageCount);
 

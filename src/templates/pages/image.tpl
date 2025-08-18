@@ -2,7 +2,7 @@
 
 {extends file="layout/wrapper.tpl"} 
 
-{block name="page-title"}Jason Browne: Gallery{if isset($image)} - {$image['title']}{/if}{/block}
+{block name="page-title"}Jason Browne: Gallery{if isset($image)} - {$image->title}{/if}{/block}
 
 {block name="extra-stylesheets"}
     <link href="{$styleRoot}/css/art/image-preview.css" rel="stylesheet">

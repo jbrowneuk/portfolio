@@ -2,7 +2,7 @@
 
 {extends file="layout/wrapper.tpl"}
 
-{block name="page-title"}Jason Browne: Gallery{if isset($album)} - {$album['name']}{/if}{/block}
+{block name="page-title"}Jason Browne: Gallery{if isset($album)} - {$album->name}{/if}{/block}
 
 {block name="extra-stylesheets"}
     <link href="{$styleRoot}/css/art/image-container.css" rel="stylesheet">
@@ -21,7 +21,7 @@
         <i class="las la-frown" aria-hidden="true"></i>
         This album does not exist
     </h1>
-    <p>Try going <a href="/art">back to the gallery main page</a>.</p>
+    <p>Try going <a href="{$scriptDirectory}/art">back to the gallery main page</a>.</p>
 </section>
 
     {/if}

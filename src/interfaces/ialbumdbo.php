@@ -19,9 +19,9 @@ interface IAlbumDBO
      *
      * @param string $albumId the ID of the album to fetch
      *
-     * @return array album data for the specified album
+     * @return Album album data for the specified album
      */
-    public function getAlbum(string $albumId);
+    public function getAlbum(string $albumId): ?Album;
 
     /**
      * Gets the data required for pagination. Returns the expected number of items
@@ -41,7 +41,7 @@ interface IAlbumDBO
      *
      * @return array a page of image data for the specified album
      */
-    public function getImagesForAlbum(string $albumId, int $page = 1);
+    public function getImagesForAlbum(string $albumId, int $page = 1): array;
 
     /**
      * Gets the album data for albums containing a specific image
@@ -50,14 +50,14 @@ interface IAlbumDBO
      *
      * @return array album data for the albums containing the specified image
      */
-    public function getAlbumsForImage(int $imageId);
+    public function getAlbumsForImage(int $imageId): array;
 
     /**
      * Gets the image data for a specific image
      *
      * @param int $imageId the ID of the image to get the data for
      *
-     * @return array image data for the specified image
+     * @return ?Image image data for the specified image
      */
-    public function getImage(int $imageId);
+    public function getImage(int $imageId): ?Image;
 }
