@@ -1,7 +1,7 @@
 {* Smarty template: main page wrapper *}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 
 {include file="./html-head.tpl"}
 
