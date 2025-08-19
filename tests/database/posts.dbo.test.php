@@ -12,13 +12,11 @@ describe('Posts Database Object', function () {
     beforeEach(function () {
         $this->mockStatement = \Mockery::mock(\PDOStatement::class);
         $this->mockPdo = \Mockery::mock(\PDO::class);
+
+        $this->postsDbo = new PostsDBO($this->mockPdo);
     });
 
     describe('setPostsPerPage', function () {
-        beforeEach(function () {
-            $this->postsDbo = new PostsDBO($this->mockPdo);
-        });
-
         it('should change posts per page for pagination', function () {
             $newCount = 16;
             $this->postsDbo->setPostsPerPage($newCount);
@@ -48,35 +46,72 @@ describe('Posts Database Object', function () {
             $this->mockStatement
                 ->shouldReceive('fetch')
                 ->andReturn(['total' => EXPECTED_POST_COUNT]);
-
-            $this->postsDbo = new PostsDBO($this->mockPdo);
         });
 
-        it('should fetch post count of all posts if tag not provided', function () {
-            $this->mockPdo
-                ->shouldReceive('query')
-                ->with(PostsSQL::SELECT_POST_COUNT)
-                ->andReturn($this->mockStatement)
-                ->once();
+        describe('with drafts hidden', function () {
+            beforeEach(function () {
+                $this->postsDbo->showDrafts(false);
+            });
 
-            expect($this->postsDbo->getPostCount())->toBe(EXPECTED_POST_COUNT);
+            it('should fetch post count of all posts if tag not provided', function () {
+                $this->mockPdo
+                    ->shouldReceive('query')
+                    ->with(PostsSQL::SELECT_POST_COUNT_PUBLISHED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPostCount())->toBe(EXPECTED_POST_COUNT);
+            });
+
+            it('should fetch post count of tagged posts if tag is provided', function () {
+                $tag = 'anything';
+
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['tag' => "%$tag%"])
+                    ->once();
+
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POST_COUNT_TAGGED_PUBLISHED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPostCount($tag))->toBe(EXPECTED_POST_COUNT);
+            });
         });
 
-        it('should fetch post count of tagged posts if tag is provided', function () {
-            $tag = 'anything';
+        describe('with drafts shown', function () {
+            beforeEach(function () {
+                $this->postsDbo->showDrafts(true);
+            });
 
-            $this->mockStatement
-                ->shouldReceive('execute')
-                ->with(['tag' => "%$tag%"])
-                ->once();
+            it('should fetch post count of all posts if tag not provided', function () {
+                $this->mockPdo
+                    ->shouldReceive('query')
+                    ->with(PostsSQL::SELECT_POST_COUNT)
+                    ->andReturn($this->mockStatement)
+                    ->once();
 
-            $this->mockPdo
-                ->shouldReceive('prepare')
-                ->with(PostsSQL::SELECT_POST_COUNT_TAGGED)
-                ->andReturn($this->mockStatement)
-                ->once();
+                expect($this->postsDbo->getPostCount())->toBe(EXPECTED_POST_COUNT);
+            });
 
-            expect($this->postsDbo->getPostCount($tag))->toBe(EXPECTED_POST_COUNT);
+            it('should fetch post count of tagged posts if tag is provided', function () {
+                $tag = 'anything';
+
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['tag' => "%$tag%"])
+                    ->once();
+
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POST_COUNT_TAGGED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPostCount($tag))->toBe(EXPECTED_POST_COUNT);
+            });
         });
     });
 
@@ -116,71 +151,125 @@ describe('Posts Database Object', function () {
 
     describe('getPosts', function () {
         beforeEach(function () {
-            $this->mockStatement
-                ->shouldReceive('fetch')
-                ->andReturn([]);
-
-            $this->postsDbo = new PostsDBO($this->mockPdo);
+            $this->mockStatement->shouldReceive('fetch')->andReturn([]);
         });
 
-        it('should fetch a page of posts if tag not provided', function () {
-            $this->mockStatement
-                ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
-                ->once();
+        describe('with drafts hidden', function () {
+            beforeEach(function () {
+                $this->postsDbo->showDrafts(false);
+            });
 
-            $this->mockPdo
-                ->shouldReceive('prepare')
-                ->with(PostsSQL::SELECT_POSTS)
-                ->andReturn($this->mockStatement)
-                ->once();
+            it('should fetch a page of posts if tag not provided', function () {
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->once();
 
-            expect($this->postsDbo->getPosts(1))->toBe([]);
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPosts(1))->toBe([]);
+            });
+
+            it('should fetch a page of posts filtered to tag if tag provided', function () {
+                $tag = 'blog-post';
+
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                    ->once();
+
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS_TAGGED_PUBLISHED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPosts(1, $tag))->toBe([]);
+            });
+
+            it('should calculate correct page offset', function () {
+                $page = 5;
+                $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->once();
+
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPosts($page))->toBe([]);
+            });
         });
 
-        it('should fetch a page of posts filtered to tag if tag provided', function () {
-            $tag = 'blog-post';
+        describe('with drafts shown', function () {
+            beforeEach(function () {
+                $this->postsDbo->showDrafts(true);
+            });
 
-            $this->mockStatement
-                ->shouldReceive('execute')
-                ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
-                ->once();
+            it('should fetch a page of posts if tag not provided', function () {
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->once();
 
-            $this->mockPdo
-                ->shouldReceive('prepare')
-                ->with(PostsSQL::SELECT_POSTS_TAGGED)
-                ->andReturn($this->mockStatement)
-                ->once();
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS)
+                    ->andReturn($this->mockStatement)
+                    ->once();
 
-            expect($this->postsDbo->getPosts(1, $tag))->toBe([]);
-        });
+                expect($this->postsDbo->getPosts(1))->toBe([]);
+            });
 
-        it('should calculate correct page offset', function () {
-            $page = 5;
-            $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+            it('should fetch a page of posts filtered to tag if tag provided', function () {
+                $tag = 'blog-post';
 
-            $this->mockStatement
-                ->shouldReceive('execute')
-                ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
-                ->once();
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                    ->once();
 
-            $this->mockPdo
-                ->shouldReceive('prepare')
-                ->with(PostsSQL::SELECT_POSTS)
-                ->andReturn($this->mockStatement)
-                ->once();
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS_TAGGED)
+                    ->andReturn($this->mockStatement)
+                    ->once();
 
-            expect($this->postsDbo->getPosts($page))->toBe([]);
+                expect($this->postsDbo->getPosts(1, $tag))->toBe([]);
+            });
+
+            it('should calculate correct page offset', function () {
+                $page = 5;
+                $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+
+                $this->mockStatement
+                    ->shouldReceive('execute')
+                    ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->once();
+
+                $this->mockPdo
+                    ->shouldReceive('prepare')
+                    ->with(PostsSQL::SELECT_POSTS)
+                    ->andReturn($this->mockStatement)
+                    ->once();
+
+                expect($this->postsDbo->getPosts($page))->toBe([]);
+            });
         });
     });
 
     describe('getPost', function () {
         beforeEach(function () {
-            $this->postsDbo = new PostsDBO($this->mockPdo);
-
-            $this->mockStatement
-                ->shouldReceive('fetch')
-                ->andReturn(MOCK_POST_ROW);
+            $this->mockStatement->shouldReceive('fetch')->andReturn(MOCK_POST_ROW);
         });
 
         it('should prepare using correct SQL', function () {
