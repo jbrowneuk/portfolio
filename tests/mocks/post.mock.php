@@ -8,6 +8,7 @@ const MOCK_POST_ROW = [
     'post_id' => 'post-id',
     'title' => 'title',
     'content' => 'content',
+    'summary' => 'summary',
     'timestamp' => 1234567890,
     'modified_timestamp' => null,
     'tags' => 'abc',
