@@ -6,6 +6,13 @@
 
 {block name="extra-stylesheets"}
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
+    {if isset($post)}
+        <meta property="og:title" content="{$post->title}" />
+        {if isset($post->summary)}<meta property="og:description" content="{$post->summary}" />{/if}
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://jbrowne.io/rss/journal/post/{$post->id}" />
+        <meta property="og:image" content="https://jbrowne.io/android-chrome-256x256.png" />
+    {/if}
 {/block}
 
 {block name="page-content"}
