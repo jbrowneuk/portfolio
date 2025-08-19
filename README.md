@@ -11,9 +11,12 @@ My reasoning behind this is as follows:
 > for packages I pull in just to spin up Angular (the framework I used) and that
 > I have no control over made me realise that this should be simpler.
 
-This project uses a SQLite database, [Smarty](https://www.smarty.net/) for the
-templating and [Pest](https://pestphp.com/) for the unit tests. I'm
-intentionally keeping the dependencies minimal.
+This project deliberately tries to keep dependencies minimal:
+- SQLite using the built-in PHP support
+- [Smarty](https://www.smarty.net/) for templating
+- [PHP-DI](https://php-di.org) for DI
+- [Pest](https://pestphp.com/) for the unit tests
+- [Mockery](https://github.com/mockery/mockery/) for mocks
 
 ## Get up and running
 The code is written for an environment using PHP 8.4, and it needs support for
@@ -32,6 +35,11 @@ sure to read the git documentation on how to use submodules.
 TL;DR:
 - `git submodule init` on initial clone to get git to fetch the submodules.
 - `git submodule update` to fetch latest commits from the submodule repo.
+
+Updating is as simple as navigating to the submodule folder, `cd src/theme`, and
+then using `git checkout tag` to change the tag the submodule is pointing to.
+You'll also want to bump the query params in `src/templates/layout/html-head.tpl`
+to match the new tag.
 
 ## Run unit tests
 `./vendor/bin/pest`
