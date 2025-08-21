@@ -8,15 +8,23 @@ namespace jbrowneuk;
 final class PostsSQL
 {
     private const WHERE_TAG = 'tags LIKE :tag';
+    private const WHERE_PUBLISHED = 'published = 1';
 
     public const ORDER_POSTS = ' ORDER BY timestamp DESC LIMIT :offset, :limit';
 
     public const SELECT_POST_COUNT = 'SELECT count(post_id) AS total FROM posts';
-    public const SELECT_POST_COUNT_TAGGED = 'SELECT count(post_id) AS total FROM posts WHERE ' . self::WHERE_TAG;
+    public const SELECT_POST_COUNT_PUBLISHED = self::SELECT_POST_COUNT . ' WHERE ' . self::WHERE_PUBLISHED;
+
+    public const SELECT_POST_COUNT_TAGGED = self::SELECT_POST_COUNT . ' WHERE ' . self::WHERE_TAG;
+    public const SELECT_POST_COUNT_TAGGED_PUBLISHED = self::SELECT_POST_COUNT_TAGGED . ' AND ' . self::WHERE_PUBLISHED;
 
     private const SELECT_POSTS_ROOT = 'SELECT * FROM posts';
+
     public const SELECT_POSTS = self::SELECT_POSTS_ROOT . self::ORDER_POSTS;
+    public const SELECT_POSTS_PUBLISHED = self::SELECT_POSTS_ROOT . ' WHERE ' . self::WHERE_PUBLISHED . self::ORDER_POSTS;
+
     public const SELECT_POSTS_TAGGED = self::SELECT_POSTS_ROOT . ' WHERE ' . self::WHERE_TAG . self::ORDER_POSTS;
+    public const SELECT_POSTS_TAGGED_PUBLISHED = self::SELECT_POSTS_ROOT . ' WHERE ' . self::WHERE_TAG . ' AND ' . self::WHERE_PUBLISHED . self::ORDER_POSTS;
 
     public const SELECT_SINGLE_POST = 'SELECT * FROM posts where post_id = :postId';
 }
@@ -28,6 +36,9 @@ class PostsDBO implements IPostsDBO
 
     /** The number of posts per page for this Database Object instance */
     private int $postsPerPage = self::DEFAULT_POSTS_PER_PAGE;
+
+    /** Whether draft posts should be shown */
+    private bool $draftsEnabled = false;
 
     /**
      * Constructs an instance of the Posts Database Object
@@ -41,13 +52,20 @@ class PostsDBO implements IPostsDBO
         $this->postsPerPage = $posts;
     }
 
+    public function showDrafts(bool $shown): void
+    {
+        $this->draftsEnabled = $shown;
+    }
+
     public function getPostCount(?string $tag = null)
     {
         if ($tag != null && strlen($tag) > 0) {
-            $statement = $this->pdo->prepare(PostsSQL::SELECT_POST_COUNT_TAGGED);
+            $sql = $this->draftsEnabled ? PostsSQL::SELECT_POST_COUNT_TAGGED : PostsSQL::SELECT_POST_COUNT_TAGGED_PUBLISHED;
+            $statement = $this->pdo->prepare($sql);
             $statement->execute(['tag' => "%$tag%"]);
         } else {
-            $statement = $this->pdo->query(PostsSQL::SELECT_POST_COUNT);
+            $sql = $this->draftsEnabled ? PostsSQL::SELECT_POST_COUNT : PostsSQL::SELECT_POST_COUNT_PUBLISHED;
+            $statement = $this->pdo->query($sql);
         }
 
         $row = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -68,10 +86,10 @@ class PostsDBO implements IPostsDBO
         $params = ['offset' => $offset, 'limit' => $this->postsPerPage];
 
         if ($tag !== null && strlen($tag) > 0) {
-            $sql = PostsSQL::SELECT_POSTS_TAGGED;
+            $sql = $this->draftsEnabled ? PostsSQL::SELECT_POSTS_TAGGED : PostsSQL::SELECT_POSTS_TAGGED_PUBLISHED;
             $params['tag'] = "%$tag%";
         } else {
-            $sql = PostsSQL::SELECT_POSTS;
+            $sql = $this->draftsEnabled ? PostsSQL::SELECT_POSTS : PostsSQL::SELECT_POSTS_PUBLISHED;
         }
 
         $statement = $this->pdo->prepare($sql);

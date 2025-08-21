@@ -15,6 +15,13 @@ interface IPostsDBO
     public function setPostsPerPage(int $posts): void;
 
     /**
+     * Controls whether the returned posts list contains drafts
+     *
+     * @param bool $shown whether drafts are shown
+     */
+    public function showDrafts(bool $shown): void;
+
+    /**
      * Gets the total post count, optionally scoped to a specific tag
      *
      * @param ?string $tag (optional) tag to scope the count to

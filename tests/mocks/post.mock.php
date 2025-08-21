@@ -10,7 +10,8 @@ const MOCK_POST_ROW = [
     'content' => 'content',
     'timestamp' => 1234567890,
     'modified_timestamp' => null,
-    'tags' => 'abc'
+    'tags' => 'abc',
+    'published' => 1
 ];
 
 const MOCK_POST = new Post(MOCK_POST_ROW);
