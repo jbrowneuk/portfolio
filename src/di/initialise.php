@@ -11,7 +11,7 @@ function initialiseContainer(\PDO $pdo): \DI\Container
         IAlbumDBO::class => fn($c) => new AlbumDBO($c->get(\PDO::class)),
         IAuthenticationDBO::class => fn($c) => new AuthenticationDBO($c->get(\PDO::class)),
         IPostsDBO::class => fn($c) => new PostsDBO($c->get(\PDO::class)),
-        IAuthentication::class => fn($c) => new Authentication($c->get(\PDO::class))
+        IAuthentication::class => fn($c) => new Authentication($c->get(IAuthenticationDBO::class))
     ];
 
     $containerBuilder = new ContainerBuilder;

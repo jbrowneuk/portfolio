@@ -13,6 +13,7 @@ class Post
     public readonly int $timestamp;
     public readonly ?int $modified;
     public readonly array $tags;
+    public readonly bool $published;
 
     /**
      * Constructs post data from a database row
@@ -27,5 +28,6 @@ class Post
         $this->timestamp = $row['timestamp'];
         $this->modified = $row['modified_timestamp'];
         $this->tags = explode(' ', $row['tags']);
+        $this->published = $row['published'] === 1;
     }
 }
