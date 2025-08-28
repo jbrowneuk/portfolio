@@ -21,5 +21,5 @@
     <!-- Component library -->
     <link href="{$styleRoot}/theme/styles.css?v3.5.3" rel="stylesheet">
 
-    {block name="extra-stylesheets"}{/block}
+    {block name="extra-head-elements"}{/block}
 </head>

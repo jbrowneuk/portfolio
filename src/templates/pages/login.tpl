@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: Login{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/admin/login.css" rel="stylesheet">
 {/block}
 

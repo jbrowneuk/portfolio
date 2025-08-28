@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: Post Editor{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/admin/post-list.css" rel="stylesheet" />
 {/block}
 

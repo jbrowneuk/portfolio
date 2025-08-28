@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: Gallery - All albums{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/art/album-list.css" rel="stylesheet" />
 {/block}
 

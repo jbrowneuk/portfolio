@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/error.css" rel="stylesheet">
 {/block}
 

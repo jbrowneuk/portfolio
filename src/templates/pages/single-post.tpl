@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: {if isset($post)}{$post->title}{else}Not found{/if}{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
     {if isset($post)}
         <meta property="og:title" content="{$post->title}" />
