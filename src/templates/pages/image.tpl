@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: Gallery{if isset($image)} - {$image->title}{/if}{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/art/image-preview.css" rel="stylesheet">
 
     {if isset($image)}
