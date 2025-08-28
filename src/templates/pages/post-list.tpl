@@ -8,8 +8,10 @@
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
 {/block}
 
+{include file="components/journal/breadcrumb-generator.tpl"}
+
 {block name="page-content"}
-    {include file="components/journal/tag-header.tpl"}
+    {include file="components/breadcrumbs.tpl"}
 
     {foreach $posts as $post}
         {include file="components/journal/post.tpl"}
