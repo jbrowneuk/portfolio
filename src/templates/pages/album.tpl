@@ -2,17 +2,32 @@
 
 {extends file="layout/wrapper.tpl"}
 
-{block name="page-title"}Jason Browne: Gallery{if isset($album)} - {$album->name}{/if}{/block}
+{assign var=hasAlbum value=isset($album)}
+
+{block name="page-title"}Jason Browne: Gallery{if $hasAlbum} - {$album->name}{/if}{/block}
 
 {block name="extra-stylesheets"}
     <link href="{$styleRoot}/css/art/image-container.css" rel="stylesheet">
     <link href="{$styleRoot}/css/art/thumbnails.css" rel="stylesheet">
 {/block}
 
+{block name="breadcrumbs"}
+    <li><a href="{$scriptDirectory}/art" data-back-button>Art</a></li>
+
+    {if $hasAlbum}
+        <li data-title>{$album->name}</li>
+    {/if}
+{/block}
+
 {block name="page-content"}
-    {if isset($album)}
+
+    {if $hasAlbum}
         {include file="components/gallery/album-hero.tpl"}
-        {include file="components/gallery/breadcrumbs/album.tpl"}
+    {/if}
+
+    {include file="components/breadcrumbs.tpl"}
+
+    {if $hasAlbum}
         {include file="components/gallery/image-container.tpl"}
     {else}
 
