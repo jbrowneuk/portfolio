@@ -16,10 +16,10 @@
     <link href="{$styleRoot}/assets/thirdparty/la/css/line-awesome.min.css?1.3.0" rel="stylesheet">
 
     <!-- Theme -->
-    <link href="{$styleRoot}/theme/palette.css?v3.5.1" rel="stylesheet">
+    <link href="{$styleRoot}/theme/palette.css?v3.5.3" rel="stylesheet">
 
     <!-- Component library -->
-    <link href="{$styleRoot}/theme/styles.css?v3.5.1" rel="stylesheet">
+    <link href="{$styleRoot}/theme/styles.css?v3.5.3" rel="stylesheet">
 
     {block name="extra-stylesheets"}{/block}
 </head>
