@@ -6,6 +6,13 @@
 
 {block name="extra-stylesheets"}
     <link href="{$styleRoot}/css/art/image-preview.css" rel="stylesheet">
+
+    {if isset($image)}
+        <meta property="og:title" content="{$image->title}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="{$scriptDirectory}/art/view/{$image->id}" />
+        <meta property="og:image" content="{$imageRoot}{$thumbDir}{$image->filename}" />
+    {/if}
 {/block}
 
 {block name="page-content"}
