@@ -2,7 +2,7 @@
 
 {extends file="layout/wrapper.tpl"} 
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="{$styleRoot}/css/super-hero.css" rel="stylesheet">
     <link href="{$styleRoot}/css/home-about.css" rel="stylesheet">
     <link href="{$styleRoot}/css/home-rating-bar.css" rel="stylesheet">

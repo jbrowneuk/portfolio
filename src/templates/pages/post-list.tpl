@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: Journal{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
 {/block}
 
