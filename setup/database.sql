@@ -14,6 +14,7 @@ CREATE TABLE posts (
   post_id TEXT UNIQUE,
   title TEXT,
   content TEXT,
+  summary TEXT,
   timestamp INTEGER,
   modified_timestamp INTEGER,
   published INTEGER DEFAULT 0,
