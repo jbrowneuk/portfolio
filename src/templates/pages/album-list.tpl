@@ -8,15 +8,14 @@
     <link href="{$styleRoot}/css/art/album-list.css" rel="stylesheet" />
 {/block}
 
-{block name="page-content"}
-    <!-- Hero -->
-    <section id="page-hero" class="page-section small-hero">
-        <div class="container">
-            <h1>All albums</h1>
-        </div>
-    </section>
+{block name="breadcrumbs"}
+    <li><a href="{$scriptDirectory}/art" data-back-button>Art</a></li>
+    <li data-title>All albums</li>
+{/block}
 
-    <!-- Album list -->
+{block name="page-content"}
+    {include file="components/breadcrumbs.tpl"}
+
     <section class="page-section">
         <div class="container">
             <div id="albums-container" class="grid">

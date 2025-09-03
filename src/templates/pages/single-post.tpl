@@ -15,18 +15,18 @@
     {/if}
 {/block}
 
-{block name="page-content"}
-    {if isset($post)}
-        <nav class="breadcrumbs">
-            <div class="container">
-                <ol role="navigation">
-                    <li><a href="{$scriptDirectory}/"><i class="las la-home"></i></a></li>
-                    <li><a href="{$scriptDirectory}/journal" data-back-button>Journal</a></li>
-                    <li data-title>{$post->title}</li>
-                </ol>
-            </div>
-        </nav>
+{block name="breadcrumbs"}
+    <li><a href="{$scriptDirectory}/journal" data-back-button>Journal</a></li>
 
+    {if isset($post)}
+        <li data-title>{$post->title}</li>
+    {/if}
+{/block}
+
+{block name="page-content"}
+    {include file="components/breadcrumbs.tpl"}
+
+    {if isset($post)}
         {include file="components/journal/post.tpl"}
     {else}
 <section class="page-section text-center">

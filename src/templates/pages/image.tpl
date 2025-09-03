@@ -8,7 +8,17 @@
     <link href="{$styleRoot}/css/art/image-preview.css" rel="stylesheet">
 {/block}
 
+{block name="breadcrumbs"}
+    <li><a href="{$scriptDirectory}/art" data-back-button>Art</a></li>
+
+    {if isset($image)}
+        <li data-title>{$image->title}</li>
+    {/if}
+{/block}
+
 {block name="page-content"}
+    {include file="components/breadcrumbs.tpl"}
+
     {if isset($image)}
         {include file="components/gallery/image-preview.tpl"}
         {include file="components/gallery/image-description.tpl"}
