@@ -4,7 +4,7 @@
 
 {block name="page-title"}Jason Browne: {if isset($post)}{$post->title}{else}Not found{/if}{/block}
 
-{block name="extra-stylesheets"}
+{block name="extra-head-elements"}
     <link href="https://jbrowne.io/rss/journal" rel="alternate" type="application/rss+xml" title="Jason Browne’s Journal">
     {if isset($post)}
         <meta property="og:title" content="{$post->title}" />
@@ -12,6 +12,9 @@
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://jbrowne.io/rss/journal/post/{$post->id}" />
         <meta property="og:image" content="https://jbrowne.io/android-chrome-256x256.png" />
+        <meta property="article:published_time" content="{$post->timestamp|date_format:c}" />
+        {if isset($post->modified)}<meta property="article:modified_time" content="{$post->modified|date_format:c}" />{/if}
+        {foreach $post->tags as $tag}<meta property="article:tag" content="{$tag}" />{/foreach}
     {/if}
 {/block}
 
