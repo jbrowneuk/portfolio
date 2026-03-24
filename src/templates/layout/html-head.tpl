@@ -19,7 +19,7 @@
     <link href="{$styleRoot}/theme/palette.css?v3.5.3" rel="stylesheet">
 
     <!-- Component library -->
-    <link href="{$styleRoot}/theme/styles.css?v3.5.3" rel="stylesheet">
+    <link href="{$styleRoot}/theme/styles.css?v3.6.0" rel="stylesheet">
 
     {block name="extra-stylesheets"}{/block}
 </head>
