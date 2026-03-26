@@ -31,7 +31,7 @@ class Editor
         $this->postsDBO->setPostsPerPage(16);
         $this->postsDBO->showDrafts(true);
 
-        $page = parsePageNumber($pageParams);
+        $page = UrlHelpers::parsePageNumber($pageParams);
 
         $posts = $this->postsDBO->getPosts($page);
         $basePagination = $this->postsDBO->getPostPaginationData();

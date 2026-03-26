@@ -59,10 +59,10 @@ class Art
      */
     private function renderAlbumImagePage(array $params): void
     {
-        $page = parsePageNumber($params);
+        $page = UrlHelpers::parsePageNumber($params);
 
         $albumId = 'featured';
-        $requestedAlbum = getValueFromPageParams($params, 'album');
+        $requestedAlbum = UrlHelpers::getValueFromPageParams($params, 'album');
         if ($requestedAlbum !== null) {
             $albumId = $requestedAlbum;
         }
