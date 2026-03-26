@@ -15,8 +15,3 @@ final class Database
         return null;
     }
 }
-
-function connect($db)
-{
-    return Database::connect($db);
-}

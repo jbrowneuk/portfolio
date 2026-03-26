@@ -2,8 +2,6 @@
 
 namespace jbrowneuk;
 
-use \DI\ContainerBuilder;
-
 final class ContainerFactory
 {
     public static function initialiseContainer(\PDO $pdo): \DI\Container
@@ -16,15 +14,10 @@ final class ContainerFactory
             IAuthentication::class => fn ($c) => new Authentication($c->get(IAuthenticationDBO::class)),
         ];
 
-        $containerBuilder = new ContainerBuilder;
+        $containerBuilder = new \DI\ContainerBuilder;
         $containerBuilder->addDefinitions($definitions);
         $container = $containerBuilder->build();
 
         return $container;
     }
-}
-
-function initialiseContainer(\PDO $pdo): \DI\Container
-{
-    return ContainerFactory::initialiseContainer($pdo);
 }

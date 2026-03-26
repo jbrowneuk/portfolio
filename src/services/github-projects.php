@@ -61,8 +61,3 @@ final class GithubProjects
         return $projects;
     }
 }
-
-function get_projects_from_github()
-{
-    return GithubProjects::getProjectsFromGithub();
-}
