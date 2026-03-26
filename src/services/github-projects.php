@@ -4,8 +4,31 @@ namespace jbrowneuk;
 
 final class GithubProjects
 {
+    /**
+     * Optional test hook for supplying projects without hitting the network.
+     *
+     * @var (callable(): array)|null
+     */
+    private static $projectsProvider = null;
+
+    /**
+     * Sets an optional projects provider.
+     *
+     * Intended for unit tests to avoid real HTTP calls.
+     */
+    public static function setProjectsProvider(?callable $provider): void
+    {
+        self::$projectsProvider = $provider;
+    }
+
     public static function getProjectsFromGithub(): array
     {
+        if (self::$projectsProvider !== null) {
+            /** @var callable(): array $provider */
+            $provider = self::$projectsProvider;
+            return $provider();
+        }
+
         $curl = curl_init('https://api.github.com/users/jbrowneuk/repos?sort=updated');
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_USERAGENT, 'PHP backend for personal website/1.0');
