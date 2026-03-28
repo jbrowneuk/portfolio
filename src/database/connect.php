@@ -2,13 +2,16 @@
 
 namespace jbrowneuk;
 
-function connect($db)
+final class Database
 {
-    try {
-        return new \PDO("sqlite:$db");
-    } catch (\PDOException $ex) {
-        echo $ex->getMessage();
-    }
+    public static function connect($db): ?\PDO
+    {
+        try {
+            return new \PDO("sqlite:$db");
+        } catch (\PDOException $ex) {
+            echo $ex->getMessage();
+        }
 
-    return null;
+        return null;
+    }
 }

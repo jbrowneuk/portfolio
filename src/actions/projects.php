@@ -11,7 +11,7 @@ class Projects
 
     public function __invoke()
     {
-        $projects = get_projects_from_github();
+        $projects = GithubProjects::getProjectsFromGithub();
         $this->renderer->setPageId('projects');
         $this->renderer->assign('projects', $projects);
         $this->renderer->displayPage('projects');

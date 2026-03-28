@@ -19,8 +19,8 @@ This project deliberately tries to keep dependencies minimal:
 - [Mockery](https://github.com/mockery/mockery/) for mocks
 
 ## Get up and running
-The code is written for an environment using PHP 8.4, and it needs support for
-the SQLite PDO.
+The code is written for an environment using PHP 8.5 or newer, and it needs
+support for the SQLite PDO.
 
 Composer is used to set up dependencies. Use `composer install`.
 

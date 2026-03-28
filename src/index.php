@@ -39,12 +39,12 @@ require_once './actions/rss.php';
 
 require_once './config.php';
 
-$pdo = connect($db);
+$pdo = Database::connect($db);
 if (!$pdo) {
     die('Could not connect to database.');
 }
 
-$container = initialiseContainer($pdo);
+$container = ContainerFactory::initialiseContainer($pdo);
 
 // Clean request URI if script directory is defined
 $rawUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
@@ -54,7 +54,7 @@ if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
 }
 
 // Calculate route
-$request = getRequestedPage($requestUri, $defaultAction);
+$request = UrlHelpers::getRequestedPage($requestUri, $defaultAction);
 if (array_key_exists($request['action'], $routes)) {
     $actionClass = $routes[$request['action']];
 } else {

@@ -38,8 +38,8 @@ class Journal
      */
     private function renderPostList(array $pageParams): void
     {
-        $page = parsePageNumber($pageParams);
-        $tag = getValueFromPageParams($pageParams, 'tag');
+        $page = UrlHelpers::parsePageNumber($pageParams);
+        $tag = UrlHelpers::getValueFromPageParams($pageParams, 'tag');
 
         $posts = $this->postsDBO->getPosts($page, $tag);
         $basePagination = $this->postsDBO->getPostPaginationData($tag);

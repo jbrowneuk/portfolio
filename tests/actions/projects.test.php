@@ -8,17 +8,15 @@ const MOCK_PROJECTS = [
     ['name' => 'proj2', 'description' => 'desc2', 'language' => 'php', 'license' => 'mocked', 'url' => 'http://localhost', 'archived' => true, 'updated' => 2048]
 ];
 
-function get_projects_from_github()
-{
-    return MOCK_PROJECTS;
-}
-
 require_once 'src/interfaces/irenderer.php';
+require_once 'src/services/github-projects.php';
 
 require_once 'src/actions/projects.php';
 
 describe('Projects Action', function () {
     beforeEach(function () {
+        GithubProjects::setProjectsProvider(fn () => MOCK_PROJECTS);
+
         $this->assignCalls = array();
         $this->mockRenderer = \Mockery::spy(IRenderer::class);
         $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
@@ -31,6 +29,7 @@ describe('Projects Action', function () {
 
     afterEach(function () {
         \Mockery::close();
+        GithubProjects::setProjectsProvider(null);
     });
 
     it('should set page id', function () {

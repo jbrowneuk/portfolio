@@ -2,6 +2,7 @@ vendor/
 smarty/
 
 src/.htaccess
+composer.phar
 
 *.db
 *.sqlite
