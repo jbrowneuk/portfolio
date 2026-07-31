@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\database;
 
 /**
  * Provides all SQL statements used by the posts database object
@@ -29,7 +29,7 @@ final class PostsSQL
     public const SELECT_SINGLE_POST = 'SELECT * FROM posts where post_id = :postId';
 }
 
-class PostsDBO implements IPostsDBO
+class PostsDBO implements \jbrowneuk\interfaces\IPostsDBO
 {
     /** The default number of posts per page */
     public const DEFAULT_POSTS_PER_PAGE = 5;
@@ -97,7 +97,7 @@ class PostsDBO implements IPostsDBO
 
         $posts = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $posts[] = new Post($row);
+            $posts[] = new \jbrowneuk\model\Post($row);
         }
 
         return $posts;
@@ -114,6 +114,6 @@ class PostsDBO implements IPostsDBO
             return null;
         }
 
-        return new Post($row);
+        return new \jbrowneuk\model\Post($row);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\model;
 
 /**
  * An object encapsulating a gallery image

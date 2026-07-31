@@ -4,47 +4,16 @@ namespace jbrowneuk;
 
 require_once '../vendor/autoload.php';
 require_once './core/autoloader.php';
-require_once './interfaces/ialbumdbo.php';
-require_once './interfaces/iauthentication.php';
-require_once './interfaces/iauthenticationdbo.php';
-require_once './interfaces/ipostsdbo.php';
-require_once './interfaces/irenderer.php';
-
-require_once './model/album.php';
-require_once './model/image.php';
-require_once './model/post.php';
-
-require_once './core/authentication.php';
-require_once './core/renderer.php';
-require_once './core/routes.php';
-require_once './core/url-helpers.php';
-
-require_once './database/album.dbo.php';
-require_once './database/authentication.dbo.php';
-require_once './database/connect.php';
-require_once './database/posts.dbo.php';
-
-require_once './services/github-projects.php';
-
-require_once './di/initialise.php';
-
-require_once './actions/art.php';
-require_once './actions/auth.php';
-require_once './actions/editor.php';
-require_once './actions/error.php';
-require_once './actions/journal.php';
-require_once './actions/portfolio.php';
-require_once './actions/projects.php';
-require_once './actions/rss.php';
 
 require_once './config.php';
+require_once './routes.php';
 
-$pdo = Database::connect($db);
+$pdo = \jbrowneuk\database\Database::connect($db);
 if (!$pdo) {
     die('Could not connect to database.');
 }
 
-$container = ContainerFactory::initialiseContainer($pdo);
+$container = \jbrowneuk\di\ContainerFactory::initialiseContainer($pdo);
 
 // Clean request URI if script directory is defined
 $rawUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
@@ -54,15 +23,15 @@ if (isset($scriptDirectory) && str_starts_with($requestUri, $scriptDirectory)) {
 }
 
 // Calculate route
-$request = UrlHelpers::getRequestedPage($requestUri, $defaultAction);
+$request = \jbrowneuk\core\UrlHelpers::getRequestedPage($requestUri, $DEFAULT_ACTION);
 if (array_key_exists($request['action'], $routes)) {
     $actionClass = $routes[$request['action']];
 } else {
-    $actionClass = $routes[$errorAction];
+    $actionClass = $routes[$ERROR_ACTION];
 }
 
 // Initialise page renderer
-$renderer = new PortfolioRenderer();
+$renderer = new \jbrowneuk\core\PortfolioRenderer();
 $renderer->setStyleRoot(isset($styleRoot) ? $styleRoot : '');
 $renderer->setScriptDirectory(isset($scriptDirectory) ? $scriptDirectory : '');
 
@@ -74,7 +43,7 @@ if (isset($scriptDirectory)) {
 
 $renderer->assign('pageUrl', $pageUrl);
 
-$container->set(IRenderer::class, $renderer);
+$container->set(\jbrowneuk\interfaces\IRenderer::class, $renderer);
 
 // Render the page
 $container->call($actionClass, [$request['params']]);

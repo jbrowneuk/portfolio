@@ -1,11 +1,11 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\core;
 
 /**
  * Controls user authentication on the site
  */
-class Authentication implements IAuthentication
+class Authentication implements \jbrowneuk\interfaces\IAuthentication
 {
     // Public to allow testing
     public const string LOGGED_IN_KEY = 'logged-in';
@@ -15,7 +15,7 @@ class Authentication implements IAuthentication
      *
      * @param \PDO $pdo an active PDO object
      */
-    public function __construct(private readonly IAuthenticationDBO $dbo) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IAuthenticationDBO $dbo) {}
 
     public function isAuthenticated(): bool
     {

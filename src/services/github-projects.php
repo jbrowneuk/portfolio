@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\services;
 
 final class GithubProjects
 {
@@ -29,15 +29,15 @@ final class GithubProjects
             return $provider();
         }
 
-        $curl = curl_init('https://api.github.com/users/jbrowneuk/repos?sort=updated');
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'PHP backend for personal website/1.0');
-        $result = curl_exec($curl);
+        $curl = \curl_init('https://api.github.com/users/jbrowneuk/repos?sort=updated');
+        \curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        \curl_setopt($curl, CURLOPT_USERAGENT, 'PHP backend for personal website/1.0');
+        $result = \curl_exec($curl);
         if ($result === false) {
             return [];
         }
 
-        $obj = json_decode($result);
+        $obj = \json_decode($result);
         if (!is_array($obj)) {
             return [];
         }
@@ -57,6 +57,8 @@ final class GithubProjects
 
             $projects[] = $project;
         }
+
+        \curl_close($curl);
 
         return $projects;
     }

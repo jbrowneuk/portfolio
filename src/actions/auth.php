@@ -1,13 +1,13 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 /**
  * An action that controls logging in and out of the site's admin functionality
  */
 class Auth
 {
-    public function __construct(private readonly IAuthentication $auth, private readonly IRenderer $renderer) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IAuthentication $auth, private readonly \jbrowneuk\interfaces\IRenderer $renderer) {}
 
     public function __invoke(array $pageParams = [])
     {
@@ -27,7 +27,7 @@ class Auth
      */
     private function handleLogin(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $this->auth->login($_POST['username'], $_POST['password']);
             if (!$result) {
                 $this->renderer->assign('loginError', true);

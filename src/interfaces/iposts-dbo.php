@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\interfaces;
 
 /**
  * An interface encapsulating the Database Object pertaining to post data

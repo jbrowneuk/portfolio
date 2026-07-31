@@ -1,13 +1,13 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 /**
  * An action that renders the journal and individual posts
  */
 class Journal
 {
-    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IRenderer $renderer) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IPostsDBO $postsDBO, private readonly \jbrowneuk\interfaces\IRenderer $renderer) {}
 
     public function __invoke(array $pageParams = [])
     {
@@ -38,8 +38,8 @@ class Journal
      */
     private function renderPostList(array $pageParams): void
     {
-        $page = UrlHelpers::parsePageNumber($pageParams);
-        $tag = UrlHelpers::getValueFromPageParams($pageParams, 'tag');
+        $page = \jbrowneuk\core\UrlHelpers::parsePageNumber($pageParams);
+        $tag = \jbrowneuk\core\UrlHelpers::getValueFromPageParams($pageParams, 'tag');
 
         $posts = $this->postsDBO->getPosts($page, $tag);
         $basePagination = $this->postsDBO->getPostPaginationData($tag);

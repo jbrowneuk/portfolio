@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\database;
 
 final class Database
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\interfaces;
 
 /**
  * An interface encapsulating the Database Object pertaining to album data
@@ -21,7 +21,7 @@ interface IAlbumDBO
      *
      * @return Album album data for the specified album
      */
-    public function getAlbum(string $albumId): ?Album;
+    public function getAlbum(string $albumId): ?\jbrowneuk\model\Album;
 
     /**
      * Gets the data required for pagination. Returns the expected number of items
@@ -59,5 +59,5 @@ interface IAlbumDBO
      *
      * @return ?Image image data for the specified image
      */
-    public function getImage(int $imageId): ?Image;
+    public function getImage(int $imageId): ?\jbrowneuk\model\Image;
 }

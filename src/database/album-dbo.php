@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\database;
 
 final class AlbumSQL
 {
@@ -26,7 +26,7 @@ final class AlbumSQL
     public const SELECT_IMAGE_COUNT_FOR_ALBUM = 'SELECT count(image_id) AS total FROM image_albums WHERE album_id = :albumId';
 }
 
-class AlbumDBO implements IAlbumDBO
+class AlbumDBO implements \jbrowneuk\interfaces\IAlbumDBO
 {
     // One image on each page is promoted/made large, therefore it takes up two
     // spaces. This is an odd number due to that.
@@ -54,7 +54,7 @@ class AlbumDBO implements IAlbumDBO
         return $albums;
     }
 
-    public function getAlbum(string $albumId): ?Album
+    public function getAlbum(string $albumId): ?\jbrowneuk\model\Album
     {
         $statement = $this->pdo->prepare(AlbumSQL::SELECT_SINGLE_ALBUM);
         $statement->execute(['albumId' => $albumId]);
@@ -96,14 +96,14 @@ class AlbumDBO implements IAlbumDBO
 
         $albums = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $album = new Album($row);
+            $album = new \jbrowneuk\model\Album($row);
             $albums[$album->id] = $album;
         }
 
         return $albums;
     }
 
-    public function getImage(int $imageId): ?Image
+    public function getImage(int $imageId): ?\jbrowneuk\model\Image
     {
         $statement = $this->pdo->prepare(AlbumSQL::SELECT_SINGLE_IMAGE);
         $statement->execute(['imageId' => $imageId]);
@@ -122,9 +122,9 @@ class AlbumDBO implements IAlbumDBO
      *
      * @return Image image data array
      */
-    private function generateImageData(array $row): Image
+    private function generateImageData(array $row): \jbrowneuk\model\Image
     {
-        $image = new Image($row);
+        $image = new \jbrowneuk\model\Image($row);
         $image->setAlbums($this->getAlbumsForImage($image->id));
 
         // Calculate whether image is in featured album
@@ -142,9 +142,9 @@ class AlbumDBO implements IAlbumDBO
      *
      * @return Album album data array
      */
-    private function generateAlbumData(array $row): Album
+    private function generateAlbumData(array $row): \jbrowneuk\model\Album
     {
-        $album = new Album($row);
+        $album = new \jbrowneuk\model\Album($row);
         $album->setImageCount($this->getImageCountForAlbum($album->id));
 
         return $album;

@@ -1,13 +1,13 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 /**
  * An action that shows a generic error page
  */
 class Error
 {
-    public function __construct(private readonly IRenderer $renderer) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IRenderer $renderer) {}
 
     public function __invoke()
     {
