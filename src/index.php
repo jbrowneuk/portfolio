@@ -3,7 +3,7 @@
 namespace jbrowneuk;
 
 require_once '../vendor/autoload.php';
-
+require_once './core/autoloader.php';
 require_once './interfaces/ialbumdbo.php';
 require_once './interfaces/iauthentication.php';
 require_once './interfaces/iauthenticationdbo.php';
