@@ -21,5 +21,34 @@
     <!-- Component library -->
     <link href="{$styleRoot}/theme/styles.css?v3.6.0" rel="stylesheet">
 
+    <!-- Site icons and manifest -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href="/icons/icon-32.png"
+      type="image/png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      href="/icons/icon-16.png"
+      type="image/png"
+      sizes="16x16"
+    />
+    <link
+      rel="icon"
+      href="/icons/icon-512.png"
+      type="image/png"
+      sizes="512x512"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="/apple-touch-icon.png"
+      sizes="180x180"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#4d698e" />
+
     {block name="extra-head-elements"}{/block}
 </head>
