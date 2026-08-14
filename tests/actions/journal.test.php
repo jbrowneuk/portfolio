@@ -2,14 +2,14 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/ipostsdbo.php';
+require_once 'src/interfaces/iposts-dbo.php';
 require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/journal.php';
 
 describe('Journal Action', function () {
     function mockPostDbo() {
-        $postsDBO = \Mockery::mock(IPostsDBO::class);
+        $postsDBO = \Mockery::mock(\jbrowneuk\interfaces\IPostsDBO::class);
         $postsDBO->shouldReceive('getPostCount')->andReturn(1);
         $postsDBO->shouldReceive('getPostPaginationData')->andReturn([
             'items_per_page' => 5,
@@ -27,12 +27,12 @@ describe('Journal Action', function () {
         $this->postsDBO = mockPostDbo();
 
         $this->assignCalls = array();
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
         $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
             $this->assignCalls[$key] = $val;
         });
 
-        $this->action = new Journal($this->postsDBO, $this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Journal($this->postsDBO, $this->mockRenderer);
     });
 
     afterEach(function () {

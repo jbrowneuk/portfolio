@@ -11,12 +11,12 @@ describe('Authentication page', function () {
     beforeEach(function () {
         $this->authenticated = true;
 
-        $this->mockAuth = \Mockery::spy(IAuthentication::class);
+        $this->mockAuth = \Mockery::spy(\jbrowneuk\interfaces\IAuthentication::class);
         $this->mockAuth->shouldReceive('isAuthenticated')->andReturnUsing(fn() => $this->authenticated);
 
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
 
-        $this->action = new Auth($this->mockAuth, $this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Auth($this->mockAuth, $this->mockRenderer);
 
         // Mock server superglobal
         $_SERVER['REQUEST_METHOD'] = 'GET';

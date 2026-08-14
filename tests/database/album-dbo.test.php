@@ -4,12 +4,12 @@ namespace jbrowneuk;
 
 require_once 'tests/mocks/art.mock.php';
 
-require_once 'src/database/album.dbo.php';
+require_once 'src/database/album-dbo.php';
 
 describe('Album Database Object', function () {
     beforeEach(function () {
         $this->mockPdo = \Mockery::mock(\PDO::class);
-        $this->albumDbo = new AlbumDBO($this->mockPdo);
+        $this->albumDbo = new \jbrowneuk\database\AlbumDBO($this->mockPdo);
     });
 
     describe('getAlbums', function () {
@@ -23,7 +23,7 @@ describe('Album Database Object', function () {
         it('should fetch all albums', function () {
             $this->mockPdo
                 ->shouldReceive('query')
-                ->with(AlbumSQL::SELECT_ALBUMS)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_ALBUMS)
                 ->andReturn($this->mockStatement)
                 ->once();
 
@@ -57,12 +57,12 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_SINGLE_ALBUM)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_SINGLE_ALBUM)
                 ->andReturn($albumStatement)
                 ->once();
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
                 ->andReturn($countStatement)
                 ->once();
         });
@@ -97,7 +97,7 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_IMAGE_COUNT_FOR_ALBUM)
                 ->once()
                 ->andReturn($statement);
 
@@ -105,7 +105,7 @@ describe('Album Database Object', function () {
         });
 
         it('should return max items per page', function () {
-            expect($this->paginationData['items_per_page'])->toBe(AlbumDBO::IMAGES_PER_PAGE);
+            expect($this->paginationData['items_per_page'])->toBe(\jbrowneuk\database\AlbumDBO::IMAGES_PER_PAGE);
         });
 
         it('should return image count for album', function () {
@@ -128,7 +128,7 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_IMAGES_IN_ALBUM)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_IMAGES_IN_ALBUM)
                 ->once()
                 ->andReturn($statement);
 
@@ -143,7 +143,7 @@ describe('Album Database Object', function () {
                 ->with([
                     'albumName' => MOCK_ALBUM_1_ROW['album_id'],
                     'offset' => 0,
-                    'limit' => AlbumDBO::IMAGES_PER_PAGE
+                    'limit' => \jbrowneuk\database\AlbumDBO::IMAGES_PER_PAGE
                 ]);
 
             $statement
@@ -190,15 +190,15 @@ describe('Album Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_IMAGES_IN_ALBUM)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_IMAGES_IN_ALBUM)
                 ->andReturn($imagesInAlbumStatement);
             
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
                 ->andReturn($albumsForImageStatement);
 
-            $expectedImage = new Image(MOCK_IMAGE_HORIZ_ROW);
+            $expectedImage = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
             $expectedImage->setAlbums([MOCK_ALBUM_1_ROW['album_id'] => MOCK_ALBUM_1]);
             $expected = [$expectedImage];
 
@@ -224,7 +224,7 @@ describe('Album Database Object', function () {
             // [TODO] extract SQL statements to constants file or similar so whitespace isn't the reason a test fails
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_ALBUMS_FOR_IMAGE)
                 ->once()
                 ->andReturn($statement);
 
@@ -281,7 +281,7 @@ describe('Album Database Object', function () {
             $this->mockPdo
                 ->shouldReceive('prepare')
                 ->once()
-                ->with(AlbumSQL::SELECT_SINGLE_IMAGE)
+                ->with(\jbrowneuk\database\AlbumSQL::SELECT_SINGLE_IMAGE)
                 ->andReturn($statement);
 
             // Album data query, don't care about this so return empty for anything else
@@ -289,7 +289,7 @@ describe('Album Database Object', function () {
                 ->shouldReceive('prepare')
                 ->andReturn($albumsStatement);
 
-            $expected = new Image(MOCK_IMAGE_HORIZ_ROW);
+            $expected = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
             $expected->albums = [];
 
             expect($this->albumDbo->getImage($expectedId))->toEqual($expected);

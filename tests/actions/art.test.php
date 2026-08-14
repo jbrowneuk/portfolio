@@ -4,7 +4,7 @@ namespace jbrowneuk;
 
 require_once 'tests/mocks/art.mock.php';
 
-require_once 'src/interfaces/ialbumdbo.php';
+require_once 'src/interfaces/ialbum-dbo.php';
 require_once 'src/interfaces/irenderer.php';
 
 require_once 'src/actions/art.php';
@@ -20,7 +20,7 @@ class ArtSubActions
 describe('Art Action', function () {
     function mockAlbumDbo()
     {
-        $mock = \Mockery::mock(IAlbumDBO::class);
+        $mock = \Mockery::mock(\jbrowneuk\interfaces\IAlbumDBO::class);
         $mock->shouldReceive('getAlbum')->andReturn(MOCK_ALBUM_1);
         $mock->shouldReceive('getAlbums')->andReturn([MOCK_ALBUM_1, MOCK_ALBUM_2]);
         $mock->shouldReceive('getAlbumPaginationData')->andReturn([
@@ -38,12 +38,12 @@ describe('Art Action', function () {
         $this->mockAlbumDbo = mockAlbumDbo();
 
         $this->assignCalls = array();
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
         $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
             $this->assignCalls[$key] = $val;
         });
 
-        $this->action = new Art($this->mockAlbumDbo, $this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Art($this->mockAlbumDbo, $this->mockRenderer);
     });
 
     afterEach(function () {
@@ -54,7 +54,7 @@ describe('Art Action', function () {
         it('should return concatenated album names separated by comma from input data', function () {
             $input = [MOCK_ALBUM_1, MOCK_ALBUM_2];
             $expected = implode(', ', array_map(fn($item) => $item->name, $input));
-            $result = Art::albumNameFormatter($input);
+            $result = \jbrowneuk\actions\Art::albumNameFormatter($input);
             expect($result)->toBe($expected);
         });
     });
