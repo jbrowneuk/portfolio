@@ -2,12 +2,12 @@
 
 namespace jbrowneuk;
 
-require_once 'src/database/authentication.dbo.php';
+require_once 'src/database/authentication-dbo.php';
 
 describe('Authentication Database Object', function () {
     beforeEach(function () {
         $this->mockPdo = \Mockery::mock(\PDO::class);
-        $this->authentication = new AuthenticationDBO($this->mockPdo);
+        $this->authentication = new \jbrowneuk\database\AuthenticationDBO($this->mockPdo);
     });
 
     describe('verifyUser', function () {

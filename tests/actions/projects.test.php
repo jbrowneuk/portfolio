@@ -15,21 +15,21 @@ require_once 'src/actions/projects.php';
 
 describe('Projects Action', function () {
     beforeEach(function () {
-        GithubProjects::setProjectsProvider(fn () => MOCK_PROJECTS);
+        \jbrowneuk\services\GithubProjects::setProjectsProvider(fn () => MOCK_PROJECTS);
 
         $this->assignCalls = array();
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
         $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
             $this->assignCalls[$key] = $val;
         });
 
-        $this->action = new Projects($this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Projects($this->mockRenderer);
         ($this->action)();
     });
 
     afterEach(function () {
         \Mockery::close();
-        GithubProjects::setProjectsProvider(null);
+        \jbrowneuk\services\GithubProjects::setProjectsProvider(null);
     });
 
     it('should set page id', function () {

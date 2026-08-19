@@ -1,10 +1,10 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 class Editor
 {
-    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IAuthentication $auth, private readonly IRenderer $renderer) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IPostsDBO $postsDBO, private readonly \jbrowneuk\interfaces\IAuthentication $auth, private readonly \jbrowneuk\interfaces\IRenderer $renderer) {}
 
     public function __invoke(array $pageParams = [])
     {
@@ -31,7 +31,7 @@ class Editor
         $this->postsDBO->setPostsPerPage(16);
         $this->postsDBO->showDrafts(true);
 
-        $page = UrlHelpers::parsePageNumber($pageParams);
+        $page = \jbrowneuk\core\UrlHelpers::parsePageNumber($pageParams);
 
         $posts = $this->postsDBO->getPosts($page);
         $basePagination = $this->postsDBO->getPostPaginationData();

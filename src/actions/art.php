@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 /**
  * An action that is used to render the art gallery and its individual images
@@ -20,7 +20,7 @@ class Art
         return implode(', ', $titles);
     }
 
-    public function __construct(private readonly IAlbumDBO $albumsDBO, private readonly IRenderer $renderer) {}
+    public function __construct(private readonly \jbrowneuk\interfaces\IAlbumDBO $albumsDBO, private readonly \jbrowneuk\interfaces\IRenderer $renderer) {}
 
     public function __invoke(array $pageParams = [])
     {
@@ -37,7 +37,7 @@ class Art
         $this->renderer->setPageId('art');
 
         // Album name formatter
-        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\Art::albumNameFormatter');
+        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'albumNames', '\jbrowneuk\actions\Art::albumNameFormatter');
 
         switch ($subAction) {
             case 'albums':
@@ -59,10 +59,10 @@ class Art
      */
     private function renderAlbumImagePage(array $params): void
     {
-        $page = UrlHelpers::parsePageNumber($params);
+        $page = \jbrowneuk\core\UrlHelpers::parsePageNumber($params);
 
         $albumId = 'featured';
-        $requestedAlbum = UrlHelpers::getValueFromPageParams($params, 'album');
+        $requestedAlbum = \jbrowneuk\core\UrlHelpers::getValueFromPageParams($params, 'album');
         if ($requestedAlbum !== null) {
             $albumId = $requestedAlbum;
         }

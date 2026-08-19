@@ -1,8 +1,8 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\core;
 
-class PortfolioRenderer extends \Smarty\Smarty implements IRenderer
+class PortfolioRenderer extends \Smarty\Smarty implements \jbrowneuk\interfaces\IRenderer
 {
     private static ?\Parsedown $parsedown = null;
     private string $scriptDirectory = '';
@@ -47,8 +47,8 @@ class PortfolioRenderer extends \Smarty\Smarty implements IRenderer
         $this->setCompileDir('smarty/compile');
         $this->setCacheDir('smarty/cache');
 
-        $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\PortfolioRenderer::modifier_parsedown');
-        $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\PortfolioRenderer::modifier_pagination');
+        $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'parsedown', '\jbrowneuk\core\PortfolioRenderer::modifier_parsedown');
+        $this->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pagination', '\jbrowneuk\core\PortfolioRenderer::modifier_pagination');
     }
 
     public function setStyleRoot(string $directory)

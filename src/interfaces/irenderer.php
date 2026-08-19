@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\interfaces;
 
 interface IRenderer {
     /**

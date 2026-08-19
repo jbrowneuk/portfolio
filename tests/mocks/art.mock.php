@@ -28,7 +28,7 @@ const MOCK_IMAGE_VERT_ROW = [
     'height' => 100
 ];
 
-const MOCK_ALBUM_1 = new Album(MOCK_ALBUM_1_ROW);
-const MOCK_ALBUM_2 = new Album(MOCK_ALBUM_2_ROW);
-const MOCK_IMAGE_HORIZ = new Image(MOCK_IMAGE_HORIZ_ROW);
-const MOCK_IMAGE_VERT = new Image(MOCK_IMAGE_VERT_ROW);
+const MOCK_ALBUM_1 = new \jbrowneuk\model\Album(MOCK_ALBUM_1_ROW);
+const MOCK_ALBUM_2 = new \jbrowneuk\model\Album(MOCK_ALBUM_2_ROW);
+const MOCK_IMAGE_HORIZ = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
+const MOCK_IMAGE_VERT = new \jbrowneuk\model\Image(MOCK_IMAGE_VERT_ROW);

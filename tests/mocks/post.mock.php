@@ -15,4 +15,4 @@ const MOCK_POST_ROW = [
     'published' => 1
 ];
 
-const MOCK_POST = new Post(MOCK_POST_ROW);
+const MOCK_POST = new \jbrowneuk\model\Post(MOCK_POST_ROW);

@@ -1,6 +1,6 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\actions;
 
 class RSS
 {
@@ -17,14 +17,14 @@ class RSS
         return "$formattedTime minute read";
     }
 
-    public function __construct(private readonly IPostsDBO $postsDBO, private readonly IRenderer $renderer) {
+    public function __construct(private readonly \jbrowneuk\interfaces\IPostsDBO $postsDBO, private readonly \jbrowneuk\interfaces\IRenderer $renderer) {
         $this->postsDBO->setPostsPerPage(16);
     }
 
     public function __invoke()
     {
         $this->renderer->setPageId('rss');
-        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\RSS::calculateReadTime');
+        $this->renderer->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'readTime', '\jbrowneuk\actions\RSS::calculateReadTime');
 
         $posts = $this->postsDBO->getPosts();
         $this->renderer->assign('posts', $posts);

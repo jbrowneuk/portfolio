@@ -4,7 +4,7 @@ namespace jbrowneuk;
 
 describe('Post object', function () {
     it('should set properties correctly', function () {
-        $post = new Post(MOCK_POST_ROW);
+        $post = new \jbrowneuk\model\Post(MOCK_POST_ROW);
         expect($post->id)->toBe(MOCK_POST_ROW['post_id']);
         expect($post->title)->toBe(MOCK_POST_ROW['title']);
         expect($post->content)->toBe(MOCK_POST_ROW['content']);
@@ -19,7 +19,7 @@ describe('Post object', function () {
         $tags = 'one two three';
         $postWithTagsRow = [...MOCK_POST_ROW, 'tags' => $tags];
 
-        $post = new Post($postWithTagsRow);
+        $post = new \jbrowneuk\model\Post($postWithTagsRow);
 
         expect($post->tags)->toBe(explode(' ', $tags));
     });
@@ -28,10 +28,10 @@ describe('Post object', function () {
         $postPublishedRow = [...MOCK_POST_ROW, 'published' => 1];
         $postDraftRow = [...MOCK_POST_ROW, 'published' => 0];
 
-        $postPublished = new Post($postPublishedRow);
+        $postPublished = new \jbrowneuk\model\Post($postPublishedRow);
         expect($postPublished->published)->toBeTrue();
 
-        $postDraft = new Post($postDraftRow);
+        $postDraft = new \jbrowneuk\model\Post($postDraftRow);
         expect($postDraft->published)->toBeFalse();
     });
 });

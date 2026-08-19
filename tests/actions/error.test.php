@@ -8,9 +8,9 @@ require_once 'src/actions/error.php';
 
 describe('Error Action', function () {
     beforeEach(function () {
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
 
-        $this->action = new Error($this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Error($this->mockRenderer);
     });
 
     afterEach(function () {

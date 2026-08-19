@@ -6,14 +6,14 @@ const EXPECTED_POST_COUNT = 5;
 
 require_once 'tests/mocks/post.mock.php';
 
-require_once 'src/database/posts.dbo.php';
+require_once 'src/database/posts-dbo.php';
 
 describe('Posts Database Object', function () {
     beforeEach(function () {
         $this->mockStatement = \Mockery::mock(\PDOStatement::class);
         $this->mockPdo = \Mockery::mock(\PDO::class);
 
-        $this->postsDbo = new PostsDBO($this->mockPdo);
+        $this->postsDbo = new \jbrowneuk\database\PostsDBO($this->mockPdo);
     });
 
     describe('setPostsPerPage', function () {
@@ -56,7 +56,7 @@ describe('Posts Database Object', function () {
             it('should fetch post count of all posts if tag not provided', function () {
                 $this->mockPdo
                     ->shouldReceive('query')
-                    ->with(PostsSQL::SELECT_POST_COUNT_PUBLISHED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POST_COUNT_PUBLISHED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -73,7 +73,7 @@ describe('Posts Database Object', function () {
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POST_COUNT_TAGGED_PUBLISHED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POST_COUNT_TAGGED_PUBLISHED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -89,7 +89,7 @@ describe('Posts Database Object', function () {
             it('should fetch post count of all posts if tag not provided', function () {
                 $this->mockPdo
                     ->shouldReceive('query')
-                    ->with(PostsSQL::SELECT_POST_COUNT)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POST_COUNT)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -106,7 +106,7 @@ describe('Posts Database Object', function () {
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POST_COUNT_TAGGED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POST_COUNT_TAGGED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -117,7 +117,7 @@ describe('Posts Database Object', function () {
 
     describe('getPostPaginationData', function () {
         beforeEach(function () {
-            $this->postsDbo = \Mockery::mock(PostsDBO::class)->makePartial();
+            $this->postsDbo = \Mockery::mock(\jbrowneuk\database\PostsDBO::class)->makePartial();
         });
 
         it('should return items per page', function () {
@@ -125,7 +125,7 @@ describe('Posts Database Object', function () {
 
             $pagination = $this->postsDbo->getPostPaginationData();
 
-            expect($pagination['items_per_page'])->toBe(PostsDBO::DEFAULT_POSTS_PER_PAGE);
+            expect($pagination['items_per_page'])->toBe(\jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE);
         });
 
         it('should return total items if tag not specified', function () {
@@ -162,12 +162,12 @@ describe('Posts Database Object', function () {
             it('should fetch a page of posts if tag not provided', function () {
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->with(['offset' => 0, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS_PUBLISHED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -179,12 +179,12 @@ describe('Posts Database Object', function () {
 
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                    ->with(['offset' => 0, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS_TAGGED_PUBLISHED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS_TAGGED_PUBLISHED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -193,16 +193,16 @@ describe('Posts Database Object', function () {
 
             it('should calculate correct page offset', function () {
                 $page = 5;
-                $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+                $expectedOffset = ($page - 1) * \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
 
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->with(['offset' => $expectedOffset, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS_PUBLISHED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS_PUBLISHED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -218,12 +218,12 @@ describe('Posts Database Object', function () {
             it('should fetch a page of posts if tag not provided', function () {
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->with(['offset' => 0, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -235,12 +235,12 @@ describe('Posts Database Object', function () {
 
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => 0, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
+                    ->with(['offset' => 0, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE, 'tag' => "%$tag%"])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS_TAGGED)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS_TAGGED)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -249,16 +249,16 @@ describe('Posts Database Object', function () {
 
             it('should calculate correct page offset', function () {
                 $page = 5;
-                $expectedOffset = ($page - 1) * PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
+                $expectedOffset = ($page - 1) * \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE; // Zero-based pagination
 
                 $this->mockStatement
                     ->shouldReceive('execute')
-                    ->with(['offset' => $expectedOffset, 'limit' => PostsDBO::DEFAULT_POSTS_PER_PAGE])
+                    ->with(['offset' => $expectedOffset, 'limit' => \jbrowneuk\database\PostsDBO::DEFAULT_POSTS_PER_PAGE])
                     ->once();
 
                 $this->mockPdo
                     ->shouldReceive('prepare')
-                    ->with(PostsSQL::SELECT_POSTS)
+                    ->with(\jbrowneuk\database\PostsSQL::SELECT_POSTS)
                     ->andReturn($this->mockStatement)
                     ->once();
 
@@ -279,7 +279,7 @@ describe('Posts Database Object', function () {
 
             $this->mockPdo
                 ->shouldReceive('prepare')
-                ->with(PostsSQL::SELECT_SINGLE_POST)
+                ->with(\jbrowneuk\database\PostsSQL::SELECT_SINGLE_POST)
                 ->andReturn($this->mockStatement)
                 ->once();
 

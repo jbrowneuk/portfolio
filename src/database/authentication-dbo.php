@@ -1,11 +1,11 @@
 <?php
 
-namespace jbrowneuk;
+namespace jbrowneuk\database;
 
 /**
  * A database object containing helpers for user authentication
  */
-class AuthenticationDBO implements IAuthenticationDBO
+class AuthenticationDBO implements \jbrowneuk\interfaces\IAuthenticationDBO
 {
     /**
      * Constructs an instance of the Authentication Database Object

@@ -9,7 +9,7 @@ describe('UrlHelpers::getRequestedPage', function () {
         $path = '';
         $defaultAction = 'potato';
 
-        $result = UrlHelpers::getRequestedPage($path, $defaultAction);
+        $result = \jbrowneuk\core\UrlHelpers::getRequestedPage($path, $defaultAction);
 
         expect($result['action'])->toBe($defaultAction);
         expect($result['params'])->toBe([]);
@@ -19,7 +19,7 @@ describe('UrlHelpers::getRequestedPage', function () {
         $path = 'roast';
         $defaultAction = 'potato';
 
-        $result = UrlHelpers::getRequestedPage($path, $defaultAction);
+        $result = \jbrowneuk\core\UrlHelpers::getRequestedPage($path, $defaultAction);
 
         expect($result['action'])->toBe($path);
         expect($result['params'])->toBe([]);
@@ -30,7 +30,7 @@ describe('UrlHelpers::getRequestedPage', function () {
         $defaultAction = 'potato';
         $pathBits = explode('/', $path);
 
-        $result = UrlHelpers::getRequestedPage($path, $defaultAction);
+        $result = \jbrowneuk\core\UrlHelpers::getRequestedPage($path, $defaultAction);
 
         expect($result['action'])->toBe(array_shift($pathBits));
         expect($result['params'])->toBe($pathBits);
@@ -43,7 +43,7 @@ describe('UrlHelpers::getValueFromPageParams', function () {
         $expectedValue = 'potato';
         $params = ['page-name', $expectedKey, $expectedValue, 'other', 'param'];
 
-        $actual = UrlHelpers::getValueFromPageParams($params, $expectedKey);
+        $actual = \jbrowneuk\core\UrlHelpers::getValueFromPageParams($params, $expectedKey);
 
         expect($actual)->toBe($expectedValue);
     });
@@ -52,7 +52,7 @@ describe('UrlHelpers::getValueFromPageParams', function () {
         $expectedKey = 'food';
         $params = ['page-name', $expectedKey];
 
-        $actual = UrlHelpers::getValueFromPageParams($params, $expectedKey);
+        $actual = \jbrowneuk\core\UrlHelpers::getValueFromPageParams($params, $expectedKey);
 
         expect($actual)->toBeNull();
     });
@@ -61,7 +61,7 @@ describe('UrlHelpers::getValueFromPageParams', function () {
         $keyToFind = 'tag';
         $params = ['page', '3'];
 
-        $actual = UrlHelpers::getValueFromPageParams($params, $keyToFind);
+        $actual = \jbrowneuk\core\UrlHelpers::getValueFromPageParams($params, $keyToFind);
 
         expect($actual)->toBeNull();
     });
@@ -72,7 +72,7 @@ describe('UrlHelpers::parsePageNumber', function () {
         $expectedPage = 4;
         $params = ['page-name', 'page', $expectedPage, 'other', 'param'];
 
-        $actual = UrlHelpers::parsePageNumber($params);
+        $actual = \jbrowneuk\core\UrlHelpers::parsePageNumber($params);
 
         expect($actual)->toBe($expectedPage);
     });
@@ -80,7 +80,7 @@ describe('UrlHelpers::parsePageNumber', function () {
     it('should return default page if provided page number in params is not numeric', function () {
         $params = ['page-name', 'page', 'not-a-number', 'other', 'param'];
 
-        $actual = UrlHelpers::parsePageNumber($params);
+        $actual = \jbrowneuk\core\UrlHelpers::parsePageNumber($params);
 
         expect($actual)->toBe(1);
     });
@@ -88,7 +88,7 @@ describe('UrlHelpers::parsePageNumber', function () {
     it('should return default page if no page number provided in params', function () {
         $params = ['page-name', 'page'];
 
-        $actual = UrlHelpers::parsePageNumber($params);
+        $actual = \jbrowneuk\core\UrlHelpers::parsePageNumber($params);
 
         expect($actual)->toBe(1);
     });

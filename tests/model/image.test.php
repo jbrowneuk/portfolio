@@ -4,7 +4,7 @@ namespace jbrowneuk;
 
 describe('Image object', function () {
     it('should set properties correctly on creation', function () {
-        $image = new Image(MOCK_IMAGE_HORIZ_ROW);
+        $image = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
         expect($image->id)->toBe(MOCK_IMAGE_HORIZ_ROW['image_id']);
         expect($image->title)->toBe(MOCK_IMAGE_HORIZ_ROW['title']);
         expect($image->filename)->toBe(MOCK_IMAGE_HORIZ_ROW['filename']);
@@ -15,10 +15,10 @@ describe('Image object', function () {
     });
 
     it('should set albums property correctly', function () {
-        $image = new Image(MOCK_IMAGE_HORIZ_ROW);
+        $image = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
         $albums = [
-            new Album(MOCK_ALBUM_1_ROW),
-            new Album(MOCK_ALBUM_2_ROW)
+            new \jbrowneuk\model\Album(MOCK_ALBUM_1_ROW),
+            new \jbrowneuk\model\Album(MOCK_ALBUM_2_ROW)
         ];
 
         $image->setAlbums($albums);
@@ -27,7 +27,7 @@ describe('Image object', function () {
     });
 
     it('should promote to featured', function () {
-        $image = new Image(MOCK_IMAGE_HORIZ_ROW);
+        $image = new \jbrowneuk\model\Image(MOCK_IMAGE_HORIZ_ROW);
 
         expect($image->featured)->toBeFalse();
 

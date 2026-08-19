@@ -9,16 +9,16 @@ require_once 'src/actions/editor.php';
 
 describe('Editor Action', function () {
     beforeEach(function () {
-        $this->postsDbo = \Mockery::spy(IPostsDBO::class);
-        $this->mockAuth = \Mockery::mock(IAuthentication::class);
+        $this->postsDbo = \Mockery::spy(\jbrowneuk\interfaces\IPostsDBO::class);
+        $this->mockAuth = \Mockery::mock(\jbrowneuk\interfaces\IAuthentication::class);
 
         $this->assignCalls = array();
-        $this->mockRenderer = \Mockery::spy(IRenderer::class);
+        $this->mockRenderer = \Mockery::spy(\jbrowneuk\interfaces\IRenderer::class);
         $this->mockRenderer->shouldReceive('assign')->andReturnUsing(function ($key, $val) {
             $this->assignCalls[$key] = $val;
         });
 
-        $this->action = new Editor($this->postsDbo, $this->mockAuth, $this->mockRenderer);
+        $this->action = new \jbrowneuk\actions\Editor($this->postsDbo, $this->mockAuth, $this->mockRenderer);
     });
 
     afterEach(function () {

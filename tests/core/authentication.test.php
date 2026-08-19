@@ -2,16 +2,16 @@
 
 namespace jbrowneuk;
 
-require_once 'src/interfaces/iauthenticationdbo.php';
+require_once 'src/interfaces/iauthentication-dbo.php';
 
-require_once 'src/database/authentication.dbo.php';
+require_once 'src/database/authentication-dbo.php';
 
 require_once 'src/core/authentication.php';
 
 describe('Authentication controller', function () {
     beforeEach(function () {
-        $this->authDBO = \Mockery::mock(IAuthenticationDBO::class);
-        $this->authentication = new Authentication($this->authDBO);
+        $this->authDBO = \Mockery::mock(\jbrowneuk\interfaces\IAuthenticationDBO::class);
+        $this->authentication = new \jbrowneuk\core\Authentication($this->authDBO);
     });
 
     afterEach(function () {
@@ -25,7 +25,7 @@ describe('Authentication controller', function () {
             $result = $this->authentication->login('username', 'password');
 
             expect($result)->toBeFalse();
-            expect(isset($_SESSION[Authentication::LOGGED_IN_KEY]))->toBeFalse();
+            expect(isset($_SESSION[\jbrowneuk\core\Authentication::LOGGED_IN_KEY]))->toBeFalse();
         });
 
         it('should allow login of valid user and regenerate session', function () {
@@ -38,7 +38,7 @@ describe('Authentication controller', function () {
 
             expect($result)->toBeTrue();
             expect(session_id())->not()->toBe($originalId);
-            expect(isset($_SESSION[Authentication::LOGGED_IN_KEY]))->toBeTrue();
+            expect(isset($_SESSION[\jbrowneuk\core\Authentication::LOGGED_IN_KEY]))->toBeTrue();
         });
     });
 
@@ -63,7 +63,7 @@ describe('Authentication controller', function () {
     describe('When authenticated', function () {
         beforeEach(function () {
             session_start();
-            $_SESSION[Authentication::LOGGED_IN_KEY] = true;
+            $_SESSION[\jbrowneuk\core\Authentication::LOGGED_IN_KEY] = true;
         });
 
         it('should return true for isAuthenticated', function () {
