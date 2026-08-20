@@ -10,7 +10,7 @@
                 <use href="#sitesheet-logo"></use>
             </svg>
             <div class="map-list">
-                <header>Portfolio</header>
+                <h2>Portfolio</h2>
                 <ul>
                     <li><a href="{$scriptDirectory}/">Home</a></li>
                     <li><a href="{$scriptDirectory}/art">Art</a></li>
@@ -19,7 +19,7 @@
                 </ul>
             </div>
             <div class="map-list">
-                <header>Connect</header>
+                <h2>Connect</h2>
                 <ul>
                     <li><a href="//github.com/jbrowneuk">GitHub</a></li>
                     <li><a href="//linkedin.com/in/jbrowneuk">LinkedIn</a></li>

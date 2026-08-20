@@ -3,9 +3,9 @@
 <section class="page-section top-hero-section">
     <article class="container">
         <div class="text">
-            <span class="fancy-heading-container blue">
-                <h1>Software</h1>
-            </span>
+            <div class="fancy-heading-container blue">
+                <h2>Software</h2>
+            </div>
             <p>
                 I’m a Front-End software developer currently working on Web apps using
                 Angular, NodeJS, TypeScript and Docker.

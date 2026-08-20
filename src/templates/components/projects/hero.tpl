@@ -3,10 +3,10 @@
 <section class="page-section post project-list-section" data-project-blurb>
     <article class="container">
         <header>
-            <h1>
+            <h2>
                 Looking to <strong>challenge</strong> the limits of computers
                 using software
-            </h1>
+            </h2>
         </header>
         <div class="grid">
             <div class="text-area">

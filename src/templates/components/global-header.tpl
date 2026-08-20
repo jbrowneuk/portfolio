@@ -7,7 +7,7 @@
                 <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="link-icon">
                     <use href="#sitesheet-logo"></use>
                 </svg>
-                <span class="link-text hide-sm">Jason Browne</span>
+                <h1 class="link-text hide-sm">Jason Browne</h1>
             </a>
             <ul id="nav-links">
                 {include file="./nav-link.tpl" url="{$scriptDirectory}/" title="portfolio" isActive="{(isset($pageId) && $pageId == 'portfolio')}" extraClasses="hide-md hide-sm"}

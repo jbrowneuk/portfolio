@@ -3,7 +3,7 @@
 <section class="page-section post" data-github-blurb>
     <article class="container">
         <header>
-            <h1>GitHub</h1>
+            <h2>GitHub</h2>
         </header>
         <p>
             The code projects that you can find on this page are all hosted on

@@ -3,9 +3,9 @@
 <section class="page-section background-alternate about-block">
     <header>
         <div class="container mugshot-container">
-            <span class="fancy-heading-container blue">
-                <h1>Background</h1>
-            </span>
+            <div class="fancy-heading-container blue">
+                <h2>Background</h2>
+            </div>
             <img class="mugshot" src="/assets/images/about/jason2019.jpg" />
         </div>
     </header>
@@ -13,7 +13,7 @@
         <div id="skills-grid">
             <!-- Work, column 1 -->
             <article id="work-experience" class="column" name="work">
-                <h2>Work Experience</h2>
+                <h3>Work Experience</h3>
                 <section class="experience">
                     <div class="role">Front end developer &amp; Visual Designer</div>
                     <div class="company">Schlumberger Oilfield UK Plc.</div>
@@ -38,7 +38,7 @@
                     <div class="timespan">2012–2013</div>
                 </section>
 
-                <h2>Education</h2>
+                <h3>Education</h3>
                 <section class="experience">
                     <div class="role">BSc (Hons) Computer Science</div>
                     <div class="company">Nottingham Trent University.</div>
@@ -47,7 +47,7 @@
             </article>
             <!-- Skills, column 2 -->
             <article id="skill-set" class="column" name="skills">
-                <h2>Skills</h2>
+                <h3>Skills</h3>
                 <h3>Code</h3>
                 <section class="experience-charts">
                     <span class="label">HTML</span>
@@ -67,7 +67,7 @@
                 </section>
 
                 <h3>Vector Graphics</h3>
-                <section class="experience-charts">
+                    <h4>Vector Graphics</h4>
                     <span class="label">Inkscape</span>
                     {include file="./rating-bar.tpl" amount="5" value="5"}
 
@@ -76,7 +76,7 @@
                 </section>
 
                 <h3>Design</h3>
-                <section class="experience-charts">
+                    <h4>Design</h4>
                     <span class="label">Sketch</span>
                     {include file="./rating-bar.tpl" amount="5" value="4"}
 

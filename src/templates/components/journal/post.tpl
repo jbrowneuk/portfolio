@@ -3,7 +3,7 @@
 <section class="page-section post">
     <article class="container">
         <header>
-            <h1 data-post-title>{$post->title}</h1>
+            <h2 data-post-title>{$post->title}</h2>
             <time data-date datetime="{$post->timestamp|date_format:c}">
                 <span data-day class="day">{$post->timestamp|date_format:j}</span>
                 <span data-month-year class="month">{$post->timestamp|date_format:"M Y"}</span>

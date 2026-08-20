@@ -3,7 +3,7 @@
 <section class="page-section post" data-post-loaded>
     <div class="container">
         <header>
-            <h1 data-title>{$image->title}</h1>
+            <h2 data-title>{$image->title}</h2>
             <time data-date datetime="{$image->timestamp|date_format:c}">
                 <span data-day class="day">{$image->timestamp|date_format:j}</span>
                 <span data-month-year class="month">{$image->timestamp|date_format:"M Y"}</span>
