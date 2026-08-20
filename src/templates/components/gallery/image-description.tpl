@@ -1,6 +1,6 @@
 {* Smarty template: Gallery full image descriptions *}
 
-<section class="page-section post" data-post-loaded>
+<div class="page-section post" data-post-loaded>
     <div class="container">
         <header>
             <h2 data-title>{$image->title}</h2>
@@ -21,4 +21,4 @@
             </ul>
         </footer>
     </div>
-</section>
+</div>

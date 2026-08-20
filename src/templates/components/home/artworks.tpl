@@ -1,6 +1,6 @@
 {* Smarty template: Portfolio top/home page: artworks summary *}
 
-<section class="page-section background-dark top-hero-section">
+<div class="page-section background-dark top-hero-section">
     <article class="container">
         <div class="text">
             <div class="fancy-heading-container light">
@@ -15,7 +15,7 @@
             </a>
         </div>
         <div class="image">
-            <img src="/assets/images/top/artworks.svg" alt="gallery image" />
+            <img src="/assets/images/top/artworks.svg" alt="gallery image">
         </div>
     </article>
-</section>
+</div>

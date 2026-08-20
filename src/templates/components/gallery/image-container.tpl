@@ -2,7 +2,7 @@
 
 {include file="components/pagination.tpl"}
 
-<section class="page-section">
+<div class="page-section">
     <div class="container">
         {if count($images) === 0}
             {* Loading failed *}
@@ -21,6 +21,6 @@
             </div>
         {/if}
     </div>
-</section>
+</div>
 
 {include file="components/pagination.tpl"}

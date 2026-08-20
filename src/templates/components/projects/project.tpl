@@ -1,6 +1,6 @@
 {* Smarty template: Project item *}
 
-<section class="page-section post project-list-section" data-project-name="{$project['name']}">
+<div class="page-section post project-list-section" data-project-name="{$project['name']}">
     <article class="container">
         <header>
             <h2>
@@ -48,4 +48,4 @@
             </div>
         </div>
     </article>
-</section>
+</div>

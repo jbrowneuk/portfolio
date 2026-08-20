@@ -1,6 +1,6 @@
 {* Smarty template: single post *}
 
-<section class="page-section post">
+<div class="page-section post">
     <article class="container">
         <header>
             <h2 data-post-title>{$post->title}</h2>
@@ -20,13 +20,13 @@
         {/if}
         {$post->content|parsedown}
         <footer>
-            <ul data-post-tags class="tags-area">
+            <menu data-post-tags class="tags-area">
                 <li><i aria-hidden="true" class="las la-tags"></i></li>
                 {foreach $post->tags as $tag}
                     <li class="tag-container" data-post-tag="{$tag}"><a class="tag"
                             href="{$scriptDirectory}/journal/tag/{$tag}">#{$tag}</a></li>
                 {/foreach}
-            </ul>
+            </menu>
         </footer>
     </article>
-</section>
+</div>

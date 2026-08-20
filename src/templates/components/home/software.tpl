@@ -1,6 +1,6 @@
 {* Smarty template: Portfolio top/home page: software summary *}
 
-<section class="page-section top-hero-section">
+<div class="page-section top-hero-section">
     <article class="container">
         <div class="text">
             <div class="fancy-heading-container blue">
@@ -22,7 +22,7 @@
             </a>
         </div>
         <div class="image">
-            <img src="/assets/images/top/programming.svg" alt="project image" />
+            <img src="/assets/images/top/programming.svg" alt="project image">
         </div>
     </article>
-</section>
+</div>
