@@ -3,7 +3,7 @@
 {assign var=orientation value=$image->width > $image->height ? 'horizontal' : 'vertical'}
 
 <a href="{$scriptDirectory}/art/view/{$image->id}" class="thumbnail {$promotedClass} {$orientation}">
-    <img src="{$imageRoot}{$thumbDir}{$image->filename}" loading="lazy" alt="{$image->title}" data-image />
+    <img src="{$imageRoot}{$thumbDir}{$image->filename}" loading="lazy" alt="{$image->title}" data-image>
     <span class="title-area">
         <span class="title-text" data-title>{$image->title}</span>
         <span class="subtitle-text" data-galleries>{$image->albums|albumNames}</span>
