@@ -57,19 +57,19 @@
 }
 
 @media screen and (max-width: 767px) {
-  #skills-grid {
-    grid-template-columns: 1fr;
+    #skills-grid {
+        grid-template-columns: 1fr;
+    }
 
     #work-experience {
-      order: 2;
+        order: 2;
     }
 
     #skill-set {
-      order: 1;
+        order: 1;
     }
 
     #education {
-      order: 3;
+        order: 3;
     }
-  }
 }
