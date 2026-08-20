@@ -11,14 +11,14 @@
         </header>
         {$image->description|parsedown}
         <footer>
-            <ul data-post-tags class="tags-area">
+            <menu data-post-tags class="tags-area">
                 <li><i aria-hidden="true" class="las la-tags"></i></li>
                 {foreach $image->albums as $album}
                     <li class="tag-container" data-post-tag="{$album->id}">
                         <a class="tag" href="{$scriptDirectory}/art/album/{$album->id}">#{$album->name}</a>
                     </li>
                 {/foreach}
-            </ul>
+            </menu>
         </footer>
     </div>
 </div>

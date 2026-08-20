@@ -11,20 +11,20 @@
             </svg>
             <div class="map-list">
                 <h2>Portfolio</h2>
-                <ul>
+                <menu>
                     <li><a href="{$scriptDirectory}/">Home</a></li>
                     <li><a href="{$scriptDirectory}/art">Art</a></li>
                     <li><a href="{$scriptDirectory}/projects/code">Projects</a></li>
                     <li><a href="{$scriptDirectory}/journal">Posts</a></li>
-                </ul>
+                </menu>
             </div>
             <div class="map-list">
                 <h2>Connect</h2>
-                <ul>
+                <menu>
                     <li><a href="//github.com/jbrowneuk">GitHub</a></li>
                     <li><a href="//linkedin.com/in/jbrowneuk">LinkedIn</a></li>
                     <li><a href="//jbrowne.io/discord">Discord</a></li>
-                </ul>
+                </menu>
             </div>
         </div>
     </div>
