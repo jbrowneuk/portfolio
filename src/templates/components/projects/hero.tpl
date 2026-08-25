@@ -1,12 +1,12 @@
 {* Smarty template: project list hero section *}
 
-<section class="page-section post project-list-section" data-project-blurb>
+<div class="page-section post project-list-section" data-project-blurb>
     <article class="container">
         <header>
-            <h1>
+            <h2>
                 Looking to <strong>challenge</strong> the limits of computers
                 using software
-            </h1>
+            </h2>
         </header>
         <div class="grid">
             <div class="text-area">
@@ -31,8 +31,8 @@
             </div>
             <div class="image-area">
                 <img src="/assets/images/programming.svg" alt="stylized image of a computer" class="side-illustration"
-                    width="320" />
+                    width="320">
             </div>
         </div>
     </article>
-</section>
+</div>

@@ -1,11 +1,11 @@
 {* Smarty template: Project item *}
 
-<section class="page-section post project-list-section" data-project-name="{$project['name']}">
+<div class="page-section post project-list-section" data-project-name="{$project['name']}">
     <article class="container">
         <header>
-            <h1>
+            <h2>
                 <a href="{$project['url']}" data-test="name">{$project['name']}</a>
-            </h1>
+            </h2>
             {if $project['archived']}
                 <span class="archived">
                     <i class="las la-box" aria-hidden="true"></i> Archived
@@ -48,4 +48,4 @@
             </div>
         </div>
     </article>
-</section>
+</div>

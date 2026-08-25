@@ -1,6 +1,6 @@
 {* Smarty template: Admin post editor layout *}
 
-<section class="page-section">
+<div class="page-section">
     <div class="container">
         <table class="post-list">
             <thead>
@@ -27,4 +27,4 @@
             </tbody>
         </table>
     </div>
-</section>
+</div>
