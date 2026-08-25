@@ -2,7 +2,7 @@
 
 <div class="presenter container zoomed-out">
     <div class="image-area">
-        <img src="{$imageRoot}{$imageDir}{$image->filename}" alt="{$image->title}" class="responsive" />
+        <img src="{$imageRoot}{$imageDir}{$image->filename}" alt="{$image->title}" class="responsive">
         {if $image->featured}
             <span class="featured-badge" title="Featured">
                 <svg>
