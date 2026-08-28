@@ -1,4 +1,14 @@
 {* Smarty template: page header nav links *}
-{assign var=activeClass value=$isActive == 1 ? 'active' : ''}
 
-<li><a href="{$url}" class="{$activeClass} {$extraClasses|default}">{$title}</a></li>
+{* Calculate classList *}
+{assign var=activeClass value=$isActive == 1 ? 'active' : ''}
+{assign var=classList value=[]}
+{if !$activeClass|empty}
+    {append var=classList value=$activeClass}
+{/if}
+
+{if !$extraClasses|empty}
+    {append var=classList value=$extraClasses}
+{/if}
+
+<li><a href="{$url}" class="{$classList|join:' '}">{$title}</a></li>
