@@ -15,6 +15,9 @@
     <!-- Iconography -->
     <link href="{$styleRoot}/assets/thirdparty/la/css/line-awesome.min.css?1.3.0" rel="stylesheet">
 
+    <!-- Light/dark mode user preference script -->
+    <script src="{$styleRoot}/js/theme-init.js"></script>
+
     <!-- Theme -->
     <link href="{$styleRoot}/theme/palette.css?v3.8.0" rel="stylesheet">
 
