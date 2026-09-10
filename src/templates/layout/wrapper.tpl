@@ -17,6 +17,7 @@
     </main>
 
     {include file="../components/global-footer.tpl"}
+    <script src="{$styleRoot}/js/theme.js"></script>
 </body>
 
 </html>
