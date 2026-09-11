@@ -32,7 +32,12 @@
     }
   }
 
-  function applyTheme(theme) {
+  function updateButtonStates(buttons, theme) {
+    if (theme === null) theme = 'auto';
+    buttons.forEach(button => button.setAttribute('aria-pressed', button.dataset.theme === theme));
+  }
+
+  function applyTheme(theme, buttons) {
     var root = document.documentElement;
 
     if (theme === 'light' || theme === 'dark') {
@@ -43,33 +48,17 @@
       localStorage.removeItem(STORAGE_KEY);
     }
 
+    updateButtonStates(buttons, theme);
     updateThemeColor();
   }
 
   function initThemeControls() {
-    var lightButton = document.getElementById('light-mode-button');
-    var darkButton = document.getElementById('dark-mode-button');
-    var systemButton = document.getElementById('system-mode-button');
+    const buttons = [document.getElementById('light-mode-button'), document.getElementById('dark-mode-button'), document.getElementById('system-mode-button')];
+    updateButtonStates(buttons, getStoredTheme());
 
-    if (lightButton) {
-      lightButton.addEventListener('click', function () {
-        applyTheme('light');
-      });
-    }
+    buttons.forEach(button =>  button.addEventListener('click', () => applyTheme(button.dataset.theme, buttons)));
 
-    if (darkButton) {
-      darkButton.addEventListener('click', function () {
-        applyTheme('dark');
-      });
-    }
-
-    if (systemButton) {
-      systemButton.addEventListener('click', function () {
-        applyTheme(null);
-      });
-    }
-
-    global.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+    global.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (!getStoredTheme()) {
         updateThemeColor();
       }
