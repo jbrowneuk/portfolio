@@ -23,6 +23,7 @@
 
     <!-- Component library -->
     <link href="{$styleRoot}/theme/styles.css?v3.8.0" rel="stylesheet">
+    <link href="{$styleRoot}/css/theme-switcher.css" rel="stylesheet">
 
     <!-- Site icons and manifest -->
     <link rel="icon" href="/favicon.ico" sizes="any">
