@@ -1,6 +1,6 @@
 {* Smarty template: Single post page layout *}
 
-{extends file="layout/wrapper.tpl"} 
+{extends file="layout/wrapper.tpl"}
 
 {block name="page-title"}Jason Browne: {if isset($post)}{$post->title}{else}Not found{/if}{/block}
 
@@ -11,7 +11,7 @@
         {if isset($post->summary)}<meta property="og:description" content="{$post->summary}" />{/if}
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://jbrowne.io/rss/journal/post/{$post->id}" />
-        <meta property="og:image" content="https://jbrowne.io/android-chrome-256x256.png" />
+        <meta property="og:image" content="https://jbrowne.io/icons/icon-512.png" />
         <meta property="article:published_time" content="{$post->timestamp|date_format:c}" />
         {if isset($post->modified)}<meta property="article:modified_time" content="{$post->modified|date_format:c}" />{/if}
         {foreach $post->tags as $tag}<meta property="article:tag" content="{$tag}" />{/foreach}
