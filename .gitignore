@@ -6,3 +6,5 @@ composer.phar
 
 *.db
 *.sqlite
+
+render.htm

@@ -31,7 +31,17 @@
     <div id="legal-stuff">
         <div class="container">
             <div class="text-container">
-                <p></p>
+                <div class="color-theme-switcher">
+                    <button type="button" aria-pressed="false" data-theme="light" id="light-mode-button">
+                        Light
+                    </button>
+                    <button type="button" aria-pressed="true" data-theme="auto" id="system-mode-button">
+                        Auto
+                    </button>
+                    <button type="button" aria-pressed="false" data-theme="dark" id="dark-mode-button">
+                        Dark
+                    </button>
+                </div>
                 <p>&copy;2020–{$smarty.now|date_format:'%Y'} Jason Browne</p>
             </div>
         </div>

@@ -1,0 +1,14 @@
+.color-theme-switcher {
+    border-radius: var(--button_border_radius);
+    border: var(--button_border_thickness) solid var(--page-footer_color_foreground);
+    padding: 1px;
+}
+
+.color-theme-switcher button {
+    border: none;
+}
+
+.color-theme-switcher button[aria-pressed="true"] {
+    background: var(--page-footer_color_foreground);
+    color: var(--page-footer_color_background);
+}

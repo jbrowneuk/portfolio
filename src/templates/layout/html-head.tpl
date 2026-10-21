@@ -15,11 +15,15 @@
     <!-- Iconography -->
     <link href="{$styleRoot}/assets/thirdparty/la/css/line-awesome.min.css?1.3.0" rel="stylesheet">
 
+    <!-- Light/dark mode user preference script -->
+    <script src="{$styleRoot}/js/theme-init.js"></script>
+
     <!-- Theme -->
     <link href="{$styleRoot}/theme/palette.css?v3.8.0" rel="stylesheet">
 
     <!-- Component library -->
     <link href="{$styleRoot}/theme/styles.css?v3.8.0" rel="stylesheet">
+    <link href="{$styleRoot}/css/theme-switcher.css" rel="stylesheet">
 
     <!-- Site icons and manifest -->
     <link rel="icon" href="/favicon.ico" sizes="any">
