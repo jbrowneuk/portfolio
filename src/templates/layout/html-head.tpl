@@ -31,8 +31,8 @@
     <link rel="icon" href="/icons/icon-16.png" type="image/png" sizes="16x16">
     <link rel="icon" href="/icons/icon-512.png" type="image/png" sizes="512x512">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
-    <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#4d698e">
+    {block name="manifest-override"}<link rel="manifest" href="/site.webmanifest">{/block}
 
     {block name="extra-head-elements"}{/block}
 </head>
