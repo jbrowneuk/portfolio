@@ -1,10 +1,11 @@
+# Third-party/vendor files
 vendor/
 smarty/
-
-src/.htaccess
 composer.phar
 
+# Dev overrides of configuration
+src/config.php
+
+# Databases
 *.db
 *.sqlite
-
-render.htm
