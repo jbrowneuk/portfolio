@@ -2,7 +2,7 @@
 
 namespace jbrowneuk;
 
-require_once '../vendor/autoload.php';
+require_once './vendor/autoload.php';
 require_once './core/autoloader.php';
 
 require_once './config.php';

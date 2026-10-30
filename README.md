@@ -20,7 +20,8 @@ This project deliberately tries to keep dependencies minimal:
 
 ## Get up and running
 The code is written for an environment using PHP 8.5 or newer, and it needs
-support for the SQLite PDO.
+support for the SQLite PDO as well as the `intl` extension (used to format data
+in templates).
 
 Composer is used to set up dependencies. Use `composer install`.
 
@@ -40,6 +41,22 @@ Updating is as simple as navigating to the submodule folder, `cd src/theme`, and
 then using `git checkout tag` to change the tag the submodule is pointing to.
 You'll also want to bump the query params in `src/templates/layout/html-head.tpl`
 to match the new tag.
+
+### Podman/Docker
+If you have podman or docker available, it is possible to use the scripts and
+files in the `podman` directory to build a simple container that includes PHP
+and its dependencies and maps in the relevant directories. You need to have
+run `composer install` and fetched the submodules before running these steps
+as they are not yet configured to do this. It also requires thirdparty assets
+to be contained in a folder on the same level as the repo root.
+
+1. To build this environment, run `<repo-root>/podman/build.sh`.This will
+    create a container image, tagged `portfoliodev`.
+2. To run this environment, run `<repo-root>/podman/run.sh`. Open your browser
+    and navigate to `localhost:3000` to access the environment.
+
+The environment runs in foreground mode so `Ctrl+C` in the terminal window to
+close it out and clear up resources.
 
 ## Run unit tests
 `./vendor/bin/pest`
