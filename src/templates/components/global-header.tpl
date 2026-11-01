@@ -1,5 +1,7 @@
 {* Smarty template: global page header *}
 
+{assign var=rootDir value=isset($rootDirectory) ? $rootDirectory : $scriptDirectory }
+
 <header id="page-header">
     <div id="sticky-menu">
         <nav id="menu" class="container">
@@ -13,10 +15,10 @@
                 {strip}
                     {assign var=pid value=isset($pageId) ? $pageId : ''}
 
-                    {include file="./nav-link.tpl" url="{$scriptDirectory}/" title="portfolio" isActive="{($pid == 'portfolio')}" extraClasses="hide-md hide-sm"}
-                    {include file="./nav-link.tpl" url="{$scriptDirectory}/projects/code/" title="projects" isActive="{($pid == 'projects')}"}
-                    {include file="./nav-link.tpl" url="{$scriptDirectory}/art/" title="art" isActive="{($pid == 'art')}"}
-                    {include file="./nav-link.tpl" url="{$scriptDirectory}/journal/" title="posts" isActive="{($pid == 'journal')}"}
+                    {include file="./nav-link.tpl" url="{$rootDir}/" title="portfolio" isActive="{($pid == 'portfolio')}" extraClasses="hide-md hide-sm"}
+                    {include file="./nav-link.tpl" url="{$rootDir}/projects/code/" title="projects" isActive="{($pid == 'projects')}"}
+                    {include file="./nav-link.tpl" url="{$rootDir}/art/" title="art" isActive="{($pid == 'art')}"}
+                    {include file="./nav-link.tpl" url="{$rootDir}/journal/" title="posts" isActive="{($pid == 'journal')}"}
                     {block name="nav-links"}{* No extra nav links by default *}{/block}
                 {/strip}
             </menu>
