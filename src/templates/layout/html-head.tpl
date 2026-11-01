@@ -19,10 +19,10 @@
     <script src="{$styleRoot}/js/theme-init.js"></script>
 
     <!-- Theme -->
-    <link href="{$styleRoot}/theme/palette.css?v3.8.0" rel="stylesheet">
+    <link href="{$styleRoot}/theme/palette.css?v4.2.0" rel="stylesheet">
 
     <!-- Component library -->
-    <link href="{$styleRoot}/theme/styles.css?v3.8.0" rel="stylesheet">
+    <link href="{$styleRoot}/theme/styles.css?v4.2.0" rel="stylesheet">
 
     <!-- Site icons and manifest -->
     <link rel="icon" href="/favicon.ico" sizes="any">
