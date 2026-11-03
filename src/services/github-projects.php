@@ -58,8 +58,6 @@ final class GithubProjects
             $projects[] = $project;
         }
 
-        \curl_close($curl);
-
         return $projects;
     }
 }
