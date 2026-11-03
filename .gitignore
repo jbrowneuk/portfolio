@@ -5,6 +5,7 @@ composer.phar
 
 # Dev overrides of configuration
 src/config.php
+src/api
 
 # Databases
 *.db
